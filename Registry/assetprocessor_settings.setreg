@@ -1,0 +1,18 @@
+{
+    "Amazon": {
+        "AssetProcessor": {
+            "Settings": {
+                "ScanFolder InteractiveTutorials/Assets": {
+                    "watch": "@GEMROOT:InteractiveTutorials@/Assets",
+                    "recursive": 1,
+                    "order": 101
+                },
+                "ScanFolder InteractiveTutorials/Registry": {
+                    "watch": "@GEMROOT:InteractiveTutorials@/Registry",
+                    "recursive": 1,
+                    "order": 102
+                }
+            }
+        }
+    }
+}
