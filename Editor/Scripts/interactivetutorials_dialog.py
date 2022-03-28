@@ -9,36 +9,69 @@ SPDX-License-Identifier: Apache-2.0 OR MIT
 Generated from O3DE PythonToolGem Template"""
 
 from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QDialog, QLabel, QVBoxLayout
+from PySide2.QtWidgets import QDialog, QDialogButtonBox, QLabel, QPushButton, QTextEdit, QVBoxLayout
+
+from demo_tutorial import DemoTutorial
+
 
 class InteractiveTutorialsDialog(QDialog):
     def __init__(self, parent=None):
         super(InteractiveTutorialsDialog, self).__init__(parent)
 
-        self.mainLayout = QVBoxLayout(self)
+        self.main_layout = QVBoxLayout(self)
 
-        self.introLabel = QLabel("Put your cool stuff here!")
+        self.title_label = QLabel(self)
+        self.main_layout.addWidget(self.title_label)
 
-        self.mainLayout.addWidget(self.introLabel, 0, Qt.AlignCenter)
+        self.content_area = QTextEdit(self)
+        self.content_area.setReadOnly(True)
+        self.main_layout.addWidget(self.content_area, 1)
 
-        self.helpText = str("For help getting started,"
-            "visit the <a href=\"https://o3de.org/docs/tools-ui/\">UI Development</a> documentation<br/>"
-            "or come ask a question in the <a href=\"https://discord.gg/R77Wss3kHe\">sig-ui-ux channel</a> on Discord")
+        self.button_box = QDialogButtonBox(self)
+        self.next_button = QPushButton("Next", self)
+        self.next_button.setDefault(True)
+        self.next_button.clicked.connect(self.on_next_button_clicked)
+        self.back_button = QPushButton("Back", self)
+        self.back_button.clicked.connect(self.on_back_button_clicked)
+        self.button_box.addButton(self.next_button, QDialogButtonBox.ActionRole)
+        self.button_box.addButton(self.back_button, QDialogButtonBox.ResetRole)
+        self.main_layout.addWidget(self.button_box)
 
-        self.helpLabel = QLabel()
-        self.helpLabel.setTextFormat(Qt.RichText)
-        self.helpLabel.setText(self.helpText)
-        self.helpLabel.setOpenExternalLinks(True)
+        self.setLayout(self.main_layout)
 
-        self.mainLayout.addWidget(self.helpLabel, 0, Qt.AlignCenter)
+        # TODO: Have real system for loading tutorials
+        self.load_tutorial()
 
-        self.setLayout(self.mainLayout)
+    def load_tutorial(self):
+        self.current_tutorial = DemoTutorial()
+
+        # Update the title based on the loaded tutorial
+        self.setWindowTitle("InteractiveTutorials - " + self.current_tutorial.get_title())
+
+        self.current_step = self.current_tutorial.get_first_step()
+        self.update_step_view()
+
+    def update_step_view(self):
+        if not self.current_step:
+            return
+
+        self.title_label.setText(self.current_step.get_title())
+        self.content_area.setText(self.current_step.get_content())
+
+    def on_next_button_clicked(self):
+        if self.current_step and self.current_step.next_step:
+            self.current_step = self.current_step.next_step
+            self.update_step_view()
+
+    def on_back_button_clicked(self):
+        if self.current_step and self.current_step.prev_step:
+            self.current_step = self.current_step.prev_step
+            self.update_step_view()
 
 
 if __name__ == "__main__":
     # Create a new instance of the tool if launched from the Python Scripts window,
     # which allows for quick iteration without having to close/re-launch the Editor
     test_dialog = InteractiveTutorialsDialog()
-    test_dialog.setWindowTitle("InteractiveTutorials")
     test_dialog.show()
     test_dialog.adjustSize()
