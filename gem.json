@@ -1,0 +1,23 @@
+{
+    "gem_name": "InteractiveTutorials",
+    "display_name": "InteractiveTutorials",
+    "license": "What license InteractiveTutorials uses goes here: i.e. Apache-2.0 Or MIT",
+    "license_url": "https://github.com/o3de/o3de/blob/development/LICENSE.txt",
+    "origin": "The name of the originator goes here. i.e. XYZ Inc.",
+    "origin_url": "The primary repo for InteractiveTutorials goes here: i.e. http://www.mydomain.com",
+    "type": "Code",
+    "summary": "A short description of InteractiveTutorials.",
+    "canonical_tags": [
+        "Gem"
+    ],
+    "user_tags": [
+        "InteractiveTutorials"
+    ],
+    "icon_path": "preview.png",
+    "requirements": "",
+    "documentation_url": "",
+    "dependencies": [
+        "QtForPython"
+    ],
+    "restricted": "InteractiveTutorials"
+}
