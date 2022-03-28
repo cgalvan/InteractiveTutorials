@@ -22,7 +22,7 @@ class HighlightWidget(QWidget):
     def __init__(self, parent=None):
         super(HighlightWidget, self).__init__(parent)
 
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.Tool | Qt.WindowTransparentForInput | Qt.WindowDoesNotAcceptFocus)
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.Tool | Qt.WindowTransparentForInput | Qt.WindowDoesNotAcceptFocus | Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_TranslucentBackground);
         self.setAttribute(Qt.WA_NoSystemBackground);
         self.setAttribute(Qt.WA_TransparentForMouseEvents)
