@@ -5,6 +5,8 @@ For complete copyright and license terms please see the LICENSE at the root of t
 SPDX-License-Identifier: Apache-2.0 OR MIT
 """
 
+from PySide2.QtWidgets import QMenuBar
+
 from tutorial import Tutorial, TutorialStep
 
 
@@ -14,6 +16,7 @@ class DemoTutorial(Tutorial):
 
         self.title = "Demo Tutorial"
 
-        self.add_step(TutorialStep("First things first", "Do blah blah blah and click on foo"))
-        self.add_step(TutorialStep("Hello World", "Time to do foo bar baz"))
-        self.add_step(TutorialStep("Last things last", "Woo you did it!"))
+        self.add_step(TutorialStep("First things first", "Welcome! This first step shouldn't highlight any widget."))
+        self.add_step(TutorialStep("Select an Entity", "Next, select any Entity in the Entity Outliner", "EntityOutlinerWidgetUI"))
+        self.add_step(TutorialStep("Add a component", "Use the Add Component button to add a component to the Entity", "m_addComponentButton"))
+        self.add_step(TutorialStep("Cool menu bar", "This step is just to showcase highlighting an item without a direct name but by using a type pattern instead", {"type": QMenuBar}))
