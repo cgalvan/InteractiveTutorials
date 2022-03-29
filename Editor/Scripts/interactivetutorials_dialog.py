@@ -9,13 +9,13 @@ SPDX-License-Identifier: Apache-2.0 OR MIT
 Generated from O3DE PythonToolGem Template"""
 
 from PySide2 import QtCore
-from PySide2.QtCore import QMargins, Qt
+from PySide2.QtCore import QMargins, QStringListModel, Qt
 from PySide2.QtGui import QColor, QPainter, QPen
-from PySide2.QtWidgets import QDialog, QDialogButtonBox, QLabel, QPushButton, QTextEdit, QVBoxLayout, QWidget
+from PySide2.QtWidgets import QDialog, QDialogButtonBox, QLabel, QListView, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
 
 import editor_python_test_tools.pyside_utils as pyside_utils
 
-from demo_tutorial import DemoTutorial
+from demo_tutorial import DemoTutorial, IntroTutorial
 
 
 class HighlightWidget(QWidget):
@@ -54,17 +54,57 @@ class InteractiveTutorialsDialog(QDialog):
     def __init__(self, parent=None):
         super(InteractiveTutorialsDialog, self).__init__(parent)
 
-        self.main_layout = QVBoxLayout(self)
+        # Stacked widget so we can switch between the intro screen that lets you
+        # choose a tutorial, and the actual tutorial in progress view
+        self.stacked_widget = QStackedWidget(self)
+
+        # Intro screen that shows list for picking a tutorial
+        self.intro_widget = QWidget(self)
+        self.intro_layout = QVBoxLayout()
+
+        self.choose_tutorial_label = QLabel("Choose a tutorial", self)
+        self.intro_layout.addWidget(self.choose_tutorial_label, 0, Qt.AlignCenter)
+
+        self.tutorial_list = QListView(self)
+
+        # TODO: Have real system for loading tutorials
+        self.tutorials = [
+            {
+                "name": "Intro to the Editor",
+                "tutorial": IntroTutorial
+            },
+            {
+                "name": "Demo Tutorial",
+                "tutorial": DemoTutorial
+            }
+        ]
+        tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
+        self.tutorial_list_model = QStringListModel(self)
+        self.tutorial_list_model.setStringList(tutorial_names)
+        self.tutorial_list.setModel(self.tutorial_list_model)
+        self.tutorial_list.setAlternatingRowColors(True)
+        self.intro_layout.addWidget(self.tutorial_list, 0, Qt.AlignCenter)
+
+        self.start_button = QPushButton("Start", self)
+        self.start_button.clicked.connect(self.on_start_button_clicked)
+        self.intro_layout.addWidget(self.start_button, 0, Qt.AlignCenter)
+
+        self.intro_widget.setLayout(self.intro_layout)
+        self.stacked_widget.addWidget(self.intro_widget)
+
+        # Tutorial in progress view
+        self.tutorial_widget = QWidget(self)
+        self.tutorial_layout = QVBoxLayout()
 
         self.highlight_widget = HighlightWidget()
         self.highlight_widget.hide()
 
         self.title_label = QLabel(self)
-        self.main_layout.addWidget(self.title_label)
+        self.tutorial_layout.addWidget(self.title_label)
 
         self.content_area = QTextEdit(self)
         self.content_area.setReadOnly(True)
-        self.main_layout.addWidget(self.content_area, 1)
+        self.tutorial_layout.addWidget(self.content_area, 1)
 
         self.button_box = QDialogButtonBox(self)
         self.next_button = QPushButton("Next", self)
@@ -74,15 +114,21 @@ class InteractiveTutorialsDialog(QDialog):
         self.back_button.clicked.connect(self.on_back_button_clicked)
         self.button_box.addButton(self.next_button, QDialogButtonBox.ActionRole)
         self.button_box.addButton(self.back_button, QDialogButtonBox.ResetRole)
-        self.main_layout.addWidget(self.button_box)
+        self.tutorial_layout.addWidget(self.button_box)
 
-        self.setLayout(self.main_layout)
+        self.tutorial_widget.setLayout(self.tutorial_layout)
+        self.stacked_widget.addWidget(self.tutorial_widget)
 
-        # TODO: Have real system for loading tutorials
-        self.load_tutorial()
+        self.stacked_layout = QVBoxLayout()
+        self.stacked_layout.addWidget(self.stacked_widget)
+        self.setLayout(self.stacked_layout)
 
-    def load_tutorial(self):
-        self.current_tutorial = DemoTutorial()
+    def load_tutorial(self, index):
+        # Switch to the tutorial view
+        self.stacked_widget.setCurrentIndex(1)
+
+        tutorial_factory = self.tutorials[index]["tutorial"]
+        self.current_tutorial = tutorial_factory()
 
         # Update the title based on the loaded tutorial
         self.setWindowTitle("InteractiveTutorials - " + self.current_tutorial.get_title())
@@ -117,6 +163,11 @@ class InteractiveTutorialsDialog(QDialog):
         if self.current_step and self.current_step.prev_step:
             self.current_step = self.current_step.prev_step
             self.update_step_view()
+
+    def on_start_button_clicked(self):
+        tutorial_index = self.tutorial_list.currentIndex().row()
+
+        self.load_tutorial(tutorial_index)
 
 
 if __name__ == "__main__":
