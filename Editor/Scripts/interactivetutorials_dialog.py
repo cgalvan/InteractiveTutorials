@@ -13,7 +13,11 @@ from PySide2.QtCore import QMargins, QStringListModel, Qt
 from PySide2.QtGui import QColor, QPainter, QPen
 from PySide2.QtWidgets import QDialog, QDialogButtonBox, QLabel, QListView, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
 
-import editor_python_test_tools.pyside_utils as pyside_utils
+# This import will fail when the AP launches, will only work once the Editor is running
+try:
+    import editor_python_test_tools.pyside_utils as pyside_utils
+except:
+    pass
 
 from demo_tutorial import DemoTutorial, IntroTutorial
 
@@ -141,12 +145,34 @@ class InteractiveTutorialsDialog(QDialog):
         first_step = self.current_tutorial.get_first_step()
         self.load_step(first_step)
 
+    def end_tutorial(self):
+        if not self.current_step:
+            return
+
+        # First, call the on_step_end for the final step
+        self.current_step.on_step_end()
+
+        # Then, call the on_tutorial_end for the tutorial
+        self.current_tutorial.on_tutorial_end()
+
+        # Finally, clear our state and switch back to the intro view
+        self.highlight_widget.update_widget(None)
+        self.current_tutorial = None
+        self.stacked_widget.setCurrentIndex(0)
+
     def update_step_view(self):
         if not self.current_step:
             return
 
         self.title_label.setText(self.current_step.get_title())
         self.content_area.setText(self.current_step.get_content())
+
+        # If there are no steps remaining in the tutorial, then
+        # update the Next button text to "End"
+        next_button_text = "Next"
+        if not self.current_step.next_step:
+            next_button_text = "End"
+        self.next_button.setText(next_button_text)
 
         # If a highlight pattern was set for this step, then find that widget/item
         # and highlight it
@@ -176,6 +202,10 @@ class InteractiveTutorialsDialog(QDialog):
             next_step = self.current_step.next_step
             if next_step:
                 self.load_step(next_step)
+            else:
+                # If there are no next steps left,
+                # then we have finished the tutorial!
+                self.end_tutorial()
 
     def load_previous_step(self):
         if self.current_step:

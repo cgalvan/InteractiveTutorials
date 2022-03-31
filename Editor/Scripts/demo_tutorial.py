@@ -36,6 +36,9 @@ class DemoTutorial(Tutorial):
     def on_tutorial_start(self):
         print("Where we're going, we don't need roads")
 
+    def on_tutorial_end(self):
+        print("Follow the yellow brick road")
+
 class IntroTutorial(Tutorial):
     def __init__(self):
         super(IntroTutorial, self).__init__()
