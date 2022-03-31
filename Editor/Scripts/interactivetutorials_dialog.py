@@ -11,7 +11,9 @@ Generated from O3DE PythonToolGem Template"""
 from PySide2 import QtCore
 from PySide2.QtCore import QMargins, QStringListModel, Qt
 from PySide2.QtGui import QColor, QPainter, QPen
-from PySide2.QtWidgets import QDialog, QDialogButtonBox, QLabel, QListView, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
+from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView,
+    QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
+)
 
 # This import will fail when the AP launches, will only work once the Editor is running
 try:
@@ -149,16 +151,22 @@ class InteractiveTutorialsDialog(QDialog):
         if not self.current_step:
             return
 
-        # First, call the on_step_end for the final step
+        # Call the on_step_end for the final step
         self.current_step.on_step_end()
 
-        # Then, call the on_tutorial_end for the tutorial
+        # Call the on_tutorial_end for the tutorial
         self.current_tutorial.on_tutorial_end()
 
-        # Finally, clear our state and switch back to the intro view
+        # Clear our state and switch back to the intro view
+        # Save our tutorial title so we can show it in the completion message
+        title = self.current_tutorial.get_title()
         self.highlight_widget.update_widget(None)
         self.current_tutorial = None
         self.stacked_widget.setCurrentIndex(0)
+
+        # Give user a nice congratulations message for completing the tutorial
+        QMessageBox.information(self, "Tutorial completed",
+            f"Congratulations! Great job completing the { title } tutorial :)")
 
     def update_step_view(self):
         if not self.current_step:
