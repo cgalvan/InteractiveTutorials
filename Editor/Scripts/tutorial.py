@@ -21,6 +21,18 @@ class TutorialStep:
         self.prev_step = None
         self.next_step = None
 
+    # Method that will be called when the step starts
+    # A step class can override this method if they need
+    # to setup any special handling/listeners
+    def on_step_start(self):
+        pass
+
+    # Method that will be called after a step has ended
+    # A step class can override this method if they need
+    # to perform any cleanup or other tasks
+    def on_step_end(self):
+        pass
+
     def get_title(self):
         return self.title
 
@@ -35,6 +47,18 @@ class Tutorial:
     def __init__(self):
         self.steps = []
         self.title = ""
+
+    # Method that will be called when the tutorial starts
+    # A tutorial class can override this method if they need
+    # to setup any special handling/listeners
+    def on_tutorial_start(self):
+        pass
+
+    # Method that will be called after a tutorial has ended
+    # A tutorial class can override this method if they need
+    # to perform any cleanup or other tasks
+    def on_tutorial_end(self):
+        pass
 
     def get_title(self):
         return self.title
