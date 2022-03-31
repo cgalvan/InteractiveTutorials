@@ -10,6 +10,18 @@ from PySide2.QtWidgets import QMenuBar
 from tutorial import Tutorial, TutorialStep
 
 
+# Example of a custom step that overrides the start/end hooks
+class SelectEntityStep(TutorialStep):
+    def __init__(self):
+        super(SelectEntityStep, self).__init__("Select an Entity",
+            "Next, select any Entity in the Entity Outliner", "EntityOutlinerWidgetUI")
+
+    def on_step_start(self):
+        print("Starting the select Entity step")
+
+    def on_step_end(self):
+        print("Ended the select Entity step")
+
 class DemoTutorial(Tutorial):
     def __init__(self):
         super(DemoTutorial, self).__init__()
@@ -17,9 +29,12 @@ class DemoTutorial(Tutorial):
         self.title = "Demo Tutorial"
 
         self.add_step(TutorialStep("First things first", "Welcome! This first step shouldn't highlight any widget."))
-        self.add_step(TutorialStep("Select an Entity", "Next, select any Entity in the Entity Outliner", "EntityOutlinerWidgetUI"))
+        self.add_step(SelectEntityStep())
         self.add_step(TutorialStep("Add a component", "Use the Add Component button to add a component to the Entity", "m_addComponentButton"))
         self.add_step(TutorialStep("Cool menu bar", "This step is just to showcase highlighting an item without a direct name but by using a type pattern instead", {"type": QMenuBar}))
+
+    def on_tutorial_start(self):
+        print("Where we're going, we don't need roads")
 
 class IntroTutorial(Tutorial):
     def __init__(self):

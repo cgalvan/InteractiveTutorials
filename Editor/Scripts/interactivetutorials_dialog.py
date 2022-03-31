@@ -109,9 +109,9 @@ class InteractiveTutorialsDialog(QDialog):
         self.button_box = QDialogButtonBox(self)
         self.next_button = QPushButton("Next", self)
         self.next_button.setDefault(True)
-        self.next_button.clicked.connect(self.on_next_button_clicked)
+        self.next_button.clicked.connect(self.load_next_step)
         self.back_button = QPushButton("Back", self)
-        self.back_button.clicked.connect(self.on_back_button_clicked)
+        self.back_button.clicked.connect(self.load_previous_step)
         self.button_box.addButton(self.next_button, QDialogButtonBox.ActionRole)
         self.button_box.addButton(self.back_button, QDialogButtonBox.ResetRole)
         self.tutorial_layout.addWidget(self.button_box)
@@ -130,11 +130,16 @@ class InteractiveTutorialsDialog(QDialog):
         tutorial_factory = self.tutorials[index]["tutorial"]
         self.current_tutorial = tutorial_factory()
 
+        # Invoke the tutorial start method
+        self.current_tutorial.on_tutorial_start()
+
         # Update the title based on the loaded tutorial
         self.setWindowTitle("InteractiveTutorials - " + self.current_tutorial.get_title())
 
-        self.current_step = self.current_tutorial.get_first_step()
-        self.update_step_view()
+        # Reset initial state and load first step
+        self.current_step = None
+        first_step = self.current_tutorial.get_first_step()
+        self.load_step(first_step)
 
     def update_step_view(self):
         if not self.current_step:
@@ -154,15 +159,29 @@ class InteractiveTutorialsDialog(QDialog):
         else:
             self.highlight_widget.update_widget(None)
 
-    def on_next_button_clicked(self):
-        if self.current_step and self.current_step.next_step:
-            self.current_step = self.current_step.next_step
-            self.update_step_view()
+    def load_step(self, step):
+        # If there was a step already loaded, call its ending method
+        if self.current_step:
+            self.current_step.on_step_end()
 
-    def on_back_button_clicked(self):
-        if self.current_step and self.current_step.prev_step:
-            self.current_step = self.current_step.prev_step
-            self.update_step_view()
+        self.current_step = step
+
+        # Invoke the method for the beginning of this step
+        self.current_step.on_step_start()
+
+        self.update_step_view()
+
+    def load_next_step(self):
+        if self.current_step:
+            next_step = self.current_step.next_step
+            if next_step:
+                self.load_step(next_step)
+
+    def load_previous_step(self):
+        if self.current_step:
+            prev_step = self.current_step.prev_step
+            if prev_step:
+                self.load_step(prev_step)
 
     def on_start_button_clicked(self):
         tutorial_index = self.tutorial_list.currentIndex().row()
