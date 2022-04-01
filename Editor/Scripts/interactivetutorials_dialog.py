@@ -106,6 +106,8 @@ class InteractiveTutorialsDialog(QDialog):
         self.highlight_widget.hide()
 
         self.title_label = QLabel(self)
+        # TODO: Use the Text::addHeadlineStyle method when more of AzQtComponents are exposed to python
+        self.title_label.setProperty("class", "Headline")
         self.tutorial_layout.addWidget(self.title_label)
 
         self.content_area = QTextEdit(self)
