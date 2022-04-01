@@ -22,6 +22,7 @@ except:
     pass
 
 from demo_tutorial import DemoTutorial, IntroTutorial
+from tutorial import Tutorial
 
 
 class HighlightWidget(QWidget):
@@ -82,6 +83,10 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "Demo Tutorial",
                 "tutorial": DemoTutorial
+            },
+            {
+                "name": "Create an Entity",
+                "tutorial": lambda: Tutorial.create_from_json_file("create_entity_tutorial.json")
             }
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]

@@ -5,6 +5,9 @@ For complete copyright and license terms please see the LICENSE at the root of t
 SPDX-License-Identifier: Apache-2.0 OR MIT
 """
 
+import json
+import os
+
 
 # Class that describes a step in the tutorial
 class TutorialStep:
@@ -47,6 +50,33 @@ class Tutorial:
     def __init__(self):
         self.steps = []
         self.title = ""
+
+    @classmethod
+    def create_from_json_file(cls, file_path):
+        # If the specified file path isn't an absolute path,
+        # try to resolve it locally
+        if not os.path.isabs(file_path):
+            local_dir = os.path.dirname(os.path.abspath(__file__))
+            file_path = os.path.join(local_dir, file_path)
+
+        # Read the json data in from the json file
+        f = open(file_path)
+        data = json.load(f)
+
+        # Create the new tutorial
+        new_tutorial = cls()
+        new_tutorial.title = data["title"]
+
+        # Add the tutorial steps
+        steps = data["steps"]
+        for step in steps:
+            title = step["title"]
+            content = step["content"]
+            highlight_pattern = step.get("highlight_pattern", None)
+            new_step = TutorialStep(title, content, highlight_pattern)
+            new_tutorial.add_step(new_step)
+
+        return new_tutorial
 
     # Method that will be called when the tutorial starts
     # A tutorial class can override this method if they need
