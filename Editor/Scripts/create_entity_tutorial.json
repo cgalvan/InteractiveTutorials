@@ -1,0 +1,15 @@
+{
+    "title": "Intro to the Editor",
+    "steps": [
+        {
+            "title": "Creating entities via the Entity Outliner",
+            "content": "<html>In the <b>Entity Outliner</b>, right-click on an empty area to reveal a context menu.<br/><br/>In the context menu, select <b>Create entity</b> (hotkey <b>Ctrl+Alt+N</b>).<br/><br/>A new entity is created and selected in both the <b>Entity Outliner</b> and <b>Viewport.</b></html>",
+            "highlight_pattern": "EntityOutlinerWidgetUI"
+        },
+        {
+            "title": "Creating entities via the Viewport",
+            "content": "<html>In the <b>Viewport</b>, right-click to reveal a context menu.<br/><br/>In the context menu, select <b>Create entity</b>.<br/><br/>A new entity is created and selected in both the <b>Entity Outliner</b> and <b>Viewport.</b></html>",
+            "highlight_pattern": "renderOverlay"
+        }
+    ]
+}
