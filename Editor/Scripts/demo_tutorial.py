@@ -84,7 +84,7 @@ With an asset selected in Asset Browser, the right-click context menu has option
 
         self.add_step(TutorialStep("Entity Inspector", """<html>
 On the right side of O3DE Editor, <b>Entity Inspector</b> displays the components of the currently selected entity. At the top of Entity Inspector is a field for the entity Name and an Add Component button. The Add Component button opens a list of available components, sorted by type, that can be added to the entity. Each component has its own set of properties that are displayed in Entity Inspector. All entities contain a transform component that sets the position, rotation, and scale of the entity in the level.
-</html>""", "ComponentEntityInspector"))
+</html>""", "InspectorMainWindow"))
 
         self.add_step(TutorialStep("Console", """<html>
 At the bottom of the default O3DE Editor layout is the <b>Editor Console</b>, which shows command and process output from O3DE Editor and your project. When you load a level, for example, the console displays messages about assets and configuration files as they load, and might display warnings and errors if issues are encountered.
