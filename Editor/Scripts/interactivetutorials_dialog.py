@@ -11,7 +11,7 @@ Generated from O3DE PythonToolGem Template"""
 from tkinter import ON
 from PySide2 import QtCore
 from PySide2.QtCore import QMargins, QStringListModel, Qt
-from PySide2.QtGui import QColor, QPainter, QPen, QPalette, QFont
+from PySide2.QtGui import QColor, QPainter, QPen
 from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView,
     QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
 )
@@ -125,9 +125,6 @@ class InteractiveTutorialsDialog(QDialog):
         #self.content_area.setReadOnly(True)
         self.content_area = QLabel(self)
         self.content_area.setWordWrap(True)
-        #self.ca_palette = self.content_area.palette()
-        #self.ca_palette.setColor(self.content_area.backgroundRole(), Qt.black)
-        #self.content_area.setPalette(self.ca_palette)
         self.tutorial_layout.addWidget(self.content_area, 1)
 
         self.button_box = QDialogButtonBox(self)
