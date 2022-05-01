@@ -1,0 +1,36 @@
+{
+    "materialType": "Materials/Types/StandardMultilayerPBR.materialtype",
+    "materialTypeVersion": 3,
+    "propertyValues": {
+        "blend.enableLayer2": true,
+        "blend.textureMap": "20-sided-dice/numbermask.png",
+        "blend.textureMapUv": "Unwrapped",
+        "general.applySpecularAA": true,
+        "general.enableMultiScatterCompensation": true,
+        "layer1_baseColor.color": [
+            0.43414968252182007,
+            0.002731364918872714,
+            0.06480506807565689,
+            1.0
+        ],
+        "layer1_clearCoat.roughness": 1.0,
+        "layer1_metallic.factor": 0.05999999865889549,
+        "layer1_normal.textureMap": "20-sided-dice/dice-face-normal.png",
+        "layer1_parallax.textureMap": "20-sided-dice/dice-face-height.png",
+        "layer1_roughness.factor": 0.3499999940395355,
+        "layer1_specularF0.factor": 0.20000000298023224,
+        "layer2_normal.factor": 2.0,
+        "layer2_normal.textureMap": "20-sided-dice/dice-number-normal.png",
+        "layer2_normal.textureMapUv": "Unwrapped",
+        "layer2_parallax.factor": 0.041999999433755875,
+        "layer2_parallax.offset": 0.10000000149011612,
+        "layer2_roughness.factor": 0.20000000298023224,
+        "layer2_roughness.lowerBound": 0.009999999776482582,
+        "layer2_roughness.textureMapUv": "Unwrapped",
+        "parallax.algorithm": "ContactRefinement",
+        "parallax.enable": false,
+        "parallax.parallaxUv": "Unwrapped",
+        "parallax.pdo": true,
+        "parallax.quality": "Medium"
+    }
+}

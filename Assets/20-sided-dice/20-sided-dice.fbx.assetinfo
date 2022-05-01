@@ -1,0 +1,47 @@
+{
+    "values": [
+        {
+            "$type": "{5B03C8E6-8CEE-4DA0-A7FA-CD88689DD45B} MeshGroup",
+            "id": "{097EED76-70BF-5EB2-B3CA-9A85A3C9E60A}",
+            "name": "20-sided-dice",
+            "NodeSelectionList": {
+                "selectedNodes": [
+                    "RootNode.20-sided-dice"
+                ],
+                "unselectedNodes": [
+                    "RootNode",
+                    "RootNode.20-sided-dice.custom_properties",
+                    "RootNode.20-sided-dice.UV0",
+                    "RootNode.20-sided-dice.UV1",
+                    "RootNode.20-sided-dice.dice-face"
+                ]
+            },
+            "export method": 1,
+            "ConvexAssetParams": {
+                "CheckZeroAreaTriangles": true,
+                "BuildGpuData": true
+            },
+            "MaterialSlots": [
+                "dice-face"
+            ],
+            "PhysicsMaterials": [
+                "<Default Physics Material>"
+            ]
+        },
+        {
+            "$type": "{07B356B7-3635-40B5-878A-FAC4EFD5AD86} MeshGroup",
+            "name": "20-sided-dice",
+            "nodeSelectionList": {
+                "selectedNodes": [
+                    "RootNode",
+                    "RootNode.20-sided-dice",
+                    "RootNode.20-sided-dice.custom_properties",
+                    "RootNode.20-sided-dice.UV0",
+                    "RootNode.20-sided-dice.UV1",
+                    "RootNode.20-sided-dice.dice-face"
+                ]
+            },
+            "id": "{0EFC2661-FE0A-5DB5-8B70-F4F8C1452456}"
+        }
+    ]
+}

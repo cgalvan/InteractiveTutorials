@@ -1,0 +1,153 @@
+{
+    "ContainerEntity": {
+        "Id": "ContainerEntity",
+        "Name": "20-sided-dice",
+        "Components": {
+            "Component_[10196972954120714642]": {
+                "$type": "EditorDisabledCompositionComponent",
+                "Id": 10196972954120714642
+            },
+            "Component_[11819430885721573649]": {
+                "$type": "EditorPrefabComponent",
+                "Id": 11819430885721573649
+            },
+            "Component_[13715621054795207946]": {
+                "$type": "EditorVisibilityComponent",
+                "Id": 13715621054795207946
+            },
+            "Component_[14750179114716037774]": {
+                "$type": "EditorInspectorComponent",
+                "Id": 14750179114716037774
+            },
+            "Component_[15236523366374190433]": {
+                "$type": "EditorEntitySortComponent",
+                "Id": 15236523366374190433
+            },
+            "Component_[17654699584220431246]": {
+                "$type": "EditorEntityIconComponent",
+                "Id": 17654699584220431246
+            },
+            "Component_[17939855088464728445]": {
+                "$type": "EditorOnlyEntityComponent",
+                "Id": 17939855088464728445
+            },
+            "Component_[478219440090519503]": {
+                "$type": "SelectionComponent",
+                "Id": 478219440090519503
+            },
+            "Component_[4841258192197199248]": {
+                "$type": "EditorLockComponent",
+                "Id": 4841258192197199248
+            },
+            "Component_[5278164960615771093]": {
+                "$type": "EditorPendingCompositionComponent",
+                "Id": 5278164960615771093
+            },
+            "Component_[9331061673385139100]": {
+                "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",
+                "Id": 9331061673385139100,
+                "Parent Entity": ""
+            }
+        }
+    },
+    "Entities": {
+        "Entity_[468674957583]": {
+            "Id": "Entity_[468674957583]",
+            "Name": "20-sided-dice",
+            "Components": {
+                "Component_[11226366270733757562]": {
+                    "$type": "SelectionComponent",
+                    "Id": 11226366270733757562
+                },
+                "Component_[14536572731456066425]": {
+                    "$type": "EditorPendingCompositionComponent",
+                    "Id": 14536572731456066425
+                },
+                "Component_[15107944913622563566]": {
+                    "$type": "EditorOnlyEntityComponent",
+                    "Id": 15107944913622563566
+                },
+                "Component_[15836308472034442729]": {
+                    "$type": "EditorVisibilityComponent",
+                    "Id": 15836308472034442729
+                },
+                "Component_[17787692817908761277]": {
+                    "$type": "EditorLockComponent",
+                    "Id": 17787692817908761277
+                },
+                "Component_[17873239631991478919]": {
+                    "$type": "EditorEntitySortComponent",
+                    "Id": 17873239631991478919
+                },
+                "Component_[3157167054484252735]": {
+                    "$type": "EditorEntityIconComponent",
+                    "Id": 3157167054484252735
+                },
+                "Component_[4737846436327003305]": {
+                    "$type": "AZ::Render::EditorMeshComponent",
+                    "Id": 4737846436327003305,
+                    "Controller": {
+                        "Configuration": {
+                            "ModelAsset": {
+                                "assetId": {
+                                    "guid": "{C039BB41-C9DF-5D05-BD12-2D8EB460DFA6}",
+                                    "subId": 278902244
+                                },
+                                "assetHint": "20-sided-dice/20-sided-dice.azmodel"
+                            }
+                        }
+                    }
+                },
+                "Component_[6436890631736614632]": {
+                    "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",
+                    "Id": 6436890631736614632,
+                    "Parent Entity": "ContainerEntity"
+                },
+                "Component_[8452649835032352718]": {
+                    "$type": "EditorMaterialComponent",
+                    "Id": 8452649835032352718,
+                    "Controller": {
+                        "Configuration": {
+                            "materials": [
+                                {
+                                    "Key": {
+                                        "materialSlotStableId": 1307669333
+                                    },
+                                    "Value": {
+                                        "MaterialAsset": {
+                                            "assetId": {
+                                                "guid": "{51A998F6-4658-5B7F-A40C-3C6CEFE13D9C}"
+                                            },
+                                            "assetHint": "20-sided-dice/20-sided-dice-resin.azmaterial"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                "Component_[8678121260785447383]": {
+                    "$type": "EditorInspectorComponent",
+                    "Id": 8678121260785447383,
+                    "ComponentOrderEntryArray": [
+                        {
+                            "ComponentId": 6436890631736614632
+                        },
+                        {
+                            "ComponentId": 4737846436327003305,
+                            "SortIndex": 1
+                        },
+                        {
+                            "ComponentId": 8452649835032352718,
+                            "SortIndex": 2
+                        }
+                    ]
+                },
+                "Component_[9200044539186558691]": {
+                    "$type": "EditorDisabledCompositionComponent",
+                    "Id": 9200044539186558691
+                }
+            }
+        }
+    }
+}

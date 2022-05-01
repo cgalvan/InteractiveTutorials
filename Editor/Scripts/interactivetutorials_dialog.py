@@ -8,9 +8,10 @@ SPDX-License-Identifier: Apache-2.0 OR MIT
 """InteractiveTutorials\\editor\\scripts\\InteractiveTutorials_dialog.py
 Generated from O3DE PythonToolGem Template"""
 
+from tkinter import ON
 from PySide2 import QtCore
 from PySide2.QtCore import QMargins, QStringListModel, Qt
-from PySide2.QtGui import QColor, QPainter, QPen
+from PySide2.QtGui import QColor, QPainter, QPen, QPalette, QFont
 from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView,
     QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
 )
@@ -22,6 +23,7 @@ except:
     pass
 
 from demo_tutorial import DemoTutorial, IntroTutorial
+from rigid_body_tutorial import RigidBodyTutorial
 from tutorial import Tutorial
 
 
@@ -87,6 +89,10 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "Create an Entity",
                 "tutorial": lambda: Tutorial.create_from_json_file("create_entity_tutorial.json")
+            },
+            {
+                "name": "PhysX Rigid Bodies",
+                "tutorial": RigidBodyTutorial
             }
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
@@ -115,8 +121,13 @@ class InteractiveTutorialsDialog(QDialog):
         self.title_label.setProperty("class", "Headline")
         self.tutorial_layout.addWidget(self.title_label)
 
-        self.content_area = QTextEdit(self)
-        self.content_area.setReadOnly(True)
+        #self.content_area = QTextEdit(self)
+        #self.content_area.setReadOnly(True)
+        self.content_area = QLabel(self)
+        self.content_area.setWordWrap(True)
+        #self.ca_palette = self.content_area.palette()
+        #self.ca_palette.setColor(self.content_area.backgroundRole(), Qt.black)
+        #self.content_area.setPalette(self.ca_palette)
         self.tutorial_layout.addWidget(self.content_area, 1)
 
         self.button_box = QDialogButtonBox(self)
