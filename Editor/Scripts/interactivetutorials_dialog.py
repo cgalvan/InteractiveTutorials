@@ -8,7 +8,6 @@ SPDX-License-Identifier: Apache-2.0 OR MIT
 """InteractiveTutorials\\editor\\scripts\\InteractiveTutorials_dialog.py
 Generated from O3DE PythonToolGem Template"""
 
-from tkinter import ON
 from PySide2 import QtCore
 from PySide2.QtCore import QMargins, QStringListModel, Qt
 from PySide2.QtGui import QColor, QPainter, QPen
@@ -121,8 +120,6 @@ class InteractiveTutorialsDialog(QDialog):
         self.title_label.setProperty("class", "Headline")
         self.tutorial_layout.addWidget(self.title_label)
 
-        #self.content_area = QTextEdit(self)
-        #self.content_area.setReadOnly(True)
         self.content_area = QLabel(self)
         self.content_area.setWordWrap(True)
         self.tutorial_layout.addWidget(self.content_area, 1)
