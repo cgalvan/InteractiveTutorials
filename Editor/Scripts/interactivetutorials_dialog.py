@@ -22,6 +22,7 @@ except:
     pass
 
 from demo_tutorial import DemoTutorial, IntroTutorial
+from rigid_body_tutorial import RigidBodyTutorial
 from tutorial import Tutorial
 
 
@@ -87,6 +88,10 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "Create an Entity",
                 "tutorial": lambda: Tutorial.create_from_json_file("create_entity_tutorial.json")
+            },
+            {
+                "name": "PhysX Rigid Bodies",
+                "tutorial": RigidBodyTutorial
             }
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
@@ -115,8 +120,8 @@ class InteractiveTutorialsDialog(QDialog):
         self.title_label.setProperty("class", "Headline")
         self.tutorial_layout.addWidget(self.title_label)
 
-        self.content_area = QTextEdit(self)
-        self.content_area.setReadOnly(True)
+        self.content_area = QLabel(self)
+        self.content_area.setWordWrap(True)
         self.tutorial_layout.addWidget(self.content_area, 1)
 
         self.button_box = QDialogButtonBox(self)
