@@ -21,3 +21,9 @@ Once the gem has been added to your project and you've rebuilt, the `Interactive
 
 ## Custom tutorials
 If you would like to create your own tutorial, check out some of the examples in `Editor/Scripts/demo_tutorial.py`
+
+# Example
+
+Here's a screen recording of our PhysX Rigid Bodies Tutorial in action!
+
+![RigidBodyTutorial](https://user-images.githubusercontent.com/7519264/167025468-b3dd1a38-34a3-4529-8a85-901e3a9e7f87.gif)
