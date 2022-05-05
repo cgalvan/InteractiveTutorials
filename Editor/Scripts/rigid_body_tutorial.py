@@ -19,7 +19,7 @@ class RigidBodyTutorial(Tutorial):
         self.title = "PhysX Rigid Bodies"
 
         self.add_step(TutorialStep("Dynamic Simulation with PhysX Rigid Bodies", 
-                """<html><p style="font-size:13px">Greetings!<br><br><i>Rigid bodies</i> are dynamic solid objects that 
+                """<html><p>Greetings!<br><br><i>Rigid bodies</i> are dynamic solid objects that 
                 simulate reactions to collisions and other physical forces.<br><br>In this tutorial, we'll edit an 
                 existing prefab to create a dynamic simulation with forces and collisions. We'll add a 
                 <b>PhysX Collider</b> component and a <b>PhysX Rigid Body</b> component, create collider for the ground 
