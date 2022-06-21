@@ -5,11 +5,6 @@ For complete copyright and license terms please see the LICENSE at the root of t
 SPDX-License-Identifier: Apache-2.0 OR MIT
 """
 
-import sys
-import azlmbr
-
-from PySide2.QtWidgets import QMenuBar
-
 from tutorial import Tutorial, TutorialStep
 
 class ColliderAssetsTutorial(Tutorial):
@@ -52,7 +47,7 @@ class ColliderAssetsTutorial(Tutorial):
                 in the viewport. Then, in <b>Entity Inspector</b>, select <b>Add Component</b> and then <b>PhysX Collider</b>.
                 The component we've just added automatically detects the <i>.pxmesh</i> asset. <br><br>
                 The <Shape> is set to <i>PhysicsAsset</i> and the <PhysX Mesh> references the <i>.pxmesh</i> product asset. <br><br><br>
-                </html>""", "AzAssetBrowserWindowClass"))
+                </html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Optimize your Entity", """<html><p style="font-size:13px">Our entity is currently static, because 
                 we only have a PhysX Collider component. A static entity is solid (it can be collided with) but does not move
                 in response to collisions. <li>If you want a static entity, you can enable the <b>Static</b> property within the <b>Transform</b>

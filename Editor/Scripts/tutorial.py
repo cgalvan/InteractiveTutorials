@@ -42,7 +42,6 @@ class TutorialStep:
     def get_content(self):
         return self.content
 
-
     def get_highlight_pattern(self):
         return self.highlight_pattern
 
@@ -109,6 +108,5 @@ class Tutorial:
 
         return None
 
-    #list of all steps in the tutorial
     def get_steps(self):
         return self.steps

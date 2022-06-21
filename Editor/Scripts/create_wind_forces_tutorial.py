@@ -5,11 +5,6 @@ For complete copyright and license terms please see the LICENSE at the root of t
 SPDX-License-Identifier: Apache-2.0 OR MIT
 """
 
-import sys
-import azlmbr
-
-from PySide2.QtWidgets import QMenuBar
-
 from tutorial import Tutorial, TutorialStep
 
 class WindForcesTutorial(Tutorial):
@@ -40,15 +35,15 @@ class WindForcesTutorial(Tutorial):
                 Select the <b>Add</b> button located next to <b>Forces</b>. Then, in the <b>Direction</b> property
                 of your new force, set the <b>Y</b> component to <i>-1.0</i>, and the <b>Z</b> component to <i>0.0</i>, to create
                 a direction for the wind. The PhysX collider box displays cones indicating the direction of the wind force. <br>
-                Set the <b>Magnitude</b> to <i>10.0</i>. </p></html>""", "AzAssetBrowserWindowClass"))
+                Set the <b>Magnitude</b> to <i>10.0</i>. </p></html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Add a Cloth Prefab", """<html><p style="font-size:13px">We'll test the wind provider by adding
                 a NVIDIA Cloth Mesh. In <b>Asset Browser</b>, navigate to <i>Gems\NvCloth\Assets\prefabs\Cloth</i>, then locate
-                <i>cloth_locked_edge.prefab</i>, and drag that asset into the viewport. </p></html>""", "EntityOutlinerWidgetUI"))
+                <i>cloth_locked_edge.prefab</i>, and drag that asset into the viewport. </p></html>""", "AzAssetBrowserWindowClass"))
         self.add_step(TutorialStep("Position the Prefab", """<html><p style="font-size:13px">Use the Move tool to place the cloth prefab. 
                 Once the prefab's in position, you can hide the wind provider entity. In <b>Entity Outliner</b>, in the column to the 
                 right of the wind provider entity, toggle the <b>Show/Hide Entity</b> setting. <br><br>Note: if you're using the 
                 <b>Local wind tag</b>, you must place the cloth asset inside the PhysX Collider volume of the wind provider entity. 
-                </p></html>""", "InspectorMainWindow"))
+                </p></html>""", "EntityOutlinerWidgetUI"))
         self.add_step(TutorialStep("Edit the Prefab", """<html><p style="font-size:13px">The cloth prefab has a local wind property 
                 enabled which generates a local wind force that overrides our wind provider entity. We will deactiate the local
                 wind force of the prefab so that we can view the results of the wind provider we created. <br><br>

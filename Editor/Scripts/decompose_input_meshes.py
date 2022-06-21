@@ -5,11 +5,6 @@ For complete copyright and license terms please see the LICENSE at the root of t
 SPDX-License-Identifier: Apache-2.0 OR MIT
 """
 
-import sys
-import azlmbr
-
-from PySide2.QtWidgets import QMenuBar
-
 from tutorial import Tutorial, TutorialStep
 
 class DecomposeInputMeshes(Tutorial):

@@ -5,11 +5,6 @@ For complete copyright and license terms please see the LICENSE at the root of t
 SPDX-License-Identifier: Apache-2.0 OR MIT
 """
 
-import sys
-import azlmbr
-
-from PySide2.QtWidgets import QMenuBar
-
 from tutorial import Tutorial, TutorialStep
 
 class CustomizeMeshAssetProcessingTutorial(Tutorial):
@@ -24,7 +19,7 @@ class CustomizeMeshAssetProcessingTutorial(Tutorial):
                 some other ways you can edit the mesh. <br><br>Click next to continue.</p></html>"""))
         self.add_step(TutorialStep("Preparing the scene", """<html><p style="font-size:13px">The <b>Asset Processor </b> runs 
                 in the background automatically detecting source assets and scheduling process jobs for them.
-                <br><br>In <b>Asset Processor</b>, search for the <b>sphere.fbx</b> source asset and 
+                <br><br>In <b>Asset Browser</b>, search for the <b>sphere.fbx</b> source asset and 
                 right click to expand it. Select 'Edit Settings'.
                 </p></html>""", "AzAssetBrowserWindowClass"))
         self.add_step(TutorialStep("Edit the Scene Settings", """<html><p style="font-size:13px">By default, 
@@ -47,7 +42,7 @@ class CustomizeMeshAssetProcessingTutorial(Tutorial):
         self.add_step(TutorialStep("View Changes", """<html><p style="font-size:13px">To use the prefab in our 
                 level we need to create an instance, or <i>instantiate</i> the prefab in the level.<br><br>Drag the 
                 <strong><code style="font-size:14px;color:#E44C9A">20-sided-dice.prefab</code></strong> into the 
-                viewport to instatiate it in the level.</p></html>""", "EntityOutlinerWidgetUI"))
+                viewport to instatiate it in the level.</p></html>""", "AzAssetBrowserWindowClass"))
         self.add_step(TutorialStep("Position the prefab", """<html><p style="font-size:13px"> 
                 Choose the <b>Update</b> button at the bottom-right of Scene Settings. 
                 This creates or updates the .assetinfo sidecar file and triggers Asset Processor to reprocess the asset.

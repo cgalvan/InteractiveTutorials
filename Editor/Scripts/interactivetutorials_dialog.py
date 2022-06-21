@@ -28,9 +28,6 @@ from decompose_input_meshes import DecomposeInputMeshes
 from customize_mesh_asset_processing import CustomizeMeshAssetProcessingTutorial
 
 from tutorial import Tutorial
-#this is the class that knows what step you're on - reads the tutorial and controls what step is being shown
-#whenever update_step_view is called - steps.index self.current_step tells you the index 
-#counter 
 
 class HighlightWidget(QWidget):
     def __init__(self, parent=None):
@@ -168,11 +165,7 @@ class InteractiveTutorialsDialog(QDialog):
 
         tutorial_factory = self.tutorials[index]["tutorial"]
         self.current_tutorial = tutorial_factory()
-        #tutorial factory creates a new instance of the tutorial
-        #self.current_tutorial : rigid body / wind forces
-        #num_steps = len(self.currenttutorial.get_steps)
-        #^ store in self.current_turoail num steps
-        #whenever updatestepview gets called use  index and string to set the text on new label
+        
         self.current_tutorial_num_steps = len(self.current_tutorial.get_steps())
 
         # Invoke the tutorial start method
@@ -181,10 +174,8 @@ class InteractiveTutorialsDialog(QDialog):
         # Update the title based on the loaded tutorial
         self.setWindowTitle("InteractiveTutorials - " + self.current_tutorial.get_title())
 
-        #set counter
-        self.current_step_index = 0 
-        #wherever load next step and load previous step + 11 -1
         # Reset initial state and load first step
+        self.current_step_index = 0 
         self.current_step = None
         first_step = self.current_tutorial.get_first_step()
         self.load_step(first_step)
@@ -217,9 +208,8 @@ class InteractiveTutorialsDialog(QDialog):
 
         self.title_label.setText(self.current_step.get_title())
         self.content_area.setText(self.current_step.get_content())
-        self.step_label.setText("Step " + str(self.current_step_index) + " of " + str(self.current_tutorial_num_steps))
-        #whenever updatestepview gets called use  index and string to set the text on new label
-
+        self.step_label.setText(f"Step {self.current_step_index} of {self.current_tutorial_num_steps}")
+        
         # If there are no steps remaining in the tutorial, then
         # update the Next button text to "End"
         next_button_text = "Next"
