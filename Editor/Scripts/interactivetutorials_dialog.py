@@ -23,8 +23,14 @@ except:
 
 from demo_tutorial import DemoTutorial, IntroTutorial
 from rigid_body_tutorial import RigidBodyTutorial
-from tutorial import Tutorial
+from process_physx_collider_assets import ColliderAssetsTutorial
+from decompose_input_meshes import DecomposeInputMeshes
+from customize_mesh_asset_processing import CustomizeMeshAssetProcessingTutorial
 
+from tutorial import Tutorial
+#this is the class that knows what step you're on - reads the tutorial and controls what step is being shown
+#whenever update_step_view is called - steps.index self.current_step tells you the index 
+#counter 
 
 class HighlightWidget(QWidget):
     def __init__(self, parent=None):
@@ -92,6 +98,18 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "PhysX Rigid Bodies",
                 "tutorial": RigidBodyTutorial
+            },
+            {
+                "name": "Process PhysX Collider Assets",
+                "tutorial": ColliderAssetsTutorial
+            },
+            {
+                "name": "Decompose Input Meshes",
+                "tutorial": DecomposeInputMeshes
+            },
+            {
+                "name": "Customize Mesh Asset Processing",
+                "tutorial": CustomizeMeshAssetProcessingTutorial
             }
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
@@ -124,6 +142,9 @@ class InteractiveTutorialsDialog(QDialog):
         self.content_area.setWordWrap(True)
         self.tutorial_layout.addWidget(self.content_area, 1)
 
+        self.step_label = QLabel(self)
+        self.tutorial_layout.addWidget(self.step_label)
+
         self.button_box = QDialogButtonBox(self)
         self.next_button = QPushButton("Next", self)
         self.next_button.setDefault(True)
@@ -147,6 +168,12 @@ class InteractiveTutorialsDialog(QDialog):
 
         tutorial_factory = self.tutorials[index]["tutorial"]
         self.current_tutorial = tutorial_factory()
+        #tutorial factory creates a new instance of the tutorial
+        #self.current_tutorial : rigid body / wind forces
+        #num_steps = len(self.currenttutorial.get_steps)
+        #^ store in self.current_turoail num steps
+        #whenever updatestepview gets called use  index and string to set the text on new label
+        self.current_tutorial_num_steps = len(self.current_tutorial.get_steps())
 
         # Invoke the tutorial start method
         self.current_tutorial.on_tutorial_start()
@@ -154,10 +181,14 @@ class InteractiveTutorialsDialog(QDialog):
         # Update the title based on the loaded tutorial
         self.setWindowTitle("InteractiveTutorials - " + self.current_tutorial.get_title())
 
+        #set counter
+        self.current_step_index = 0 
+        #wherever load next step and load previous step + 11 -1
         # Reset initial state and load first step
         self.current_step = None
         first_step = self.current_tutorial.get_first_step()
         self.load_step(first_step)
+        
 
     def end_tutorial(self):
         if not self.current_step:
@@ -186,6 +217,8 @@ class InteractiveTutorialsDialog(QDialog):
 
         self.title_label.setText(self.current_step.get_title())
         self.content_area.setText(self.current_step.get_content())
+        self.step_label.setText("Step " + str(self.current_step_index) + " of " + str(self.current_tutorial_num_steps))
+        #whenever updatestepview gets called use  index and string to set the text on new label
 
         # If there are no steps remaining in the tutorial, then
         # update the Next button text to "End"
@@ -211,6 +244,7 @@ class InteractiveTutorialsDialog(QDialog):
             self.current_step.on_step_end()
 
         self.current_step = step
+        self.current_step_index += 1 
 
         # Invoke the method for the beginning of this step
         self.current_step.on_step_start()
@@ -230,8 +264,11 @@ class InteractiveTutorialsDialog(QDialog):
     def load_previous_step(self):
         if self.current_step:
             prev_step = self.current_step.prev_step
+            self.current_step_index -= 1
             if prev_step:
+                self.current_step_index -= 1
                 self.load_step(prev_step)
+
 
     def on_start_button_clicked(self):
         tutorial_index = self.tutorial_list.currentIndex().row()
