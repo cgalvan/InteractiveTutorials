@@ -25,7 +25,7 @@ class WindForcesTutorial(Tutorial):
                 <b>Wind Configuration</b> includes the <b>Global wind tag</b> and the <b>Local wind tag</b>. </p></html>""", "EntityOutlinerWidgetUI"))
         self.add_step(TutorialStep("Update the Shape", """<html><p style="font-size:13px">Set the PhysX Collider component's Shape
                 property to <i>Box</i>. </p></html>""", "AzAssetBrowserWindowClass"))
-        self.add_step(TutorialStep("Scale the Entity", """<html><p style="font-size:13px">Adjust the <b>Box Dimensions>
+        self.add_step(TutorialStep("Scale the Entity", """<html><p style="font-size:13px">Adjust the <b>Box Dimensions</b>
                 to your specifications. If you're creating a localized wind force, make the dimenesions large enough that they can 
                 contain the entity that receives the wind force.</p></html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Position the Entity", """<html><p style="font-size:13px"> Use the <b>Move</b> tool 

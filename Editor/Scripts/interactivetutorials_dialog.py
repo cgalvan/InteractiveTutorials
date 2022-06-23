@@ -209,7 +209,6 @@ class InteractiveTutorialsDialog(QDialog):
         self.title_label.setText(self.current_step.get_title())
         self.content_area.setText(self.current_step.get_content())
         self.step_label.setText(f"Step {self.current_step_index} of {self.current_tutorial_num_steps}")
-        
         # If there are no steps remaining in the tutorial, then
         # update the Next button text to "End"
         next_button_text = "Next"
@@ -253,8 +252,8 @@ class InteractiveTutorialsDialog(QDialog):
 
     def load_previous_step(self):
         if self.current_step:
-            prev_step = self.current_step.prev_step
             self.current_step_index -= 1
+            prev_step = self.current_step.prev_step
             if prev_step:
                 self.current_step_index -= 1
                 self.load_step(prev_step)
