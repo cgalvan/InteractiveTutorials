@@ -17,11 +17,11 @@ class SelectEntityStep(TutorialStep):
             "Next, select any Entity in the Entity Outliner", "EntityOutlinerWidgetUI")
 
     def on_step_start(self):
+        print("Starting X from AutomatedTesting")
         print("Starting the select Entity step")
 
     def on_step_end(self):
         print("Ended the select Entity step")
-        
 
 class DemoTutorial(Tutorial):
     def __init__(self):

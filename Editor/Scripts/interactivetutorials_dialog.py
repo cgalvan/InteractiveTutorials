@@ -252,7 +252,6 @@ class InteractiveTutorialsDialog(QDialog):
 
     def load_previous_step(self):
         if self.current_step:
-            self.current_step_index -= 1
             prev_step = self.current_step.prev_step
             if prev_step:
                 self.current_step_index -= 1
