@@ -15,7 +15,7 @@ from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView,
     QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
 )
 
-from collider_assets_tutorial import ColliderAssetsTutorial
+from decompose_meshes_tutorial import DecomposeInputMeshes
 
 # This import will fail when the AP launches, will only work once the Editor is running
 try:
@@ -91,9 +91,9 @@ class InteractiveTutorialsDialog(QDialog):
                 "tutorial": lambda: Tutorial.create_from_json_file("create_entity_tutorial.json")
             },
             {
-                "name": "Process PhysX Collider Assets",
-                "tutorial": ColliderAssetsTutorial
-            }            
+                "name": "Decompose Input Meshes",
+                "tutorial": DecomposeInputMeshes
+            }       
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
         self.tutorial_list_model = QStringListModel(self)
