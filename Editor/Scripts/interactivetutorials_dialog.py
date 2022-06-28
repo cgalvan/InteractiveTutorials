@@ -15,7 +15,7 @@ from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView,
     QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
 )
 
-from rigid_body_tutorial import RigidBodyTutorial
+from wind_forces_tutorial import WindForcesTutorial
 
 # This import will fail when the AP launches, will only work once the Editor is running
 try:
@@ -91,9 +91,9 @@ class InteractiveTutorialsDialog(QDialog):
                 "tutorial": lambda: Tutorial.create_from_json_file("create_entity_tutorial.json")
             },
             {
-                "name": "PhysX Rigid Bodies",
-                "tutorial": RigidBodyTutorial
-            },
+                "name": "Create Wind Forces",
+                "tutorial": WindForcesTutorial
+            }
 
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
