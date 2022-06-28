@@ -15,6 +15,8 @@ from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView,
     QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
 )
 
+from rigid_body_tutorial import RigidBodyTutorial
+
 # This import will fail when the AP launches, will only work once the Editor is running
 try:
     import editor_python_test_tools.pyside_utils as pyside_utils
@@ -22,10 +24,6 @@ except:
     pass
 
 from demo_tutorial import DemoTutorial, IntroTutorial
-from rigid_body_tutorial import RigidBodyTutorial
-from process_physx_collider_assets import ColliderAssetsTutorial
-from decompose_input_meshes import DecomposeInputMeshes
-from customize_mesh_asset_processing import CustomizeMeshAssetProcessingTutorial
 
 from tutorial import Tutorial
 
@@ -96,18 +94,7 @@ class InteractiveTutorialsDialog(QDialog):
                 "name": "PhysX Rigid Bodies",
                 "tutorial": RigidBodyTutorial
             },
-            {
-                "name": "Process PhysX Collider Assets",
-                "tutorial": ColliderAssetsTutorial
-            },
-            {
-                "name": "Decompose Input Meshes",
-                "tutorial": DecomposeInputMeshes
-            },
-            {
-                "name": "Customize Mesh Asset Processing",
-                "tutorial": CustomizeMeshAssetProcessingTutorial
-            }
+
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
         self.tutorial_list_model = QStringListModel(self)
@@ -180,7 +167,6 @@ class InteractiveTutorialsDialog(QDialog):
         first_step = self.current_tutorial.get_first_step()
         self.load_step(first_step)
         
-
     def end_tutorial(self):
         if not self.current_step:
             return
