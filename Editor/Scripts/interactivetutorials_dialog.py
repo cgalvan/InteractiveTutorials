@@ -15,7 +15,7 @@ from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView,
     QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
 )
 
-from wind_forces_tutorial import WindForcesTutorial
+from customize_mesh_tutorial import CustomizeMeshAssetProcessingTutorial
 
 # This import will fail when the AP launches, will only work once the Editor is running
 try:
@@ -93,8 +93,11 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "Create Wind Forces",
                 "tutorial": WindForcesTutorial
+            },
+            {
+                "name": "Customize Mesh Asset Processing",
+                "tutorial": CustomizeMeshAssetProcessingTutorial
             }
-
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
         self.tutorial_list_model = QStringListModel(self)
