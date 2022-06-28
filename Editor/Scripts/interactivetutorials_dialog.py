@@ -93,8 +93,7 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "PhysX Rigid Bodies",
                 "tutorial": RigidBodyTutorial
-            },
-
+            }
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
         self.tutorial_list_model = QStringListModel(self)
