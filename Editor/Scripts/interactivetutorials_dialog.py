@@ -23,7 +23,7 @@ except:
 
 from demo_tutorial import DemoTutorial, IntroTutorial
 from rigid_body_tutorial import RigidBodyTutorial
-from customize_mesh_asset_processing import CustomizeMeshAssetProcessingTutorial
+from tutorial_for_scripts import TutorialForScripts
 from tutorial import Tutorial
 
 class HighlightWidget(QWidget):
@@ -94,8 +94,8 @@ class InteractiveTutorialsDialog(QDialog):
                 "tutorial": RigidBodyTutorial
             }, 
             {
-                "name": "Customize Mesh Asset Processing",
-                "tutorial": CustomizeMeshAssetProcessingTutorial
+                "name": "Scripts",
+                "tutorial": TutorialForScripts
             }
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
