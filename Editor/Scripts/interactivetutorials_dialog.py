@@ -15,6 +15,8 @@ from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView,
     QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
 )
 
+from decompose_meshes_tutorial import DecomposeInputMeshes
+
 # This import will fail when the AP launches, will only work once the Editor is running
 try:
     import editor_python_test_tools.pyside_utils as pyside_utils
@@ -24,7 +26,6 @@ except:
 from demo_tutorial import DemoTutorial, IntroTutorial
 from rigid_body_tutorial import RigidBodyTutorial
 from tutorial import Tutorial
-
 
 class HighlightWidget(QWidget):
     def __init__(self, parent=None):
@@ -92,7 +93,11 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "PhysX Rigid Bodies",
                 "tutorial": RigidBodyTutorial
-            }
+            },            
+            {
+                "name": "Decompose Input Meshes",
+                "tutorial": DecomposeInputMeshes
+            }       
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
         self.tutorial_list_model = QStringListModel(self)
@@ -124,6 +129,9 @@ class InteractiveTutorialsDialog(QDialog):
         self.content_area.setWordWrap(True)
         self.tutorial_layout.addWidget(self.content_area, 1)
 
+        self.step_label = QLabel(self)
+        self.tutorial_layout.addWidget(self.step_label)
+
         self.button_box = QDialogButtonBox(self)
         self.next_button = QPushButton("Next", self)
         self.next_button.setDefault(True)
@@ -147,6 +155,8 @@ class InteractiveTutorialsDialog(QDialog):
 
         tutorial_factory = self.tutorials[index]["tutorial"]
         self.current_tutorial = tutorial_factory()
+        
+        self.current_tutorial_num_steps = len(self.current_tutorial.get_steps())
 
         # Invoke the tutorial start method
         self.current_tutorial.on_tutorial_start()
@@ -155,10 +165,11 @@ class InteractiveTutorialsDialog(QDialog):
         self.setWindowTitle("InteractiveTutorials - " + self.current_tutorial.get_title())
 
         # Reset initial state and load first step
+        self.current_step_index = 0 
         self.current_step = None
         first_step = self.current_tutorial.get_first_step()
         self.load_step(first_step)
-
+        
     def end_tutorial(self):
         if not self.current_step:
             return
@@ -186,7 +197,7 @@ class InteractiveTutorialsDialog(QDialog):
 
         self.title_label.setText(self.current_step.get_title())
         self.content_area.setText(self.current_step.get_content())
-
+        self.step_label.setText(f"Step {self.current_step_index} of {self.current_tutorial_num_steps}")
         # If there are no steps remaining in the tutorial, then
         # update the Next button text to "End"
         next_button_text = "Next"
@@ -211,6 +222,7 @@ class InteractiveTutorialsDialog(QDialog):
             self.current_step.on_step_end()
 
         self.current_step = step
+        self.current_step_index += 1 
 
         # Invoke the method for the beginning of this step
         self.current_step.on_step_start()
@@ -229,9 +241,12 @@ class InteractiveTutorialsDialog(QDialog):
 
     def load_previous_step(self):
         if self.current_step:
+            self.current_step_index -= 1
             prev_step = self.current_step.prev_step
             if prev_step:
+                self.current_step_index -= 1
                 self.load_step(prev_step)
+
 
     def on_start_button_clicked(self):
         tutorial_index = self.tutorial_list.currentIndex().row()
