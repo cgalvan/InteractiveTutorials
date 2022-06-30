@@ -24,7 +24,7 @@ except:
     pass
 
 from demo_tutorial import DemoTutorial, IntroTutorial
-
+from rigid_body_tutorial import RigidBodyTutorial
 from tutorial import Tutorial
 
 class HighlightWidget(QWidget):
@@ -90,6 +90,10 @@ class InteractiveTutorialsDialog(QDialog):
                 "name": "Create an Entity",
                 "tutorial": lambda: Tutorial.create_from_json_file("create_entity_tutorial.json")
             },
+            {
+                "name": "Rigid Body Tutorial",
+                "tutorial": RigidBodyTutorial
+            },        
             {
                 "name": "Create Wind Forces",
                 "tutorial": WindForcesTutorial
