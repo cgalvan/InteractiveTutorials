@@ -23,10 +23,7 @@ except:
 
 from demo_tutorial import DemoTutorial, IntroTutorial
 from rigid_body_tutorial import RigidBodyTutorial
-from process_physx_collider_assets import ColliderAssetsTutorial
-from decompose_input_meshes import DecomposeInputMeshes
 from customize_mesh_asset_processing import CustomizeMeshAssetProcessingTutorial
-
 from tutorial import Tutorial
 
 class HighlightWidget(QWidget):
@@ -95,15 +92,7 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "PhysX Rigid Bodies",
                 "tutorial": RigidBodyTutorial
-            },
-            {
-                "name": "Process PhysX Collider Assets",
-                "tutorial": ColliderAssetsTutorial
-            },
-            {
-                "name": "Decompose Input Meshes",
-                "tutorial": DecomposeInputMeshes
-            },
+            }, 
             {
                 "name": "Customize Mesh Asset Processing",
                 "tutorial": CustomizeMeshAssetProcessingTutorial
@@ -233,7 +222,7 @@ class InteractiveTutorialsDialog(QDialog):
             self.current_step.on_step_end()
 
         self.current_step = step
-        self.current_step_index += 1 
+        self.current_step_index += 1
 
         # Invoke the method for the beginning of this step
         self.current_step.on_step_start()

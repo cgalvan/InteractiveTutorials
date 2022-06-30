@@ -12,12 +12,15 @@ import traceback
 from typing import Callable, Tuple
 
 import azlmbr
+import azlmbr.bus as bus
+import azlmbr.editor as editor
 import azlmbr.legacy.general as general
 import azlmbr.multiplayer as multiplayer
 import azlmbr.debug
 import ly_test_tools.environment.waiter as waiter
 import ly_test_tools.environment.process_utils as process_utils
-
+import azlmbr.entity
+from azlmbr.entity import EntityId
 
 class FailFast(Exception):
     """

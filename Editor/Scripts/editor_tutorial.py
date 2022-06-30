@@ -4,9 +4,11 @@ For complete copyright and license terms please see the LICENSE at the root of t
 
 SPDX-License-Identifier: Apache-2.0 OR MIT
 """
-
+import azlmbr.bus as bus # type: ignore
+import azlmbr.editor as editor   # type: ignore
+import azlmbr.entity  # type: ignore
+from azlmbr.entity import EntityId  # type: ignore
 from PySide2.QtWidgets import QMenuBar
-
 from tutorial import Tutorial, TutorialStep
 
 
@@ -19,6 +21,7 @@ class SelectEntityStep(TutorialStep):
     def on_step_start(self):
         print("Starting X from AutomatedTesting")
         print("Starting the select Entity step")
+        DemoTutorial.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
 
     def on_step_end(self):
         print("Ended the select Entity step")
@@ -36,6 +39,7 @@ class DemoTutorial(Tutorial):
 
     def on_tutorial_start(self):
         print("Where we're going, we don't need roads")
+        rootentity = DemoTutorial.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
 
     def on_tutorial_end(self):
         print("Follow the yellow brick road")

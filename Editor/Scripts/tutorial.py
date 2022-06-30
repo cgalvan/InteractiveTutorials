@@ -7,8 +7,6 @@ SPDX-License-Identifier: Apache-2.0 OR MIT
 
 import json
 import os
-from fbx import *
-import pyside_utils
 
 # Class that describes a step in the tutorial
 class TutorialStep:
@@ -30,11 +28,7 @@ class TutorialStep:
     # to setup any special handling/listeners
     def on_step_start(self):
         # Automated testing scripts go here
-        exec(bush.prefab)
         pass
-
-    def service_func():
-        print ("step 1")
 
     # Method that will be called after a step has ended
     # A step class can override this method if they need
