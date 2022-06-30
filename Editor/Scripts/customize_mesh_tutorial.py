@@ -52,18 +52,11 @@ class CustomizeMeshAssetProcessingTutorial(Tutorial):
                 </p></html>""", "AzAssetBrowserWindowClass"))        
         self.add_step(TutorialStep("Position the prefab", """<html><p style="font-size:13px"> 
                 Choose the <b>Update</b> button at the bottom-right of Scene Settings. 
-                This creates or updates the .assetinfo sidecar file and triggers Asset Processor to reprocess the asset.
-                Drag the .azmodel product asset from Asset Browser into the viewport.
+                This creates or updates the <b>.assetinfo</b> sidecar file and triggers Asset Processor to reprocess the asset.
                 </p></html>""", "renderOverlay"))        
-        self.add_step(TutorialStep("View Changes", """<html><p style="font-size:13px">To use the prefab in our 
-                level we need to create an instance, or <i>instantiate</i> the prefab in the level.<br><br>Drag the 
-                <strong><code style="font-size:14px;color:#E44C9A">20-sided-dice.prefab</code></strong> into the 
+        self.add_step(TutorialStep("View Changes", """<html><p style="font-size:13px">Drag the 
+                <b>.azmodel</b> product asset from the Asset Browser into the 
                 viewport to instatiate it in the level.</p></html>""", "AzAssetBrowserWindowClass"))
-        self.add_step(TutorialStep("Position the prefab", """<html><p style="font-size:13px"> 
-                Choose the <b>Update</b> button at the bottom-right of Scene Settings. 
-                This creates or updates the .assetinfo sidecar file and triggers Asset Processor to reprocess the asset.
-                Drag the .azmodel product asset from Asset Browser into the viewport.
-                </p></html>""", "renderOverlay"))
 
     def on_tutorial_start(self):
         print("Starting Mesh Asset Process tutorial.")
