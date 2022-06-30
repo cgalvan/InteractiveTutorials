@@ -15,8 +15,6 @@ from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView,
     QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
 )
 
-from customize_mesh_tutorial import CustomizeMeshAssetProcessingTutorial
-
 # This import will fail when the AP launches, will only work once the Editor is running
 try:
     import editor_python_test_tools.pyside_utils as pyside_utils
@@ -24,7 +22,8 @@ except:
     pass
 
 from demo_tutorial import DemoTutorial, IntroTutorial
-
+from rigid_body_tutorial import RigidBodyTutorial
+from customize_mesh_tutorial import CustomizeMeshAssetProcessingTutorial
 from tutorial import Tutorial
 
 class HighlightWidget(QWidget):
@@ -91,8 +90,8 @@ class InteractiveTutorialsDialog(QDialog):
                 "tutorial": lambda: Tutorial.create_from_json_file("create_entity_tutorial.json")
             },
             {
-                "name": "Create Wind Forces",
-                "tutorial": WindForcesTutorial
+                "name": "PhysX Rigid Bodies",
+                "tutorial": RigidBodyTutorial
             },
             {
                 "name": "Customize Mesh Asset Processing",
