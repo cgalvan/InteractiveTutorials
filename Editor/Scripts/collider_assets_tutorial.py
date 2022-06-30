@@ -21,11 +21,14 @@ class ColliderAssetsTutorial(Tutorial):
                 existing source asset to create a Physx collider asset. <br><br>Click next to continue.</p></html>"""))
         self.add_step(TutorialStep("Select the Asset", """<html><p style="font-size:13px">Locate your source asset in the 
                 <b>Asset Browser</b>. You can use your own or use one of the provided <i>.fbx</i> files, such as <i>sphere.fbx</i>. 
-                Right click the <i>.fbx</i> source asset and select 'Edit Settings.' 
+                </p></html>""", "AzAssetBrowserWindowClass"))
+        self.add_step(TutorialStep("Select the Asset", """<html><p style="font-size:13px">To open Scene Settings, right-click
+                the <i>.fbx</i> source asset and select 'Edit Settings.' 
                 </p></html>""", "AzAssetBrowserWindowClass"))
         self.add_step(TutorialStep("Add a PhysX Mesh", """<html><p style="font-size:13px"> Select the 
-                PhysX tab and select <b>Add another physxmesh</b> to create a PhysX mesh group. <br><br>
-                Each PhysX group produces as <i>.pxmesh</i> product asset.
+                PhysX tab. If the tab is empty, select <b>Add another physxmesh</b> to create a PhysX mesh group. <br><br>
+                Each PhysX group produces as <i>.pxmesh</i> product asset. You can create additional PhysX mesh groups for a source
+                asset by choosing <b>Add another physxmesh</b>. 
                 </p></html>""", 
                 "AzAssetBrowserWindowClass"))
         self.add_step(TutorialStep("Add a PhysX Mesh", """<html><p style="font-size:13px"> To select which 
@@ -36,9 +39,17 @@ class ColliderAssetsTutorial(Tutorial):
         self.add_step(TutorialStep("Customize the PhysX Mesh Collider Type", """<html><p style="font-size:13px"> Customize the 
                 PhysX mesh collider type by setting the <b>Export As</b> property to the type you choose. You might prefer to 
                 selecct the 'Convex' type so that you can create any type of entity (static, kinematic, dynamic), but 
-                Triangle and Primitive types each also have their respective advantages and limitations. <br><br>You can visit the 
-                Docs online if you want to learn more.<br><br> Then select <b>Update</b> (in the bottom right corner) 
-                to update the <i>.assetinfo</i> file and trigger the Asset Processor. </p></html>""", "AzAssetBrowserWindowClass"))
+                Triangle and Primitive types each also have their respective advantages and limitations. <br><br>
+                Triangle meshes are appropriate for colliders composed of triangles and can be used with static and kinematic entities. <br>
+                Primitive meshes are appropriate for simple sphere, box, or capsule shapes and can be used with static, kinematic, and dynamic
+                entities. <br> Convex meshes are defined by a convex hull composed of a limited number of vertices. They can be used with
+                static, kinematic, and dynamic entities, <br><br> </p></html>""", "AzAssetBrowserWindowClass"))
+        self.add_step(TutorialStep("Finish Customization", """<html><p style="font-size:13px"> .</li><li> Once you have finished 
+                cutomizingg the PhysX mesh collider type, select <b>Update</b> in the bottom right corner. <br><br>
+                The customizations that we've made are stored in a sidecar file with an <i>.assetinfo</i> extension. If that file
+                changes, the source asset is reprocessed. When we select <b>Update</b>, we will 
+                update the <i>.assetinfo</i> file and trigger the Asset Processor. </li></p>
+                </p></html>""", "renderOverlay"))        
         self.add_step(TutorialStep("View the Entity", """<html><p style="font-size:13px"> .</li><li>Drag the <i>.azmodel</i> 
                 product asset into the viewport from the Asset Browser.<br><br> As you do this, O3DE automatically creates
                 an entity with a <b>Mesh</b> component referencing the mesh product asset. </li></p>
