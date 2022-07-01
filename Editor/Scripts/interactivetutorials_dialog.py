@@ -23,8 +23,9 @@ except:
 
 from demo_tutorial import DemoTutorial, IntroTutorial
 from rigid_body_tutorial import RigidBodyTutorial
-from tutorial import Tutorial
+from finding_ui_objects import FindingUIObjectsTutorial
 
+from tutorial import Tutorial
 
 class HighlightWidget(QWidget):
     def __init__(self, parent=None):
@@ -92,6 +93,10 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "PhysX Rigid Bodies",
                 "tutorial": RigidBodyTutorial
+            },
+            {
+                "name": "Highlighting UI Objects",
+                "tutorial": FindingUIObjectsTutorial
             }
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
@@ -124,6 +129,9 @@ class InteractiveTutorialsDialog(QDialog):
         self.content_area.setWordWrap(True)
         self.tutorial_layout.addWidget(self.content_area, 1)
 
+        self.step_label = QLabel(self)
+        self.tutorial_layout.addWidget(self.step_label)
+
         self.button_box = QDialogButtonBox(self)
         self.next_button = QPushButton("Next", self)
         self.next_button.setDefault(True)
@@ -147,6 +155,8 @@ class InteractiveTutorialsDialog(QDialog):
 
         tutorial_factory = self.tutorials[index]["tutorial"]
         self.current_tutorial = tutorial_factory()
+        
+        self.current_tutorial_num_steps = len(self.current_tutorial.get_steps())
 
         # Invoke the tutorial start method
         self.current_tutorial.on_tutorial_start()
@@ -155,9 +165,11 @@ class InteractiveTutorialsDialog(QDialog):
         self.setWindowTitle("InteractiveTutorials - " + self.current_tutorial.get_title())
 
         # Reset initial state and load first step
+        self.current_step_index = 0 
         self.current_step = None
         first_step = self.current_tutorial.get_first_step()
         self.load_step(first_step)
+        
 
     def end_tutorial(self):
         if not self.current_step:
@@ -186,7 +198,7 @@ class InteractiveTutorialsDialog(QDialog):
 
         self.title_label.setText(self.current_step.get_title())
         self.content_area.setText(self.current_step.get_content())
-
+        self.step_label.setText(f"Step {self.current_step_index} of {self.current_tutorial_num_steps}")
         # If there are no steps remaining in the tutorial, then
         # update the Next button text to "End"
         next_button_text = "Next"
@@ -194,11 +206,23 @@ class InteractiveTutorialsDialog(QDialog):
             next_button_text = "End"
         self.next_button.setText(next_button_text)
 
-        # If a highlight pattern was set for this step, then find that widget/item
-        # and highlight it
+        # If a highlight pattern was set for this step, then find that widget/item and highlight it.
+        # A named parent node can be specified to find an unnamed child node by hierarchy.
+        # For scenarios where there are multiple children of the same type, an index
+        # can be specified to return the appropriate child from the hierarchy. 
         highlight_pattern = self.current_step.get_highlight_pattern()
+        highlight_parent = self.current_step.get_highlight_parent()
+        highlight_index = self.current_step.get_highlight_index()
+        
         if highlight_pattern:
-            item = pyside_utils.find_child_by_pattern(None, highlight_pattern)
+            if highlight_parent:
+                item_parent = pyside_utils.find_child_by_pattern(None, highlight_parent)
+                if highlight_index:
+                    item = self.find_child_in_hierarchy_with_index(item_parent, highlight_index, highlight_pattern)
+                else:
+                    item = pyside_utils.find_child_by_hierarchy(item_parent, highlight_pattern)
+            else:    
+                item = pyside_utils.find_child_by_pattern(None, highlight_pattern)        
             self.highlight_widget.update_widget(item)
             if not item:
                 print(f"Couldn't find widget or item matching pattern: { highlight_pattern }")
@@ -211,6 +235,7 @@ class InteractiveTutorialsDialog(QDialog):
             self.current_step.on_step_end()
 
         self.current_step = step
+        self.current_step_index += 1 
 
         # Invoke the method for the beginning of this step
         self.current_step.on_step_start()
@@ -229,15 +254,51 @@ class InteractiveTutorialsDialog(QDialog):
 
     def load_previous_step(self):
         if self.current_step:
+            self.current_step_index -= 1
             prev_step = self.current_step.prev_step
             if prev_step:
+                self.current_step_index -= 1
                 self.load_step(prev_step)
+
 
     def on_start_button_clicked(self):
         tutorial_index = self.tutorial_list.currentIndex().row()
 
         self.load_tutorial(tutorial_index)
 
+    def find_child_in_hierarchy_with_index(self, obj_parent, obj_index, pattern):
+        """
+        Searches for a hierarchy of children descending from a parent.
+        obj_parent: The Qt object to search within. If None, this will search all top level windows.
+        obj_index: The index of the Qt object to return. Often, an obj_parent has several children of the same type. 
+        patterns: the type of the unnamed Qt object to highlight.
+        The patterns are tested in order.
+
+        For example, to look for the second QComboBox in a hierarchy like the following:
+
+        QWidget (window)
+            -QTabWidget
+                -QWidget named "m_exampleTab"
+                    -QComboBox
+                    -QComboBox
+                    -QComboBox
+
+        Invoke:
+        find_child_in_hierarchy_with_index("m_exampleTab", 1, QtWidgets.QComboBox)
+
+        
+        """
+
+        current_objects = pyside_utils._get_parents_to_search(obj_parent)
+
+        candidates = []
+        for parent_candidate in current_objects:
+            candidates += pyside_utils.find_children_by_pattern(parent_candidate, pattern=pattern, recursive=False)
+        if len(candidates) == 0:
+            return None
+        current_objects = candidates
+
+        return current_objects[obj_index]
 
 if __name__ == "__main__":
     # Create a new instance of the tool if launched from the Python Scripts window,

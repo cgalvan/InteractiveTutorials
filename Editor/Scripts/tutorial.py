@@ -11,7 +11,7 @@ import os
 
 # Class that describes a step in the tutorial
 class TutorialStep:
-    def __init__(self, title, content, highlight_pattern=None):
+    def __init__(self, title, content, highlight_pattern=None, highlight_parent=None, highlight_index=None):
         self.title = title
         self.content = content
 
@@ -20,6 +20,8 @@ class TutorialStep:
         # This pattern will be passed to `editor_python_test_tools.pyside_utils`
         # to find the widget/item. See its documentation for supported patterns
         self.highlight_pattern = highlight_pattern
+        self.highlight_parent = highlight_parent
+        self.highlight_index = highlight_index
 
         self.prev_step = None
         self.next_step = None
@@ -44,6 +46,12 @@ class TutorialStep:
 
     def get_highlight_pattern(self):
         return self.highlight_pattern
+
+    def get_highlight_parent(self):
+        return self.highlight_parent
+
+    def get_highlight_index(self):
+        return self.highlight_index
 
 # Top-level entry point for describing a tutorial which is made up of a series of steps
 class Tutorial:
@@ -73,7 +81,9 @@ class Tutorial:
             title = step["title"]
             content = step["content"]
             highlight_pattern = step.get("highlight_pattern", None)
-            new_step = TutorialStep(title, content, highlight_pattern)
+            highlight_parent = step.get("highlight_parent", None)
+            highlight_index = step.get("highlight_index", None)
+            new_step = TutorialStep(title, content, highlight_pattern, highlight_parent, highlight_index)
             new_tutorial.add_step(new_step)
 
         return new_tutorial
