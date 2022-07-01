@@ -26,6 +26,8 @@ from rigid_body_tutorial import RigidBodyTutorial
 from process_physx_collider_assets import ColliderAssetsTutorial
 from decompose_input_meshes import DecomposeInputMeshes
 from customize_mesh_asset_processing import CustomizeMeshAssetProcessingTutorial
+from create_wind_forces_tutorial import WindForcesTutorial
+from finding_ui_objects import FindingUIObjectsTutorial
 
 from tutorial import Tutorial
 
@@ -107,6 +109,14 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "Customize Mesh Asset Processing",
                 "tutorial": CustomizeMeshAssetProcessingTutorial
+            },
+            {
+                "name": "Create a Wind Force",
+                "tutorial": WindForcesTutorial
+            },
+            {
+                "name": "Highlighting UI Objects",
+                "tutorial": FindingUIObjectsTutorial
             }
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
@@ -216,11 +226,23 @@ class InteractiveTutorialsDialog(QDialog):
             next_button_text = "End"
         self.next_button.setText(next_button_text)
 
-        # If a highlight pattern was set for this step, then find that widget/item
-        # and highlight it
+        # If a highlight pattern was set for this step, then find that widget/item and highlight it.
+        # A named parent node can be specified to find an unnamed child node by hierarchy.
+        # For scenarios where there are multiple children of the same type, an index
+        # can be specified to return the appropriate child from the hierarchy. 
         highlight_pattern = self.current_step.get_highlight_pattern()
+        highlight_parent = self.current_step.get_highlight_parent()
+        highlight_index = self.current_step.get_highlight_index()
+        
         if highlight_pattern:
-            item = pyside_utils.find_child_by_pattern(None, highlight_pattern)
+            if highlight_parent:
+                item_parent = pyside_utils.find_child_by_pattern(None, highlight_parent)
+                if highlight_index:
+                    item = self.find_child_in_hierarchy_with_index(item_parent, highlight_index, highlight_pattern)
+                else:
+                    item = pyside_utils.find_child_by_hierarchy(item_parent, highlight_pattern)
+            else:    
+                item = pyside_utils.find_child_by_pattern(None, highlight_pattern)        
             self.highlight_widget.update_widget(item)
             if not item:
                 print(f"Couldn't find widget or item matching pattern: { highlight_pattern }")
@@ -264,6 +286,39 @@ class InteractiveTutorialsDialog(QDialog):
 
         self.load_tutorial(tutorial_index)
 
+    def find_child_in_hierarchy_with_index(self, obj_parent, obj_index, pattern):
+        """
+        Searches for a hierarchy of children descending from a parent.
+        obj_parent: The Qt object to search within. If None, this will search all top level windows.
+        obj_index: The index of the Qt object to return. Often, an obj_parent has several children of the same type. 
+        patterns: the type of the unnamed Qt object to highlight.
+        The patterns are tested in order.
+
+        For example, to look for the second QComboBox in a hierarchy like the following:
+
+        QWidget (window)
+            -QTabWidget
+                -QWidget named "m_exampleTab"
+                    -QComboBox
+                    -QComboBox
+                    -QComboBox
+
+        Invoke:
+        find_child_in_hierarchy_with_index("m_exampleTab", 1, QtWidgets.QComboBox)
+
+        
+        """
+
+        current_objects = pyside_utils._get_parents_to_search(obj_parent)
+
+        candidates = []
+        for parent_candidate in current_objects:
+            candidates += pyside_utils.find_children_by_pattern(parent_candidate, pattern=pattern, recursive=False)
+        if len(candidates) == 0:
+            return None
+        current_objects = candidates
+
+        return current_objects[obj_index]
 
 if __name__ == "__main__":
     # Create a new instance of the tool if launched from the Python Scripts window,
