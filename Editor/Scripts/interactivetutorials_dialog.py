@@ -15,16 +15,18 @@ from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView,
     QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
 )
 
+from collider_assets_tutorial import ColliderAssetsTutorial
+
 # This import will fail when the AP launches, will only work once the Editor is running
 try:
     import editor_python_test_tools.pyside_utils as pyside_utils
 except:
     pass
 
-from demo_tutorial import DemoTutorial, IntroTutorial
 from rigid_body_tutorial import RigidBodyTutorial
-from tutorial import Tutorial
+from demo_tutorial import DemoTutorial, IntroTutorial
 
+from tutorial import Tutorial
 
 class HighlightWidget(QWidget):
     def __init__(self, parent=None):
@@ -92,7 +94,11 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "PhysX Rigid Bodies",
                 "tutorial": RigidBodyTutorial
-            }
+            },
+            {
+                "name": "Process PhysX Collider Assets",
+                "tutorial": ColliderAssetsTutorial
+            }            
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
         self.tutorial_list_model = QStringListModel(self)
