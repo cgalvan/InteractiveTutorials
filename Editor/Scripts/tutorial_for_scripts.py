@@ -4,13 +4,14 @@ For complete copyright and license terms please see the LICENSE at the root of t
 
 SPDX-License-Identifier: Apache-2.0 OR MIT
 """
-import os
+import os, sys
 import azlmbr.bus as bus # type: ignore
+import azlmbr.entity as entity # type: ignore
 import azlmbr.editor as editor   # type: ignore
-import azlmbr.entity  # type: ignore
 from azlmbr.entity import EntityId  # type: ignore
 import azlmbr.paths as paths
 from tutorial import Tutorial, TutorialStep  # type: ignore
+import editor_python_test_tools.pyside_utils as pyside_utils
 
 class TutorialForScripts(Tutorial):
     FILE_PATH = os.path.join(paths.projectroot, "TestAssets", "test_file.scriptevents")
@@ -28,16 +29,19 @@ class TutorialForScripts(Tutorial):
     
     def on_step_start(self):
         print("Starting the select Entity step")
-        newEntity = TutorialForScripts.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
-        editor.AssetEditorWidgetRequestsBus(bus.Broadcast, "SaveAssetAs", FILE_PATH)
+        rootEntityId = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
+        #editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', rootEntityId)
+
+        # editor.EditorComponentAPIBus(bus.Broadcast, 'HasComponentOfType', newEntityId, meshComponentTypeId)
+        # editor.AssetEditorWidgetRequestsBus(bus.Broadcast, "SaveAssetAs", FILE_PATH)
         # SCRIPTS I HAVE TRIED 
         # self.generate_variable_test_output(self, "create")
         # get_action_for_menu_path
         # _get_children --> the direct descendants from a given PySide object.
 
     def on_tutorial_start(self):
-        print("Starting Mesh Asset Process tutorial.")
+        print("Starting tutorial for scripts tutorial.")
 
     def on_tutorial_end(self):
-        print("Mesh Asset Process tutorial complete!")
+        print("Tutorial for scripts complete!")
 
