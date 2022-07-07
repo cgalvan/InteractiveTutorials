@@ -4,8 +4,9 @@ For complete copyright and license terms please see the LICENSE at the root of t
 
 SPDX-License-Identifier: Apache-2.0 OR MIT
 """
-import os, sys
-sys.path.append(os.path.dirname(__file__))
+import os
+#import sys
+#sys.path.append(os.path.dirname(__file__))
 import azlmbr
 import azlmbr.bus as bus
 import azlmbr.editor as editor
@@ -164,11 +165,17 @@ class RigidBodyTutorial(Tutorial):
         editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', entityId)
         # Instantiate prefab
         transform = math.Transform_CreateIdentity()
-        position = math.Vector3(64.0, 64.0, 32.0)
+        position = math.Vector3(0.0, 0.0, 5.0)
         transform.invoke('SetPosition', position)
-        test_prefab_path = os.path.join("Assets", "Prefabs", "BushFlowerBlender.prefab")
-        prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path,
+        #test_prefab_path = os.path.join("Assets", "20-sided-dice.prefab")
+        #test_prefab_path = open(r'C:\Users\jmadeson\InteractiveTutorials\Assets\20-sided-dice\20-sided-dice.prefab')
+        #test_prefab_path = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', '20-sided-dice', '20-sided-dice.prefab'))
+        test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
+        dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path,
                                                         entity.EntityId(), position)
+        # Add PhysX Collider
+        
+        # Add PhysX Rigid Body
 
     def on_tutorial_end(self):
         print("PhysX Rigid Body tutorial complete!")
