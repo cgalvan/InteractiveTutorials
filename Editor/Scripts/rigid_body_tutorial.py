@@ -4,9 +4,19 @@ For complete copyright and license terms please see the LICENSE at the root of t
 
 SPDX-License-Identifier: Apache-2.0 OR MIT
 """
-
-import sys
+import os, sys
+sys.path.append(os.path.dirname(__file__))
 import azlmbr
+import azlmbr.bus as bus
+import azlmbr.editor as editor
+import azlmbr.legacy.general as general
+import azlmbr.entity as entity
+import azlmbr.math as math
+import azlmbr.prefab as prefab
+
+# import editor_python_test_tools.pyside_utils as pyside_utils
+# from Editor_TestClass import BaseClass
+
 
 from PySide2.QtWidgets import QMenuBar
 
@@ -141,8 +151,24 @@ class RigidBodyTutorial(Tutorial):
                  fly in the air an spin, then fall and collide with the ground plane. Press <b>ESC</b> to exit.
                 </p></html>"""))
 
+
+
     def on_tutorial_start(self):
         print("Starting PhysX Rigid Body tutorial.")
+        #Delete the Shader Ball entity
+        editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
+        searchFilter = entity.SearchFilter()
+        searchFilter.names = ['Shader Ball']
+        searchResult = entity.SearchBus(bus.Broadcast, 'SearchEntities', searchFilter)
+        entityId = searchResult[0]
+        editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', entityId)
+        # Instantiate prefab
+        transform = math.Transform_CreateIdentity()
+        position = math.Vector3(64.0, 64.0, 32.0)
+        transform.invoke('SetPosition', position)
+        test_prefab_path = os.path.join("Assets", "Prefabs", "BushFlowerBlender.prefab")
+        prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path,
+                                                        entity.EntityId(), position)
 
     def on_tutorial_end(self):
         print("PhysX Rigid Body tutorial complete!")

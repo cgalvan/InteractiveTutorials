@@ -23,7 +23,6 @@ except:
 
 from demo_tutorial import DemoTutorial, IntroTutorial
 from rigid_body_tutorial import RigidBodyTutorial
-from tutorial_for_scripts import TutorialForScripts
 from tutorial import Tutorial
 
 class HighlightWidget(QWidget):
@@ -92,10 +91,6 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "PhysX Rigid Bodies",
                 "tutorial": RigidBodyTutorial
-            }, 
-            {
-                "name": "Scripts",
-                "tutorial": TutorialForScripts
             }
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
