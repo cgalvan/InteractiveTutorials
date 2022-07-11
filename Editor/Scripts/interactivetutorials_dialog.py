@@ -136,6 +136,13 @@ class InteractiveTutorialsDialog(QDialog):
         self.button_box.addButton(self.back_button, QDialogButtonBox.ResetRole)
         self.tutorial_layout.addWidget(self.button_box)
 
+        self.button_box = QDialogButtonBox(self)
+        self.simulate_button = QPushButton("Simulate This Step", self)
+        self.simulate_button.setDefault(True)
+        self.simulate_button.clicked.connect(self.simulate_step)
+        self.button_box.addButton(self.simulate_button, QDialogButtonBox.ActionRole)
+        self.tutorial_layout.addWidget(self.button_box)
+
         self.tutorial_widget.setLayout(self.tutorial_layout)
         self.stacked_widget.addWidget(self.tutorial_widget)
 
@@ -162,8 +169,7 @@ class InteractiveTutorialsDialog(QDialog):
         self.current_step_index = 0 
         self.current_step = None
         first_step = self.current_tutorial.get_first_step()
-        self.load_step(first_step)
-        
+        self.load_step(first_step)        
 
     def end_tutorial(self):
         if not self.current_step:
@@ -236,11 +242,20 @@ class InteractiveTutorialsDialog(QDialog):
 
     def load_previous_step(self):
         if self.current_step:
+            self.current_step_index -= 1
             prev_step = self.current_step.prev_step
             if prev_step:
                 self.current_step_index -= 1
                 self.load_step(prev_step)
 
+
+    def simulate_step(self):
+        print("Entered simulate step")
+        if self.tutorial_list.currentIndex().row() == 3:
+            print("Rigid Body Tutorial identified")
+            RigidBodyTutorial.set_step_number(self, self.current_step_index)
+            RigidBodyTutorial.set_simulate_on(self)
+            RigidBodyTutorial.simulate(self)
 
     def on_start_button_clicked(self):
         tutorial_index = self.tutorial_list.currentIndex().row()

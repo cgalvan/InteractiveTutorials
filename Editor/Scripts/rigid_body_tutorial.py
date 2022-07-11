@@ -14,13 +14,10 @@ import azlmbr.legacy.general as general
 import azlmbr.entity as entity
 import azlmbr.math as math
 import azlmbr.prefab as prefab
-
-# import editor_python_test_tools.pyside_utils as pyside_utils
-# from Editor_TestClass import BaseClass
-
+from azlmbr.entity import EntityId
 
 from PySide2.QtWidgets import QMenuBar
-
+from PySide2.QtWidgets import QDialog
 from tutorial import Tutorial, TutorialStep
 
 class RigidBodyTutorial(Tutorial):
@@ -28,6 +25,8 @@ class RigidBodyTutorial(Tutorial):
         super(RigidBodyTutorial, self).__init__()
 
         self.title = "PhysX Rigid Bodies"
+        self.current_step_index = 0
+        self.simulate_clicked = False
 
         self.add_step(TutorialStep("Dynamic Simulation with PhysX Rigid Bodies", 
                 """<html><p style="font-size:13px">Greetings!<br><br><i>Rigid bodies</i> are dynamic solid objects that 
@@ -41,7 +40,7 @@ class RigidBodyTutorial(Tutorial):
                 all the entities in the level. Each entity has a collection of components that provide some 
                 functionality. The <b>Sun</b> entity, for example, has a <b>Directional Light</b> component the 
                 simulates a very bright distant light with parallel rays. It also has a <b>Transform</b> component that 
-                places it in the level in realtion to it's parent, the <b>Atom Default Environment</b> entity.
+                places it in the level in relation to it's parent, the <b>Atom Default Environment</b> entity.
                 </p></html>""", "EntityOutlinerWidgetUI"))
         self.add_step(TutorialStep("Delete the Shader Ball entity", """<html><p style="font-size:13px">Let's tidy up a 
                 bit.<br><br>In <b>Entity Outliner</b>, click the <b>Shader Ball</b> entity to select it and press 
@@ -156,6 +155,9 @@ class RigidBodyTutorial(Tutorial):
 
     def on_tutorial_start(self):
         print("Starting PhysX Rigid Body tutorial.")
+
+
+    def step_one(self):
         #Delete the Shader Ball entity
         editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
         searchFilter = entity.SearchFilter()
@@ -163,19 +165,51 @@ class RigidBodyTutorial(Tutorial):
         searchResult = entity.SearchBus(bus.Broadcast, 'SearchEntities', searchFilter)
         entityId = searchResult[0]
         editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', entityId)
-        # Instantiate prefab
+
+    def step_two(self):
+        # Instantiate and position the prefab
         transform = math.Transform_CreateIdentity()
         position = math.Vector3(0.0, 0.0, 5.0)
         transform.invoke('SetPosition', position)
-        #test_prefab_path = os.path.join("Assets", "20-sided-dice.prefab")
-        #test_prefab_path = open(r'C:\Users\jmadeson\InteractiveTutorials\Assets\20-sided-dice\20-sided-dice.prefab')
-        #test_prefab_path = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', '20-sided-dice', '20-sided-dice.prefab'))
         test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-        dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path,
-                                                        entity.EntityId(), position)
-        # Add PhysX Collider
-        
-        # Add PhysX Rigid Body
+        dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)
+
+    def step_three(self):
+        # Find created dice entity
+        search_filter = entity.SearchFilter()
+        search_filter.names = ["20-sided-dice"]
+        diceEntity = entity.SearchBus(bus.Broadcast, 'SearchEntities', search_filter)[0]
+
+        #Add PhysX Collider 
+        #Get Component Type for PhysX Collider
+        colliderComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Collider"], entity.EntityType().Game
+        )[0]
+        #newEntityId = 
+        editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId)
+        editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', EntityId, [colliderComponentTypeId])
+
+    def set_step_number(self, x):
+        self.current_step_index = x
+
+    def set_simulate_on(self):
+        """ simulate button has been clicked """
+        self.simulate_clicked = True
+    
+    def set_simulate_off(self):
+        self.simulate_clicked = False
+
+    def simulate(self):
+        #if simulate_clicked is true
+        step_count = self.current_step_index
+        # for loop with steps 
+        # for int i = 1 i is num tutorial steps i ++ 
+        #list_of_steps = ['step_one(self)', 'step_two(self)', 'step_three(self)']
+        list_of_steps = ['print("Hello")', 'print("Now")', 'print("Goodbye")']
+        for step in list_of_steps:
+            eval(step)
+            print("Reached Eval Step")
+            if step == step_count:
+                break
 
     def on_tutorial_end(self):
         print("PhysX Rigid Body tutorial complete!")

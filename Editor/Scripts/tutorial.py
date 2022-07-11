@@ -22,6 +22,8 @@ class TutorialStep:
 
         self.prev_step = None
         self.next_step = None
+        self.current_step_index = 0
+        self.simulate_clicked = False
 
     # Method that will be called when the step starts
     # A step class can override this method if they need
@@ -36,6 +38,9 @@ class TutorialStep:
     def on_step_end(self):
         pass
 
+    def simulate(self):
+        pass
+
     def get_title(self):
         return self.title
 
@@ -43,13 +48,15 @@ class TutorialStep:
         return self.content
 
     def get_highlight_pattern(self):
-        return self.highlight_pattern
+        return self.highlight_pattern    
 
 # Top-level entry point for describing a tutorial which is made up of a series of steps
 class Tutorial:
     def __init__(self):
         self.steps = []
         self.title = ""
+        self.current_step_index = 0
+        self.simulate_clicked = False
 
     @classmethod
     def create_from_json_file(cls, file_path):
