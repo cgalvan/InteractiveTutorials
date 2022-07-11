@@ -250,9 +250,9 @@ class InteractiveTutorialsDialog(QDialog):
 
 
     def simulate_step(self):
-        print("Entered simulate step")
+        #print("Entered simulate step")
         if self.tutorial_list.currentIndex().row() == 3:
-            print("Rigid Body Tutorial identified")
+            #print("Rigid Body Tutorial identified")
             RigidBodyTutorial.set_step_number(self, self.current_step_index)
             RigidBodyTutorial.set_simulate_on(self)
             RigidBodyTutorial.simulate(self)

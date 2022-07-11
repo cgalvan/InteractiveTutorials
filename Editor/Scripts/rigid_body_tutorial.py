@@ -157,8 +157,34 @@ class RigidBodyTutorial(Tutorial):
         print("Starting PhysX Rigid Body tutorial.")
 
 
-    def step_one(self):
+    def set_step_number(self, x):
+        self.current_step_index = x
+
+    def set_simulate_on(self):
+        """ simulate button has been clicked """
+        self.simulate_clicked = True
+    
+    def set_simulate_off(self):
+        self.simulate_clicked = False
+
+    def on_tutorial_end(self):
+        print("PhysX Rigid Body tutorial complete!")
+
+    def simulate(self):
+        #if simulate_clicked is true
+        step_count = self.current_step_index
+        # for loop with steps 
+        # for int i = 1 i is num tutorial steps i ++ 
+        #list_of_steps = ['step_one(self)', 'step_two(self)', 'step_three(self)']
+        #list_of_steps = ['print("Hello")', 'print("Now")', 'print("Goodbye")']
+        
+        #for step in list_of_steps:
+        #    eval(step)
+        #    print("Reached Eval Step")
+        #    if step == step_count:
+        #        break
         #Delete the Shader Ball entity
+
         editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
         searchFilter = entity.SearchFilter()
         searchFilter.names = ['Shader Ball']
@@ -166,7 +192,6 @@ class RigidBodyTutorial(Tutorial):
         entityId = searchResult[0]
         editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', entityId)
 
-    def step_two(self):
         # Instantiate and position the prefab
         transform = math.Transform_CreateIdentity()
         position = math.Vector3(0.0, 0.0, 5.0)
@@ -174,7 +199,6 @@ class RigidBodyTutorial(Tutorial):
         test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
         dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)
 
-    def step_three(self):
         # Find created dice entity
         search_filter = entity.SearchFilter()
         search_filter.names = ["20-sided-dice"]
@@ -186,30 +210,4 @@ class RigidBodyTutorial(Tutorial):
         )[0]
         #newEntityId = 
         editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId)
-        editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', EntityId, [colliderComponentTypeId])
-
-    def set_step_number(self, x):
-        self.current_step_index = x
-
-    def set_simulate_on(self):
-        """ simulate button has been clicked """
-        self.simulate_clicked = True
-    
-    def set_simulate_off(self):
-        self.simulate_clicked = False
-
-    def simulate(self):
-        #if simulate_clicked is true
-        step_count = self.current_step_index
-        # for loop with steps 
-        # for int i = 1 i is num tutorial steps i ++ 
-        #list_of_steps = ['step_one(self)', 'step_two(self)', 'step_three(self)']
-        list_of_steps = ['print("Hello")', 'print("Now")', 'print("Goodbye")']
-        for step in list_of_steps:
-            eval(step)
-            print("Reached Eval Step")
-            if step == step_count:
-                break
-
-    def on_tutorial_end(self):
-        print("PhysX Rigid Body tutorial complete!")
+        editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', EntityId, [colliderComponentTypeId])        

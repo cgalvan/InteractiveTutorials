@@ -48,8 +48,10 @@ class TutorialStep:
         return self.content
 
     def get_highlight_pattern(self):
-        return self.highlight_pattern    
+        return self.highlight_pattern
 
+
+    
 # Top-level entry point for describing a tutorial which is made up of a series of steps
 class Tutorial:
     def __init__(self):
