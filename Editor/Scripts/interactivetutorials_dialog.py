@@ -23,6 +23,7 @@ except:
 
 from demo_tutorial import DemoTutorial, IntroTutorial
 from rigid_body_tutorial import RigidBodyTutorial
+from finding_ui_objects import FindingUIObjectsTutorial
 from tutorial import Tutorial
 
 
@@ -92,6 +93,10 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "PhysX Rigid Bodies",
                 "tutorial": RigidBodyTutorial
+            },
+            {
+                "name": "Highlighting UI Objects",
+                "tutorial": FindingUIObjectsTutorial
             }
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
@@ -197,10 +202,26 @@ class InteractiveTutorialsDialog(QDialog):
         # If a highlight pattern was set for this step, then find that widget/item
         # and highlight it
         highlight_pattern = self.current_step.get_highlight_pattern()
+        highlight_parent = self.current_step.get_highlight_parent()
+        highlight_index = self.current_step.get_highlight_index()
+
         if highlight_pattern:
-            item = pyside_utils.find_child_by_pattern(None, highlight_pattern)
-            self.highlight_widget.update_widget(item)
-            if not item:
+            if highlight_parent:
+                # The parent is requested by name
+                if isinstance(highlight_parent, str):
+                    item_parent = pyside_utils.find_child_by_pattern(None, highlight_parent)
+                    item = pyside_utils.find_child_by_hierarchy(item_parent, highlight_pattern, child_index=highlight_index)
+                # The parent is requested by pattern. For use in scenarios where the object we want to highlight is a 
+                # couple levels and indices away. Find the parent object prior to defining the step, then supply 
+                # the parent object to create the step.
+                else:
+                    item = pyside_utils.find_child_by_hierarchy(highlight_parent, highlight_pattern, child_index=highlight_index)
+            else:
+                item = pyside_utils.find_child_by_pattern(None, highlight_pattern)
+            if item:
+                self.highlight_widget.update_widget(item)
+            else:
+                self.highlight_widget.update_widget(None)
                 print(f"Couldn't find widget or item matching pattern: { highlight_pattern }")
         else:
             self.highlight_widget.update_widget(None)
