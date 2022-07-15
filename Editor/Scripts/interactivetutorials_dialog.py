@@ -259,7 +259,6 @@ class InteractiveTutorialsDialog(QDialog):
 
     def on_start_button_clicked(self):
         tutorial_index = self.tutorial_list.currentIndex().row()
-
         self.load_tutorial(tutorial_index)
 
 
