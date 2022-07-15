@@ -143,6 +143,13 @@ class InteractiveTutorialsDialog(QDialog):
         self.button_box.addButton(self.simulate_button, QDialogButtonBox.ActionRole)
         self.tutorial_layout.addWidget(self.button_box)
 
+        self.button_box = QDialogButtonBox(self)
+        self.simulate_all_button = QPushButton("View the Final Simulation", self)   
+        self.simulate_all_button.setDefault(True)
+        self.simulate_all_button.clicked.connect(self.simulate_tutorial)
+        self.button_box.addButton(self.simulate_all_button, QDialogButtonBox.ActionRole)
+        self.tutorial_layout.addWidget(self.button_box)       
+
         self.tutorial_widget.setLayout(self.tutorial_layout)
         self.stacked_widget.addWidget(self.tutorial_widget)
 
@@ -256,6 +263,13 @@ class InteractiveTutorialsDialog(QDialog):
             RigidBodyTutorial.set_step_number(self, self.current_step_index)
             RigidBodyTutorial.set_simulate_on(self)
             RigidBodyTutorial.simulate(self)
+
+    def simulate_tutorial(self):
+        if self.tutorial_list.currentIndex().row() == 3:
+            #print("Rigid Body Tutorial identified")
+            RigidBodyTutorial.set_step_number(self, self.current_tutorial_num_steps)
+            RigidBodyTutorial.set_simulate_on(self)
+            RigidBodyTutorial.simulate(self)        
 
     def on_start_button_clicked(self):
         tutorial_index = self.tutorial_list.currentIndex().row()
