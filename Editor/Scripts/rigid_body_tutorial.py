@@ -188,6 +188,9 @@ class RigidBodyTutorial(Tutorial):
             collison_occued = False
             mass = 0.0
 
+        """
+        
+
         if step_count == 3: #Up to Delete the Shader Ball
             #Delete Shader Ball
             editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
@@ -227,6 +230,7 @@ class RigidBodyTutorial(Tutorial):
             transform.invoke('SetPosition', position)
             test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
             dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)
+            prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
         elif step_count == 9: #Up To Open Dice Entity
             #Delete Shader Ball
             editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
@@ -241,7 +245,8 @@ class RigidBodyTutorial(Tutorial):
             position = math.Vector3(0.0, 0.0, 5.0)
             transform.invoke('SetPosition', position)
             test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-            dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)           
+            dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)
+            prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)           
             
             #Create new Dice Entity parented to Prefab
             newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
@@ -269,7 +274,8 @@ class RigidBodyTutorial(Tutorial):
             transform.invoke('SetPosition', position)
             test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
             dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
-            
+            prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
+
             #Create new Dice Entity parented to Prefab
             newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
             editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")
@@ -299,7 +305,8 @@ class RigidBodyTutorial(Tutorial):
             transform.invoke('SetPosition', position)
             test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
             dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
-            
+            azlmbr.prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
+
             #Create new Dice Entity parented to Prefab
             newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
             editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")   
@@ -331,7 +338,8 @@ class RigidBodyTutorial(Tutorial):
             transform.invoke('SetPosition', position)
             test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
             dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
-            
+            prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
+
             #Create new Dice Entity parented to Prefab
             newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
             editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")   
@@ -373,7 +381,8 @@ class RigidBodyTutorial(Tutorial):
             transform.invoke('SetPosition', position)
             test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
             dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
-            
+            prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
+
             #Create new Dice Entity parented to Prefab
             newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
             editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")   
@@ -415,7 +424,7 @@ class RigidBodyTutorial(Tutorial):
             transform.invoke('SetPosition', position)
             test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
             dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
-            
+            prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
             #Create new Dice Entity parented to Prefab
             newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
             editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")   
@@ -459,7 +468,8 @@ class RigidBodyTutorial(Tutorial):
             transform.invoke('SetPosition', position)
             test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
             dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
-            
+            prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
+
             #Create new Dice Entity parented to Prefab
             newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
             editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")   
@@ -508,6 +518,7 @@ class RigidBodyTutorial(Tutorial):
             transform.invoke('SetPosition', position)
             test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
             dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
+            azlmbr.prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
             
             #Create new Dice Entity parented to Prefab
             newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
@@ -552,7 +563,8 @@ class RigidBodyTutorial(Tutorial):
             transform.invoke('SetPosition', position)
             test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
             dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
-            
+            azlmbr.prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
+
             #Create new Dice Entity parented to Prefab
             newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
             editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")   
@@ -598,7 +610,7 @@ class RigidBodyTutorial(Tutorial):
             transform.invoke('SetPosition', position)
             test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
             dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
-            
+            azlmbr.prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
             #Create new Dice Entity parented to Prefab
             newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
             editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")   
@@ -632,7 +644,11 @@ class RigidBodyTutorial(Tutorial):
             collider_entity = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
             shapeComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Shape Collider"], entity.EntityType().Game)[0]
             editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', collider_entity, [shapeComponentTypeId])
-        elif step_count == 21 : #enter game mode
+                
+        """
+        if step_count == 10000 : 
+                pass
+        elif step_count != 21 : #enter game mode
             #Delete Shader Ball
             editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
             searchFilter = entity.SearchFilter()
@@ -646,8 +662,19 @@ class RigidBodyTutorial(Tutorial):
             position = math.Vector3(0.0, 0.0, 5.0)
             transform.invoke('SetPosition', position)
             test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-            dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
-            
+            dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)
+            search_filter2 = entity.SearchFilter()
+            search_filter2.names = ["20-sided-dice"]
+            prefab_lc_root = entity.SearchBus(bus.Broadcast, 'SearchEntities', search_filter2)[0]  
+            azlmbr.prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", prefab_lc_root)
+
+            """
+            search_filter = entity.SearchFilter()
+            search_filter.names = ["LandscapeCanvas"]
+            helper.wait_for_condition(lambda: len(entity.SearchBus(bus.Broadcast, 'SearchEntities', search_filter)) > 0, 5.0)
+            prefab_lc_root = entity.SearchBus(bus.Broadcast, 'SearchEntities', search_filter)[0]
+            azlmbr.prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", prefab_lc_root)
+                """
             #Create new Dice Entity parented to Prefab
             newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
             editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")   
@@ -675,10 +702,15 @@ class RigidBodyTutorial(Tutorial):
             azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigid_body_id, 1.0)
             azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigidBodyComponentTypeId, 3.0)
             
+            search_filter3 = entity.SearchFilter()
+            search_filter3.names = ["Sun"]
+            prefab_lc_root3 = entity.SearchBus(bus.Broadcast, 'SearchEntities', search_filter3)[0]
+            azlmbr.prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", prefab_lc_root3)
+
             transform = math.Transform_CreateIdentity()
             position = math.Vector3(0.0, 0.0, 5.0)
             transform.invoke('SetPosition', position)
             collider_entity = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
             shapeComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Shape Collider"], entity.EntityType().Game)[0]
             editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', collider_entity, [shapeComponentTypeId])
-            helper.enter_game_mode(Tests.enter_game_mode)   
+            #helper.enter_game_mode(Tests.enter_game_mode)   
