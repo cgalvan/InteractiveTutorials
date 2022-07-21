@@ -16,7 +16,7 @@ import azlmbr.prefab as prefab
 from azlmbr.entity import EntityId
 import azlmbr.asset as asset
 from editor_python_test_tools.utils import TestHelper as helper
-
+from hashtable import HashTable
 from PySide2.QtWidgets import QMenuBar
 from PySide2.QtWidgets import QDialog
 from tutorial import Tutorial, TutorialStep
@@ -160,8 +160,6 @@ class RigidBodyTutorial(Tutorial):
                  fly in the air an spin, then fall and collide with the ground plane. Press <b>ESC</b> to exit.
                 </p></html>"""))
 
-
-
     def on_tutorial_start(self):
         print("Starting PhysX Rigid Body tutorial.")
 
@@ -178,539 +176,110 @@ class RigidBodyTutorial(Tutorial):
 
     def on_tutorial_end(self):
         print("PhysX Rigid Body tutorial complete!")
+    
+    """
+    per-step functions
+    """
+    def delete_shader_ball(self):
+        editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
+        searchFilter = entity.SearchFilter()
+        searchFilter.names = ['Shader Ball']
+        searchResult = entity.SearchBus(bus.Broadcast, 'SearchEntities', searchFilter)
+        shaderBallId = searchResult[0]
+        editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', shaderBallId)
 
+
+    def focus_dice_prefab(self):
+        # Instantiate and position the prefab
+        transform = math.Transform_CreateIdentity()
+        position = math.Vector3(0.0, 0.0, 5.0)
+        transform.invoke('SetPosition', position)
+        test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
+        dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)
+        search_filter2 = entity.SearchFilter()
+        search_filter2.names = ["20-sided-dice"]
+        prefab_lc_root = entity.SearchBus(bus.Broadcast, 'SearchEntities', search_filter2)[0]  
+        azlmbr.prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", prefab_lc_root)
+
+    def edit_dice_components(self):
+        e1_reached = False #Add Rigid Body and Collider Components
+        e2_reached = False #Edit Rigid Body and Collider Components
+        
+        #Create new Dice Entity parented to Prefab
+        newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
+        editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")   
+        #Add Mesh, Material, and Position Components to the Entity             
+        meshComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Position"], entity.EntityType().Game)[0]
+        materialComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Material"], entity.EntityType().Game)[0]
+        positionComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Mesh"], entity.EntityType().Game)[0]
+        editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [meshComponentTypeId])
+        editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [materialComponentTypeId])
+        editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [positionComponentTypeId])
+        if e1_reached == True:
+            #Add PhysX Collider Component and Rigid Body Component
+            colliderComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Collider"], entity.EntityType().Game)[0]
+            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [colliderComponentTypeId])
+            rigidBodyComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Rigid Body"], entity.EntityType().Game)[0]
+            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [rigidBodyComponentTypeId])            
+
+            #Edit Linear Velocity 
+            #Edit Angular Velocity 
+            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
+        if e2_reached == True:
+            #todo: break these into subfunctions
+            rigid_body_id = general.find_game_entity(newEntity5)
+            azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetGravityEnabled", newEntity5, True)
+            azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetLinearDamping", rigidBodyComponentTypeId, 0.06)
+            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigid_body_id, 1.0)
+            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigidBodyComponentTypeId, 3.0)
+            
+            #Edit Linear Velocity 
+            #Edit Angular Velocity 
+            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
+
+            rigid_body_id = general.find_game_entity(newEntity5)
+            azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetGravityEnabled", newEntity5, True)
+            azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetLinearDamping", rigidBodyComponentTypeId, 0.06)
+            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigid_body_id, 1.0)
+            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigidBodyComponentTypeId, 3.0)
+
+    def create_new_collider(self):
+        search_filter3 = entity.SearchFilter()
+        search_filter3.names = ["Sun"]
+        prefab_lc_root3 = entity.SearchBus(bus.Broadcast, 'SearchEntities', search_filter3)[0]
+        azlmbr.prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", prefab_lc_root3)
+
+        transform = math.Transform_CreateIdentity()
+        position = math.Vector3(0.0, 0.0, 5.0)
+        transform.invoke('SetPosition', position)
+        collider_entity = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
+        shapeComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Shape Collider"], entity.EntityType().Game)[0]
+        editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', collider_entity, [shapeComponentTypeId])
+
+    def enter_game_mode(self):
+        helper.enter_game_mode(Tests.enter_game_mode)       
+        
     def simulate(self):
         #if simulate_clicked is true
         step_count = self.current_step_index
-
+        print(step_count)
         class RigidBody:
             gravity_enabled = False
-            collison_occued = False
+            collison_occued = False 
             mass = 0.0
+        Steps = [0, 0, 0, 0, 0]
+        for x in Steps:
+            pass
+        print("entered simulate")
+        self.delete_shader_ball
+        print("entered simulate")
 
-        """
-        
-
-        if step_count == 3: #Up to Delete the Shader Ball
-            #Delete Shader Ball
-            editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
-            searchFilter = entity.SearchFilter()
-            searchFilter.names = ['Shader Ball']
-            searchResult = entity.SearchBus(bus.Broadcast, 'SearchEntities', searchFilter)
-            shaderBallId = searchResult[0]
-            editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', shaderBallId)
-        elif step_count == 5 or 6: #Up to position the Dice Prefab
-            #Delete Shader Ball
-            editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
-            searchFilter = entity.SearchFilter()
-            searchFilter.names = ['Shader Ball']
-            searchResult = entity.SearchBus(bus.Broadcast, 'SearchEntities', searchFilter)
-            shaderBallId = searchResult[0]
-            editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', shaderBallId)
-            
-            # Instantiate and position the prefab
-            transform = math.Transform_CreateIdentity()
-            position = math.Vector3(0.0, 0.0, 5.0)
-            transform.invoke('SetPosition', position)
-            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-            dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)
-            azlmbr.prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
-        elif step_count == 7: #Up to open focus view
-            #Delete Shader Ball
-            editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
-            searchFilter = entity.SearchFilter()
-            searchFilter.names = ['Shader Ball']
-            searchResult = entity.SearchBus(bus.Broadcast, 'SearchEntities', searchFilter)
-            shaderBallId = searchResult[0]
-            editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', shaderBallId)
-            
-            # Instantiate and position the prefab
-            transform = math.Transform_CreateIdentity()
-            position = math.Vector3(0.0, 0.0, 5.0)
-            transform.invoke('SetPosition', position)
-            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-            dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)
-            prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
-        elif step_count == 9: #Up To Open Dice Entity
-            #Delete Shader Ball
-            editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
-            searchFilter = entity.SearchFilter()
-            searchFilter.names = ['Shader Ball']
-            searchResult = entity.SearchBus(bus.Broadcast, 'SearchEntities', searchFilter)
-            shaderBallId = searchResult[0]
-            editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', shaderBallId)
-
-            # Instantiate and position the prefab
-            transform = math.Transform_CreateIdentity()
-            position = math.Vector3(0.0, 0.0, 5.0)
-            transform.invoke('SetPosition', position)
-            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-            dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)
-            prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)           
-            
-            #Create new Dice Entity parented to Prefab
-            newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
-            editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")
-            #Add Mesh, Material, and Position Components to the Entity
-            meshComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Position"], entity.EntityType().Game)[0]
-            materialComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Material"], entity.EntityType().Game)[0]
-            positionComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Mesh"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [meshComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [materialComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [positionComponentTypeId])
-
-        elif step_count == 10:  #Up to add a PhysX Collider Component
-            #Delete Shader Ball
-            editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
-            searchFilter = entity.SearchFilter()
-            searchFilter.names = ['Shader Ball']
-            searchResult = entity.SearchBus(bus.Broadcast, 'SearchEntities', searchFilter)
-            shaderBallId = searchResult[0]
-            editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', shaderBallId)
-
-            # Instantiate and position the prefab
-            transform = math.Transform_CreateIdentity()
-            position = math.Vector3(0.0, 0.0, 5.0)
-            transform.invoke('SetPosition', position)
-            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-            dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
-            prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
-
-            #Create new Dice Entity parented to Prefab
-            newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
-            editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")
-            #Add Mesh, Material, and Position Components to the Entity             
-            meshComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Position"], entity.EntityType().Game)[0]
-            materialComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Material"], entity.EntityType().Game)[0]
-            positionComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Mesh"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [meshComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [materialComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [positionComponentTypeId])
-        
-            #Add PhysX Collider Component
-            colliderComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Collider"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [colliderComponentTypeId])
-        elif step_count == 11 : #Up to Add a Rigid Body Component
-            #Delete Shader Ball
-            editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
-            searchFilter = entity.SearchFilter()
-            searchFilter.names = ['Shader Ball']
-            searchResult = entity.SearchBus(bus.Broadcast, 'SearchEntities', searchFilter)
-            shaderBallId = searchResult[0]
-            editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', shaderBallId)
-
-            # Instantiate and position the prefab
-            transform = math.Transform_CreateIdentity()
-            position = math.Vector3(0.0, 0.0, 5.0)
-            transform.invoke('SetPosition', position)
-            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-            dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
-            azlmbr.prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
-
-            #Create new Dice Entity parented to Prefab
-            newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
-            editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")   
-            #Add Mesh, Material, and Position Components to the Entity             
-            meshComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Position"], entity.EntityType().Game)[0]
-            materialComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Material"], entity.EntityType().Game)[0]
-            positionComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Mesh"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [meshComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [materialComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [positionComponentTypeId])
-            
-            #Add PhysX Collider Component and Rigid Body Component
-            colliderComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Collider"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [colliderComponentTypeId])
-            rigidBodyComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Rigid Body"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [rigidBodyComponentTypeId])
-        elif step_count == 12 : #Up to Edit Linear Velocity
-            #Delete Shader Ball
-            editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
-            searchFilter = entity.SearchFilter()
-            searchFilter.names = ['Shader Ball']
-            searchResult = entity.SearchBus(bus.Broadcast, 'SearchEntities', searchFilter)
-            shaderBallId = searchResult[0]
-            editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', shaderBallId)
-
-            # Instantiate and position the prefab
-            transform = math.Transform_CreateIdentity()
-            position = math.Vector3(0.0, 0.0, 5.0)
-            transform.invoke('SetPosition', position)
-            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-            dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
-            prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
-
-            #Create new Dice Entity parented to Prefab
-            newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
-            editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")   
-            #Add Mesh, Material, and Position Components to the Entity             
-            meshComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Position"], entity.EntityType().Game)[0]
-            materialComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Material"], entity.EntityType().Game)[0]
-            positionComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Mesh"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [meshComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [materialComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [positionComponentTypeId])
-            
-            #Add PhysX Collider Component and Rigid Body Component
-            colliderComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Collider"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [colliderComponentTypeId])
-            rigidBodyComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Rigid Body"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [rigidBodyComponentTypeId])
-            
-            #Edit Linear Velocity 
-            #Edit Angular Velocity 
-            #test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-
-            rigid_body_id = general.find_game_entity(newEntity5)
-
-            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigid_body_id, 1.0)
-            
-            editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
-        elif step_count == 13 : #Up to Edit Angular Velocity
-            #Delete Shader Ball
-            editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
-            searchFilter = entity.SearchFilter()
-            searchFilter.names = ['Shader Ball']
-            searchResult = entity.SearchBus(bus.Broadcast, 'SearchEntities', searchFilter)
-            shaderBallId = searchResult[0]
-            editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', shaderBallId)
-
-            # Instantiate and position the prefab
-            transform = math.Transform_CreateIdentity()
-            position = math.Vector3(0.0, 0.0, 5.0)
-            transform.invoke('SetPosition', position)
-            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-            dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
-            prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
-
-            #Create new Dice Entity parented to Prefab
-            newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
-            editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")   
-            #Add Mesh, Material, and Position Components to the Entity             
-            meshComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Position"], entity.EntityType().Game)[0]
-            materialComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Material"], entity.EntityType().Game)[0]
-            positionComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Mesh"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [meshComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [materialComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [positionComponentTypeId])
-            
-            #Add PhysX Collider Component and Rigid Body Component
-            colliderComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Collider"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [colliderComponentTypeId])
-            rigidBodyComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Rigid Body"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [rigidBodyComponentTypeId])
-            
-            #Edit Linear Velocity 
-            #Edit Angular Velocity 
-            #test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-
-            rigid_body_id = general.find_game_entity(newEntity5)
-            #azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetGravityEnabled", newEntity5, True)
-            #azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetLinearDamping", rigidBodyComponentTypeId, 0.06)
-            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigid_body_id, 1.0)
-            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetAngularVelocity", rigidBodyComponentTypeId, 1.0)
-        elif step_count == 16 : #Add new Entity
-            #Delete Shader Ball
-            editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
-            searchFilter = entity.SearchFilter()
-            searchFilter.names = ['Shader Ball']
-            searchResult = entity.SearchBus(bus.Broadcast, 'SearchEntities', searchFilter)
-            shaderBallId = searchResult[0]
-            editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', shaderBallId)
-
-            # Instantiate and position the prefab
-            transform = math.Transform_CreateIdentity()
-            position = math.Vector3(0.0, 0.0, 5.0)
-            transform.invoke('SetPosition', position)
-            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-            dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
-            prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
-            #Create new Dice Entity parented to Prefab
-            newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
-            editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")   
-            #Add Mesh, Material, and Position Components to the Entity             
-            meshComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Position"], entity.EntityType().Game)[0]
-            materialComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Material"], entity.EntityType().Game)[0]
-            positionComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Mesh"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [meshComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [materialComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [positionComponentTypeId])
-            
-            #Add PhysX Collider Component and Rigid Body Component
-            colliderComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Collider"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [colliderComponentTypeId])
-            rigidBodyComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Rigid Body"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [rigidBodyComponentTypeId])
-            
-            #Edit Linear Velocity 
-            #Edit Angular Velocity 
-            #test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-
-            rigid_body_id = general.find_game_entity(newEntity5)
-            #azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetGravityEnabled", newEntity5, True)
-            #azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetLinearDamping", rigidBodyComponentTypeId, 0.06)
-            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigid_body_id, 1.0)
-            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetAngularVelocity", rigidBodyComponentTypeId, 1.0)
-            
-            editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
-        elif step_count == 14 : #Up to Exit Focus Mode
-            #Delete Shader Ball
-            editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
-            searchFilter = entity.SearchFilter()
-            searchFilter.names = ['Shader Ball']
-            searchResult = entity.SearchBus(bus.Broadcast, 'SearchEntities', searchFilter)
-            shaderBallId = searchResult[0]
-            editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', shaderBallId)
-
-            # Instantiate and position the prefab
-            transform = math.Transform_CreateIdentity()
-            position = math.Vector3(0.0, 0.0, 5.0)
-            transform.invoke('SetPosition', position)
-            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-            dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
-            prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
-
-            #Create new Dice Entity parented to Prefab
-            newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
-            editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")   
-            #Add Mesh, Material, and Position Components to the Entity             
-            meshComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Position"], entity.EntityType().Game)[0]
-            materialComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Material"], entity.EntityType().Game)[0]
-            positionComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Mesh"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [meshComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [materialComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [positionComponentTypeId])
-            
-            #Add PhysX Collider Component and Rigid Body Component
-            colliderComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Collider"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [colliderComponentTypeId])
-            rigidBodyComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Rigid Body"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [rigidBodyComponentTypeId])
-            
-            #Edit Linear Velocity 
-            #Edit Angular Velocity 
-            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-
-            rigid_body_id = general.find_game_entity(newEntity5)
-            azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetGravityEnabled", newEntity5, True)
-            azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetLinearDamping", rigidBodyComponentTypeId, 0.06)
-            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigid_body_id, 1.0)
-            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigidBodyComponentTypeId, 3.0)
-            
-            editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
-            
-            transform = math.Transform_CreateIdentity()
-            position = math.Vector3(0.0, 0.0, 5.0)
-            transform.invoke('SetPosition', position)
-            helper.enter_game_mode(Tests.enter_game_mode)        
-        elif step_count == 16 : #Add a Collider
-            #Delete Shader Ball
-            editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
-            searchFilter = entity.SearchFilter()
-            searchFilter.names = ['Shader Ball']
-            searchResult = entity.SearchBus(bus.Broadcast, 'SearchEntities', searchFilter)
-            shaderBallId = searchResult[0]
-            editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', shaderBallId)
-
-            # Instantiate and position the prefab
-            transform = math.Transform_CreateIdentity()
-            position = math.Vector3(0.0, 0.0, 5.0)
-            transform.invoke('SetPosition', position)
-            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-            dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
-            azlmbr.prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
-            
-            #Create new Dice Entity parented to Prefab
-            newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
-            editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")   
-            #Add Mesh, Material, and Position Components to the Entity             
-            meshComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Position"], entity.EntityType().Game)[0]
-            materialComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Material"], entity.EntityType().Game)[0]
-            positionComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Mesh"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [meshComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [materialComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [positionComponentTypeId])
-            
-            #Add PhysX Collider Component and Rigid Body Component
-            colliderComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Collider"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [colliderComponentTypeId])
-            rigidBodyComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Rigid Body"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [rigidBodyComponentTypeId])
-            
-            #Edit Linear Velocity 
-            #Edit Angular Velocity 
-            #test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-
-            rigid_body_id = general.find_game_entity(newEntity5)
-            #azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetGravityEnabled", newEntity5, True)
-            #azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetLinearDamping", rigidBodyComponentTypeId, 0.06)
-            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigid_body_id, 1.0)
-            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetAngularVelocity", rigidBodyComponentTypeId, 1.0)
-            
-            editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())        
-        elif step_count == 17 :
-            #Delete Shader Ball
-            editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
-            searchFilter = entity.SearchFilter()
-            searchFilter.names = ['Shader Ball']
-            searchResult = entity.SearchBus(bus.Broadcast, 'SearchEntities', searchFilter)
-            shaderBallId = searchResult[0]
-            editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', shaderBallId)
-
-            # Instantiate and position the prefab
-            transform = math.Transform_CreateIdentity()
-            position = math.Vector3(0.0, 0.0, 5.0)
-            transform.invoke('SetPosition', position)
-            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-            dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
-            azlmbr.prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
-
-            #Create new Dice Entity parented to Prefab
-            newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
-            editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")   
-            #Add Mesh, Material, and Position Components to the Entity             
-            meshComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Position"], entity.EntityType().Game)[0]
-            materialComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Material"], entity.EntityType().Game)[0]
-            positionComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Mesh"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [meshComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [materialComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [positionComponentTypeId])
-            
-            #Add PhysX Collider Component and Rigid Body Component
-            colliderComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Collider"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [colliderComponentTypeId])
-            rigidBodyComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Rigid Body"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [rigidBodyComponentTypeId])
-            
-            #Edit Linear Velocity 
-            #Edit Angular Velocity 
-            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-
-            rigid_body_id = general.find_game_entity(newEntity5)
-            azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetGravityEnabled", newEntity5, True)
-            azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetLinearDamping", rigidBodyComponentTypeId, 0.06)
-            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigid_body_id, 1.0)
-            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigidBodyComponentTypeId, 3.0)
-            
-            collider_entity = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
-            shapeComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Shape Collider"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', collider_entity, [shapeComponentTypeId])
-        elif step_count == 17 or 18 or 19 :
-            #Delete Shader Ball
-            editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
-            searchFilter = entity.SearchFilter()
-            searchFilter.names = ['Shader Ball']
-            searchResult = entity.SearchBus(bus.Broadcast, 'SearchEntities', searchFilter)
-            shaderBallId = searchResult[0]
-            editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', shaderBallId)
-
-            # Instantiate and position the prefab
-            transform = math.Transform_CreateIdentity()
-            position = math.Vector3(0.0, 0.0, 5.0)
-            transform.invoke('SetPosition', position)
-            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-            dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)   
-            azlmbr.prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", dice_prefab)
-            #Create new Dice Entity parented to Prefab
-            newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
-            editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")   
-            #Add Mesh, Material, and Position Components to the Entity             
-            meshComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Position"], entity.EntityType().Game)[0]
-            materialComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Material"], entity.EntityType().Game)[0]
-            positionComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Mesh"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [meshComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [materialComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [positionComponentTypeId])
-            
-            #Add PhysX Collider Component and Rigid Body Component
-            colliderComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Collider"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [colliderComponentTypeId])
-            rigidBodyComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Rigid Body"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [rigidBodyComponentTypeId])
-            
-            #Edit Linear Velocity 
-            #Edit Angular Velocity 
-            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-
-            rigid_body_id = general.find_game_entity(newEntity5)
-            azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetGravityEnabled", newEntity5, True)
-            azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetLinearDamping", rigidBodyComponentTypeId, 0.06)
-            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigid_body_id, 1.0)
-            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigidBodyComponentTypeId, 3.0)
-            
-            transform = math.Transform_CreateIdentity()
-            position = math.Vector3(0.0, 0.0, 5.0)
-            transform.invoke('SetPosition', position)
-            collider_entity = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
-            shapeComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Shape Collider"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', collider_entity, [shapeComponentTypeId])
-                
-        """
-        if step_count == 10000 : 
-                pass
-        elif step_count != 21 : #enter game mode
-            #Delete Shader Ball
-            editor.EditorComponentAPIBus(bus.Broadcast, 'SetVisibleEnforcement', True)
-            searchFilter = entity.SearchFilter()
-            searchFilter.names = ['Shader Ball']
-            searchResult = entity.SearchBus(bus.Broadcast, 'SearchEntities', searchFilter)
-            shaderBallId = searchResult[0]
-            editor.ToolsApplicationRequestBus(bus.Broadcast, 'DeleteEntityAndAllDescendants', shaderBallId)
-
-            # Instantiate and position the prefab
-            transform = math.Transform_CreateIdentity()
-            position = math.Vector3(0.0, 0.0, 5.0)
-            transform.invoke('SetPosition', position)
-            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-            dice_prefab = prefab.PrefabPublicRequestBus(bus.Broadcast, 'InstantiatePrefab', test_prefab_path, entity.EntityId(), position)
-            search_filter2 = entity.SearchFilter()
-            search_filter2.names = ["20-sided-dice"]
-            prefab_lc_root = entity.SearchBus(bus.Broadcast, 'SearchEntities', search_filter2)[0]  
-            azlmbr.prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", prefab_lc_root)
-
-            """
-            search_filter = entity.SearchFilter()
-            search_filter.names = ["LandscapeCanvas"]
-            helper.wait_for_condition(lambda: len(entity.SearchBus(bus.Broadcast, 'SearchEntities', search_filter)) > 0, 5.0)
-            prefab_lc_root = entity.SearchBus(bus.Broadcast, 'SearchEntities', search_filter)[0]
-            azlmbr.prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", prefab_lc_root)
-                """
-            #Create new Dice Entity parented to Prefab
-            newEntity5 = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
-            editor.EditorEntityAPIBus(bus.Event, 'SetName', newEntity5, "20-sided-dice-2")   
-            #Add Mesh, Material, and Position Components to the Entity             
-            meshComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Position"], entity.EntityType().Game)[0]
-            materialComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Material"], entity.EntityType().Game)[0]
-            positionComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Mesh"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [meshComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [materialComponentTypeId])
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [positionComponentTypeId])
-            
-            #Add PhysX Collider Component and Rigid Body Component
-            colliderComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Collider"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [colliderComponentTypeId])
-            rigidBodyComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Rigid Body"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', newEntity5, [rigidBodyComponentTypeId])
-            
-            #Edit Linear Velocity 
-            #Edit Angular Velocity 
-            test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
-
-            rigid_body_id = general.find_game_entity(newEntity5)
-            azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetGravityEnabled", newEntity5, True)
-            azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetLinearDamping", rigidBodyComponentTypeId, 0.06)
-            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigid_body_id, 1.0)
-            azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigidBodyComponentTypeId, 3.0)
-            
-            search_filter3 = entity.SearchFilter()
-            search_filter3.names = ["Sun"]
-            prefab_lc_root3 = entity.SearchBus(bus.Broadcast, 'SearchEntities', search_filter3)[0]
-            azlmbr.prefab.PrefabFocusPublicRequestBus(bus.Broadcast, "FocusOnOwningPrefab", prefab_lc_root3)
-
-            transform = math.Transform_CreateIdentity()
-            position = math.Vector3(0.0, 0.0, 5.0)
-            transform.invoke('SetPosition', position)
-            collider_entity = editor.ToolsApplicationRequestBus(bus.Broadcast, 'CreateNewEntity', EntityId())
-            shapeComponentTypeId = editor.EditorComponentAPIBus(bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["PhysX Shape Collider"], entity.EntityType().Game)[0]
-            editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', collider_entity, [shapeComponentTypeId])
-            #helper.enter_game_mode(Tests.enter_game_mode)   
+        Steps[0] = 1
+        self.focus_dice_prefab
+        Steps[1] = 1
+        #self.edit_dice_components
+        Steps[2] = 1
+        #self.create_new_collider
+        Steps[3] = 1
+        #self.enter_game_mode
+        Steps[4] = 1
