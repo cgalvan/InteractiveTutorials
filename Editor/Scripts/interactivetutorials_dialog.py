@@ -15,8 +15,6 @@ from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView,
     QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
 )
 
-from rigid_body_tutorial import RigidBodyTutorial
-
 # This import will fail when the AP launches, will only work once the Editor is running
 try:
     import editor_python_test_tools.pyside_utils as pyside_utils
@@ -24,8 +22,8 @@ except:
     pass
 
 from demo_tutorial import DemoTutorial, IntroTutorial
-
 from tutorial import Tutorial
+from rigid_body_tutorial import RigidBodyTutorial
 
 class HighlightWidget(QWidget):
     def __init__(self, parent=None):
