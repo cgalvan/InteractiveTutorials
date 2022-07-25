@@ -26,11 +26,11 @@ class RigidBodyTutorial(Tutorial):
                 plane, and simulate the results.<br><br>Click next to continue.</p></html>"""))
         self.add_step(TutorialStep("Preparing the scene", """<html><p style="font-size:13px">The default level includes 
                 a bunch of starter entities. Let's see what we have.<br><br>In <b>Entity Outliner</b>, click the arrow 
-                next to the <b>Atom Default Environment</b> entity to expand it.<br><br>The list of child entites are 
+                next to the <b>Atom Default Environment</b> entity to expand it.<br><br>The list of child entities are 
                 all the entities in the level. Each entity has a collection of components that provide some 
                 functionality. The <b>Sun</b> entity, for example, has a <b>Directional Light</b> component the 
                 simulates a very bright distant light with parallel rays. It also has a <b>Transform</b> component that 
-                places it in the level in realtion to it's parent, the <b>Atom Default Environment</b> entity.
+                places it in the level in relation to it's parent, the <b>Atom Default Environment</b> entity.
                 </p></html>""", "EntityOutlinerWidgetUI"))
         self.add_step(TutorialStep("Delete the Shader Ball entity", """<html><p style="font-size:13px">Let's tidy up a 
                 bit.<br><br>In <b>Entity Outliner</b>, click the <b>Shader Ball</b> entity to select it and press 
@@ -45,7 +45,7 @@ class RigidBodyTutorial(Tutorial):
         self.add_step(TutorialStep("Instantiate a prefab", """<html><p style="font-size:13px">To use the prefab in our 
                 level we need to create an instance, or <i>instantiate</i> the prefab in the level.<br><br>Drag the 
                 <strong><code style="font-size:14px;color:#E44C9A">20-sided-dice.prefab</code></strong> into the 
-                viewport to instatiate it in the level.</p></html>""", "renderOverlay"))
+                viewport to instantiate it in the level.</p></html>""", "renderOverlay"))
         self.add_step(TutorialStep("Position the prefab", """<html><p style="font-size:13px"> Use the <b>Move</b> tool 
                 to position the dice prefab instance in the camera's view.<ul><li>In the viewport, ensure the prefab 
                 instance is selected by clicking it.</li><li>Use the translate handles to drag the prefab instance so 
@@ -60,20 +60,21 @@ class RigidBodyTutorial(Tutorial):
                 modifications we make happen in the context of the prefab instance that is open for editing.<br><br><br>
                 </p></html>""", "EntityOutlinerWidgetUI"))
         self.add_step(TutorialStep("Edit the dice entity", """<html><p style="font-size:13px">With the dice prefab 
-                instance open for editing, we can see it contains an enity (denoted by a white box icon). We'll add some
-                 PhysX components to this entity.<br><br>In <b>Enity Outliner</b> click the <b>20-sided-dice</b> entity 
-                to select it.</p></html>""", "EntityOutlinerWidgetUI"))
+                instance open for editing, we can see it contains an entity (denoted by a white box icon). We'll add 
+                some PhysX components to this entity.<br><br>In <b>Entity Outliner</b> click the <b>20-sided-dice</b> 
+                entity to select it.</p></html>""", "EntityOutlinerWidgetUI"))
         self.add_step(TutorialStep("Inspect the dice entity", """<html><p style="font-size:13px"><b>Entity 
                 Inspector</b> displays the dice entity's three components.<ul><li><b>Transform</b> - Places and orients 
                 the entity in the local space of the prefab instance.</li><li><b>Mesh</b> - Supplies a render mesh for 
                 the entity.</li><li><b>Material</b> - Applies shaders and textures to the render mesh.</il></ul>In the 
-                next steps, we'll add and configure components in Entity Inspector.</p></html>""", "InspectorMainWindow"))
+                next steps, we'll add and configure components in Entity Inspector.</p></html>""", 
+                "InspectorMainWindow"))
         self.add_step(TutorialStep("Add a PhysX Collider", """<html><p style="font-size:13px">A collider is a simplified
                  mesh that defines a solid surface that can register collisions and overlaps with other colliders. To 
                 add a collider to the entity, we'll add a <b>PhysX Collider</b> component.<br><br>In 
                 <b>Entity Inspector</b>, click the <b>Add Component</b> button and select the PhysX Collider component 
                 from the list to add a collider to the entity.<br><br>In the viewport, notice that there's now a 
-                transparent mesh on the entity. This is the colider mesh. The dice source asset was configured to 
+                transparent mesh on the entity. This is the collider mesh. The dice source asset was configured to 
                 generate a <i>convex</i> PhysX collision mesh when processed. A convex mesh is a simplified mesh that 
                 can approximate a complex surface and be used in a dynamic physics simulation.<br><br>The PhysX Collider
                  component was automatically configured with the convex collider when we added it to the entity. In the 
@@ -83,7 +84,7 @@ class RigidBodyTutorial(Tutorial):
                 20-sided-dice</code></strong>, the generated convex mesh.</p></html>""", 
                 "m_addComponentButton"))
         self.add_step(TutorialStep("Add a PhysX Rigid Body", """<html><p style="font-size:13px">A rigid body is a 
-                dynamic hard surface that responds to collisions and forces. Currently, the enity can be 
+                dynamic hard surface that responds to collisions and forces. Currently, the entity can be 
                 collided with, but it won't respond when a simulation runs. We need to add a <b>PhysX Rigid Body</b> 
                 component.<br><br>In <b>Entity Inspector</b> click the <b>Add Component</b> button and select the 
                 PhysX Rigid Body component from the list.<br><br>The entity can now be simulated, but 
@@ -91,16 +92,17 @@ class RigidBodyTutorial(Tutorial):
                 "m_addComponentButton"))
         self.add_step(TutorialStep("Add an initial linear velocity", """<html><p style="font-size:13px">The <b>PhysX 
                 Rigid Body</b> component has a lot of properties. The most important one, <b>Gravity enabled</b>, is 
-                turned on by default. When simulated, the enity will fall due to gravity. Let's add a small upward 
+                turned on by default. When simulated, the entity will fall due to gravity. Let's add a small upward 
                 initial velocity to the rigid body so we see an interesting result when we run the simulation.<br><br>
                 In the PhysX Rigid Body component, set the <b>Initial linear velocity</b> property's <b>Z</b> value to 
-                <strong><code style="font-size:14px;color:#E44C9A">10</code></strong>.</p></html>""", "InspectorMainWindow"))
+                <strong><code style="font-size:14px;color:#E44C9A">10</code></strong>.</p></html>""", 
+                "InspectorMainWindow"))
         self.add_step(TutorialStep("Add an initial angular velocity", """<html><p style="font-size:13px">We can also 
-                spin the dice entity. Let's add a small inital angular velocity to the rigid body as well.<br><br>In the
-                 <b>PhysX Rigid Body</b> component, set the <b>Initial angular 
-                velocity</b> property's <b>Y</b> value to 
-                <strong><code style="font-size:14px;color:#E44C9A">15</code></strong>.<br><br>With these two properties 
-                set, the entity will pop straight up and spin when the entity is activated.</p></html>""", "InspectorMainWindow"))
+                spin the dice entity. Let's add a small initial angular velocity to the rigid body as well.<br><br>In 
+                the <b>PhysX Rigid Body</b> component, set the <b>Initial angular velocity</b> property's <b>Y</b> 
+                value to <strong><code style="font-size:14px;color:#E44C9A">15</code></strong>.<br><br>With these two 
+                properties set, the entity will pop straight up and spin when the entity is activated.</p></html>""", 
+                "InspectorMainWindow"))
         self.add_step(TutorialStep("Exit Focus Mode", """<html><p style="font-size:13px">We're done editing the prefab 
                 instance, so let's exit Focus Mode.<br><br>In <b>Entity Outliner</b> double click the dice prefab 
                 instance to close it.</p></html>""", "EntityOutlinerWidgetUI"))
@@ -109,13 +111,14 @@ class RigidBodyTutorial(Tutorial):
                 instance has been edited and there are unsaved changes. Let's save the prefab.<br><br>In Entity 
                 Outliner, right-click the dice prefab instance and choose <b>Save Prefab to file</b>.<br><br>Saving the 
                 prefab overwrites the prefab file on disk. Any new instances of the prefab will contain the <b>PhysX 
-                Collider</b> and <b>PhysX Rigid Body</b> components we added in the previous setps.</p></html>""", "EntityOutlinerWidgetUI"))
+                Collider</b> and <b>PhysX Rigid Body</b> components we added in the previous steps.</p></html>""", 
+                "EntityOutlinerWidgetUI"))
         self.add_step(TutorialStep("Add a ground plane collider", """<html><p style="font-size:13px">We need to add a 
                 collider to the ground plane so that the dice prefab instance has a surface to collide against in the 
                 simulation.<br><br>In <b>Entity Outliner</b>, right-click and select <b>Create Entity</b> from the 
                 context menu.</p></html>""", "EntityOutlinerWidgetUI"))
         self.add_step(TutorialStep("Add a PhysX Shape Collider", """<html><p style="font-size:13px">With the 
-                new enity selected, we'll add a <b>PhysX Shape Collider</b> componnet to create a collision surface for 
+                new entity selected, we'll add a <b>PhysX Shape Collider</b> component to create a collision surface for 
                 the ground plane.<br><br>In <b>Entity Inspector</b> click the <b>Add Component</b> button and select the
                 PhysX Shape Collider component from the list.</p></html>""", 
                 "m_addComponentButton"))
@@ -129,15 +132,15 @@ class RigidBodyTutorial(Tutorial):
                 much larger to ensure the dice prefab instance collides with it.<br><br>In the Quad Shape component, set
                  both the <b>Width</b> and <b>Height</b> properties to 
                  <strong><code style="font-size:14px;color:#E44C9A">512</code></strong> so that the collision plane 
-                matches the size of the gorund plane.</p></html>""", "InspectorMainWindow"))
+                matches the size of the ground plane.</p></html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Position the ground collider", """<html><p style="font-size:13px">The ground 
                 collider we just created is not aligned with the ground mesh. Let's move the collider so that 
                 it aligns better with the ground plane.<br><br>With the ground collider entity selected, in the 
-                viewpoort, use the <b>Z</b> handle of the move tool to move the ground collider just enough for 
+                viewport, use the <b>Z</b> handle of the move tool to move the ground collider just enough for 
                 the quad shape to disappear below the ground plane.</p></html>""", 
                 "renderOverlay"))
         self.add_step(TutorialStep("Run the simulation", """<html><p style="font-size:13px">We can now run the 
-                simualtion and view the results. Press <b>CTRL+G</b> to enter game mode and see the dice prefab instance
+                simulation and view the results. Press <b>CTRL+G</b> to enter game mode and see the dice prefab instance
                  fly in the air an spin, then fall and collide with the ground plane. Press <b>ESC</b> to exit.
                 </p></html>"""))
 
