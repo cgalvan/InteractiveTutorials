@@ -12,7 +12,7 @@ from PySide2 import QtCore
 from PySide2.QtCore import QMargins, QStringListModel, Qt
 from PySide2.QtGui import QColor, QPainter, QPen
 from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView,
-    QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
+    QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget, QAbstractItemView
 )
 
 # This import will fail when the AP launches, will only work once the Editor is running
@@ -103,6 +103,7 @@ class InteractiveTutorialsDialog(QDialog):
         self.tutorial_list_model.setStringList(tutorial_names)
         self.tutorial_list.setModel(self.tutorial_list_model)
         self.tutorial_list.setAlternatingRowColors(True)
+        self.tutorial_list.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.intro_layout.addWidget(self.tutorial_list, 0, Qt.AlignCenter)
 
         self.start_button = QPushButton("Start", self)
