@@ -24,6 +24,7 @@ except:
 from demo_tutorial import DemoTutorial, IntroTutorial
 from tutorial import Tutorial
 from rigid_body_tutorial import RigidBodyTutorial
+from finding_ui_objects import FindingUIObjectsTutorial
 
 class HighlightWidget(QWidget):
     def __init__(self, parent=None):
@@ -91,6 +92,10 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "PhysX Rigid Bodies",
                 "tutorial": RigidBodyTutorial
+            },
+            {
+                "name": "Highlighting UI Objects",
+                "tutorial": FindingUIObjectsTutorial
             }
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
@@ -201,14 +206,27 @@ class InteractiveTutorialsDialog(QDialog):
 
         # If a highlight pattern was set for this step, then find that widget/item
         # and highlight it
+        highlight_item = None
         highlight_pattern = self.current_step.get_highlight_pattern()
-        if highlight_pattern:
-            item = pyside_utils.find_child_by_pattern(None, highlight_pattern)
-            self.highlight_widget.update_widget(item)
-            if not item:
-                print(f"Couldn't find widget or item matching pattern: { highlight_pattern }")
-        else:
+        if not highlight_pattern:
             self.highlight_widget.update_widget(None)
+            return
+
+        highlight_parent = self.current_step.get_highlight_parent()
+        if not highlight_parent:
+            highlight_item = pyside_utils.find_child_by_pattern(None, highlight_pattern)
+        else:
+            if isinstance(highlight_parent, str):
+                highlight_parent = pyside_utils.find_child_by_pattern(None, highlight_parent)
+            highlight_item = pyside_utils.find_child_by_hierarchy(highlight_parent, highlight_pattern, 
+                    child_index=self.current_step.get_highlight_index())
+
+        if not highlight_item:
+            self.highlight_widget.update_widget(None)
+            print(f"Couldn't find widget or item matching pattern: { highlight_pattern }")
+            return
+
+        self.highlight_widget.update_widget(highlight_item)
 
     def load_step(self, step):
         # If there was a step already loaded, call its ending method
