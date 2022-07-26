@@ -1,7 +1,6 @@
 """
 Copyright (c) Contributors to the Open 3D Engine Project.
 For complete copyright and license terms please see the LICENSE at the root of this distribution.
-
 SPDX-License-Identifier: Apache-2.0 OR MIT
 """
 # -------------------------------------------------------------------------
@@ -23,7 +22,9 @@ except:
 
 from demo_tutorial import DemoTutorial, IntroTutorial
 from rigid_body_tutorial import RigidBodyTutorial
+from finding_ui_objects import FindingUIObjectsTutorial
 from tutorial import Tutorial
+
 
 class HighlightWidget(QWidget):
     def __init__(self, parent=None):
@@ -91,6 +92,10 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "PhysX Rigid Bodies",
                 "tutorial": RigidBodyTutorial
+            },
+            {
+                "name": "Highlighting UI Objects",
+                "tutorial": FindingUIObjectsTutorial
             }
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
@@ -123,9 +128,6 @@ class InteractiveTutorialsDialog(QDialog):
         self.content_area.setWordWrap(True)
         self.tutorial_layout.addWidget(self.content_area, 1)
 
-        self.step_label = QLabel(self)
-        self.tutorial_layout.addWidget(self.step_label)
-
         self.button_box = QDialogButtonBox(self)
         self.next_button = QPushButton("Next", self)
         self.next_button.setDefault(True)
@@ -135,20 +137,6 @@ class InteractiveTutorialsDialog(QDialog):
         self.button_box.addButton(self.next_button, QDialogButtonBox.ActionRole)
         self.button_box.addButton(self.back_button, QDialogButtonBox.ResetRole)
         self.tutorial_layout.addWidget(self.button_box)
-
-        self.button_box = QDialogButtonBox(self)
-        self.simulate_button = QPushButton("Simulate This Step", self)
-        self.simulate_button.setDefault(True)
-        self.simulate_button.clicked.connect(self.simulate_step)
-        self.button_box.addButton(self.simulate_button, QDialogButtonBox.ActionRole)
-        self.tutorial_layout.addWidget(self.button_box)
-
-        self.button_box = QDialogButtonBox(self)
-        self.simulate_all_button = QPushButton("View the Final Simulation", self)   
-        self.simulate_all_button.setDefault(True)
-        self.simulate_all_button.clicked.connect(self.simulate_tutorial)
-        self.button_box.addButton(self.simulate_all_button, QDialogButtonBox.ActionRole)
-        self.tutorial_layout.addWidget(self.button_box)       
 
         self.tutorial_widget.setLayout(self.tutorial_layout)
         self.stacked_widget.addWidget(self.tutorial_widget)
@@ -163,8 +151,6 @@ class InteractiveTutorialsDialog(QDialog):
 
         tutorial_factory = self.tutorials[index]["tutorial"]
         self.current_tutorial = tutorial_factory()
-        
-        self.current_tutorial_num_steps = len(self.current_tutorial.get_steps())
 
         # Invoke the tutorial start method
         self.current_tutorial.on_tutorial_start()
@@ -173,10 +159,9 @@ class InteractiveTutorialsDialog(QDialog):
         self.setWindowTitle("InteractiveTutorials - " + self.current_tutorial.get_title())
 
         # Reset initial state and load first step
-        self.current_step_index = 0 
         self.current_step = None
         first_step = self.current_tutorial.get_first_step()
-        self.load_step(first_step)        
+        self.load_step(first_step)
 
     def end_tutorial(self):
         if not self.current_step:
@@ -205,7 +190,7 @@ class InteractiveTutorialsDialog(QDialog):
 
         self.title_label.setText(self.current_step.get_title())
         self.content_area.setText(self.current_step.get_content())
-        self.step_label.setText(f"Step {self.current_step_index} of {self.current_tutorial_num_steps}")
+
         # If there are no steps remaining in the tutorial, then
         # update the Next button text to "End"
         next_button_text = "Next"
@@ -215,14 +200,27 @@ class InteractiveTutorialsDialog(QDialog):
 
         # If a highlight pattern was set for this step, then find that widget/item
         # and highlight it
+        highlight_item = None
         highlight_pattern = self.current_step.get_highlight_pattern()
-        if highlight_pattern:
-            item = pyside_utils.find_child_by_pattern(None, highlight_pattern)
-            self.highlight_widget.update_widget(item)
-            if not item:
-                print(f"Couldn't find widget or item matching pattern: { highlight_pattern }")
-        else:
+        if not highlight_pattern:
             self.highlight_widget.update_widget(None)
+            return
+
+        highlight_parent = self.current_step.get_highlight_parent()
+        if not highlight_parent:
+            highlight_item = pyside_utils.find_child_by_pattern(None, highlight_pattern)
+        else:
+            if isinstance(highlight_parent, str):
+                highlight_parent = pyside_utils.find_child_by_pattern(None, highlight_parent)
+            highlight_item = pyside_utils.find_child_by_hierarchy(highlight_parent, highlight_pattern, 
+                    child_index=self.current_step.get_highlight_index())
+
+        if not highlight_item:
+            self.highlight_widget.update_widget(None)
+            print(f"Couldn't find widget or item matching pattern: { highlight_pattern }")
+            return
+
+        self.highlight_widget.update_widget(highlight_item)
 
     def load_step(self, step):
         # If there was a step already loaded, call its ending method
@@ -230,7 +228,6 @@ class InteractiveTutorialsDialog(QDialog):
             self.current_step.on_step_end()
 
         self.current_step = step
-        self.current_step_index += 1
 
         # Invoke the method for the beginning of this step
         self.current_step.on_step_start()
@@ -249,30 +246,13 @@ class InteractiveTutorialsDialog(QDialog):
 
     def load_previous_step(self):
         if self.current_step:
-            self.current_step_index -= 1
             prev_step = self.current_step.prev_step
             if prev_step:
-                self.current_step_index -= 1
                 self.load_step(prev_step)
-
-
-    def simulate_step(self):
-        #print("Entered simulate step")
-        if self.tutorial_list.currentIndex().row() == 3:
-            #print("Rigid Body Tutorial identified")
-            RigidBodyTutorial.set_step_number(self, self.current_step_index)
-            RigidBodyTutorial.set_simulate_on(self)
-            RigidBodyTutorial.simulate(self)
-
-    def simulate_tutorial(self):
-        if self.tutorial_list.currentIndex().row() == 3:
-            #print("Rigid Body Tutorial identified")
-            RigidBodyTutorial.set_step_number(self, self.current_tutorial_num_steps)
-            RigidBodyTutorial.set_simulate_on(self)
-            RigidBodyTutorial.simulate(self)        
 
     def on_start_button_clicked(self):
         tutorial_index = self.tutorial_list.currentIndex().row()
+
         self.load_tutorial(tutorial_index)
 
 

@@ -1,16 +1,17 @@
 """
 Copyright (c) Contributors to the Open 3D Engine Project.
 For complete copyright and license terms please see the LICENSE at the root of this distribution.
-
 SPDX-License-Identifier: Apache-2.0 OR MIT
 """
 
+from asyncio.windows_events import NULL
 import json
 import os
 
+
 # Class that describes a step in the tutorial
 class TutorialStep:
-    def __init__(self, title, content, highlight_pattern=None):
+    def __init__(self, title, content, highlight_pattern=None, highlight_parent=None, highlight_index=0):
         self.title = title
         self.content = content
 
@@ -19,26 +20,22 @@ class TutorialStep:
         # This pattern will be passed to `editor_python_test_tools.pyside_utils`
         # to find the widget/item. See its documentation for supported patterns
         self.highlight_pattern = highlight_pattern
+        self.highlight_parent = highlight_parent
+        self.highlight_index = highlight_index
 
         self.prev_step = None
         self.next_step = None
-        self.current_step_index = 0
-        self.simulate_clicked = False
 
     # Method that will be called when the step starts
     # A step class can override this method if they need
     # to setup any special handling/listeners
     def on_step_start(self):
-        # Automated testing scripts go here
         pass
 
     # Method that will be called after a step has ended
     # A step class can override this method if they need
     # to perform any cleanup or other tasks
     def on_step_end(self):
-        pass
-
-    def simulate(self):
         pass
 
     def get_title(self):
@@ -50,15 +47,17 @@ class TutorialStep:
     def get_highlight_pattern(self):
         return self.highlight_pattern
 
+    def get_highlight_parent(self):
+        return self.highlight_parent
 
-    
+    def get_highlight_index(self):
+        return self.highlight_index
+
 # Top-level entry point for describing a tutorial which is made up of a series of steps
 class Tutorial:
     def __init__(self):
         self.steps = []
         self.title = ""
-        self.current_step_index = 0
-        self.simulate_clicked = False
 
     @classmethod
     def create_from_json_file(cls, file_path):
@@ -82,7 +81,9 @@ class Tutorial:
             title = step["title"]
             content = step["content"]
             highlight_pattern = step.get("highlight_pattern", None)
-            new_step = TutorialStep(title, content, highlight_pattern)
+            highlight_parent = step.get("highlight_parent", None)
+            highlight_index = step.get("highlight_index", None)
+            new_step = TutorialStep(title, content, highlight_pattern, highlight_parent, highlight_index)
             new_tutorial.add_step(new_step)
 
         return new_tutorial
