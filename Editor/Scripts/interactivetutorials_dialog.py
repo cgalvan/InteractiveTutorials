@@ -12,8 +12,7 @@ from PySide2 import QtCore
 from PySide2.QtCore import QMargins, QStringListModel, Qt
 from PySide2.QtGui import QColor, QPainter, QPen
 from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView,
-    QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget, QAbstractItemView
-)
+        QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget, QAbstractItemView)
 
 # This import will fail when the AP launches, will only work once the Editor is running
 try:
@@ -30,7 +29,8 @@ class HighlightWidget(QWidget):
     def __init__(self, parent=None):
         super(HighlightWidget, self).__init__(parent)
 
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.Tool | Qt.WindowTransparentForInput | Qt.WindowDoesNotAcceptFocus | Qt.WindowStaysOnTopHint)
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.Tool | Qt.WindowTransparentForInput | 
+                Qt.WindowDoesNotAcceptFocus | Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_TranslucentBackground);
         self.setAttribute(Qt.WA_NoSystemBackground);
         self.setAttribute(Qt.WA_TransparentForMouseEvents)
@@ -169,7 +169,7 @@ class InteractiveTutorialsDialog(QDialog):
         self.current_step = None
         first_step = self.current_tutorial.get_first_step()
         self.load_step(first_step)
-        
+
     def end_tutorial(self):
         if not self.current_step:
             return
@@ -260,12 +260,9 @@ class InteractiveTutorialsDialog(QDialog):
                 self.current_step_index -= 1
                 self.load_step(prev_step)
 
-
     def on_start_button_clicked(self):
         tutorial_index = self.tutorial_list.currentIndex().row()
-
         self.load_tutorial(tutorial_index)
-
 
 if __name__ == "__main__":
     # Create a new instance of the tool if launched from the Python Scripts window,
