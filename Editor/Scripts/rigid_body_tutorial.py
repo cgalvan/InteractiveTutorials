@@ -23,7 +23,7 @@ class RigidBodyTutorial(Tutorial):
                 simulate reactions to collisions and other physical forces.<br><br>In this tutorial, we'll edit an 
                 existing prefab to create a dynamic simulation with forces and collisions. We'll add a 
                 <b>PhysX Collider</b> component and a <b>PhysX Rigid Body</b> component, create collider for the ground 
-                plane, and simulate the results.<br><br>Click next to continue.</p></html>"""))
+                plane, and simulate the results.</p></html>"""))
         self.add_step(TutorialStep("Preparing the scene", """<html><p style="font-size:13px">The default level includes 
                 a bunch of starter entities. Let's see what we have.<br><br>In <b>Entity Outliner</b>, click the arrow 
                 next to the <b>Atom Default Environment</b> entity to expand it.<br><br>The list of child entities are 
