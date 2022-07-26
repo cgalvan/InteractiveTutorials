@@ -21,17 +21,9 @@ except:
     pass
 
 from demo_tutorial import DemoTutorial, IntroTutorial
-<<<<<<< HEAD
-from rigid_body_tutorial import RigidBodyTutorial
-from finding_ui_objects import FindingUIObjectsTutorial
-from tutorial import Tutorial
-
-from tutorial import Tutorial
-=======
 from tutorial import Tutorial
 from rigid_body_tutorial import RigidBodyTutorial
 from finding_ui_objects import FindingUIObjectsTutorial
->>>>>>> 49f689f5f1280ecbba386ac0ba93b0aa1c132887
 
 class HighlightWidget(QWidget):
     def __init__(self, parent=None):
