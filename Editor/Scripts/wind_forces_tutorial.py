@@ -60,9 +60,9 @@ class WindForcesTutorial(Tutorial):
                 a NVIDIA Cloth Mesh. <br><br> In <b>Asset Browser</b>, locate <i>cloth_locked_edge.prefab</i> within
                 <i>Gems/NvCloth/Assets/prefabs/Cloth</i>, and drag the prefab into the viewport. </p></html>""", "AzAssetBrowserWindowClass"))
         self.add_step(TutorialStep("Position the Prefab", """<html><p style="font-size:13px">
-                Ensure the viewport is highlighted. <br><br>Because we created a local wind force, the cloth prefab can only be affected when it is inside the wind provider's collider.
+                <br><br>Because we created a local wind force, the cloth prefab can only be affected when it is inside the wind provider's collider.
                 <br><br>Use the Move tool to position the cloth prefab inside the collider box shape.
-                </p></html>""", "EntityOutlinerWidgetUI"))
+                </p></html>""", "renderOverlay"))
         self.add_step(TutorialStep("Hide the Wind Provider Entity", """<html><p style="font-size:13px">Once the prefab's in position, you can hide the wind provider entity. In <b>Entity Outliner</b>, in the column to the 
                 right of the wind provider entity, toggle the <b>Show/Hide Entity</b> setting. <br><br>
                 </p></html>""", "EntityOutlinerWidgetUI"))        
