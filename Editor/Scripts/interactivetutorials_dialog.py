@@ -24,6 +24,7 @@ from demo_tutorial import DemoTutorial, IntroTutorial
 from tutorial import Tutorial
 from rigid_body_tutorial import RigidBodyTutorial
 from finding_ui_objects import FindingUIObjectsTutorial
+from wind_forces_tutorial import WindForcesTutorial
 
 class HighlightWidget(QWidget):
     def __init__(self, parent=None):
@@ -96,6 +97,10 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "Highlighting UI Objects",
                 "tutorial": FindingUIObjectsTutorial
+            },
+            {
+                "name": "Create Wind Forces",
+                "tutorial": WindForcesTutorial
             }
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
