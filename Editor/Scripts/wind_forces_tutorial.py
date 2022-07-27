@@ -25,20 +25,19 @@ class WindForcesTutorial(Tutorial):
                 Let's begin by creating a new entity for a wind provider. Right click in <b>Entity Outliner</b> and choose <b>Create Entity</b> from the context menu. Name the new entity Wind Provider.
                 <br><br>For this tutorial, make sure that you have the <b>Nvidia Cloth Gem</b> and <b>PhysX Gem</b> enabled in your project.</p></html>"""))
         self.add_step(TutorialStep("Add a Tag component",  """<html><p style="font-size:13px">
-                Create an entity for the wind provider by right-clicking in <b>Entity Outliner</b> and selecting <b>Create Entity</b>.<br><br>
-		We need to add a tag to the entity to identify it as a wind provider and specify the type of wind force. We can do this with a Tag component.
-                In Entity Inspector, choose Add Component and select Tag from the components list to add a Tag component to the entity. </p></html>""", "EntityOutlinerWidgetUI"))
+                We need to add a tag to the entity to identify it as a wind provider and specify the type of wind force. We can do this with a Tag component.
+                In Entity Inspector, choose Add Component and select Tag from the components list to add a Tag component to the entity. </p></html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Create a local wind force tag",  """<html><p style="font-size:13px">A wind provider can create a global wind force for the entire level, or a local wind force that is contained within a volume. Let's create a local wind force.
-                In the Tag component, click the + button to add a new tag element. Enter wind in the new element field to create a local wind force.<br><br> </p></html>""", "EntityOutlinerWidgetUI"))
+                In the Tag component, click the + button to add a new tag element. Enter wind in the new element field to create a local wind force.<br><br> </p></html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Add a tag component for the entity",  """<html><p style="font-size:13px"> Edit the tag value to <b>global_wind</b>.
                 <br><br> There are two types of wind: global and local, used to specify which entities provide wind forces. <br><br>
                 If you choose to use the Local wind tag property, the wind force affects only certain entities.</p></html>""", "EntityOutlinerWidgetUI"))
         self.add_step(TutorialStep("Add a PhysX collider component",  """<html><p style="font-size:13px"> Wind providers must have a PhysX collider. For local wind forces, the collider specifies the volume that contains the wind force. 
                 Objects are affected by the local wind force only when they are inside the wind provider's PhysX collider.
-                In Entity Inspector, choose Add Component and add a PhysX Collider component to the entity. <br><br> </p></html>""", "EntityOutlinerWidgetUI"))
+                In Entity Inspector, choose Add Component and add a PhysX Collider component to the entity. <br><br> </p></html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Set the collider shape", """<html><p style="font-size:13px">We'll use a simple box for the volume of our local wind force.<br><br>
                 In <b>Entity Inspector</b>, in the <b>PhysX Collider</b> component, set the <b>Shape</b> property to <b>Box</b>.<br><br>
-                The wind force can only affect entities that are within this box collider shape. </p></html>""", "AzAssetBrowserWindowClass"))
+                The wind force can only affect entities that are within this box collider shape. </p></html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Resize the wind provider", """<html><p style="font-size:13px">The box is quite small. Let's enlarge it so that it affects a larger area and so that we can easily position the cloth entity inside it.
                 <br><br>In <b>Entity Inspector</b> in the <b>PhysX Collider</b> component, set the <b>X</b>, <b>Y</b>, and <b>Z</b> components of the <b>Dimensions</b> property to 5.0.</p></html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Position the Entity", """<html><p style="font-size:13px"> Use the <b>Move</b> tool to position the wind provider entity in the level. 
@@ -46,7 +45,7 @@ class WindForcesTutorial(Tutorial):
         self.add_step(TutorialStep("Add a PhysX Force Region component", """<html><p style="font-size:13px"> 
                 <br><br>Our wind provider entity has a Tag that identifies it as a local wind provider and a box collider that defines a volume for the wind force. We need to add a <b>PhysX Force Region</b> that defines the wind force.<br><br>
                 In <b>Entity Inspector</b>, choose <b>Add Component</b>, and select <b>PhysX Force Region</b> from the component list. </p></html>""", "InspectorMainWindow"))
-        self.add_step(TutorialStep("Configure the wind force component direction", """<html><p style="font-size:13px"> 
+        self.add_step(TutorialStep("Configure the wind force direction", """<html><p style="font-size:13px"> 
                 We need to specify a direction for the wind force. <br><br>In <b>Entity Inspector</b>, in the <b>PhysX Force Region</b> 
                 component, click the <b>+</b> button to add a force. <br><br>Set the <b>X</b> value of the <b>Direction</b> property to -1.0. Set the <b>Y</b> 
                 value of the <b>Direction</b> property to -8.0. Set the <b>Z</b> value of the <b>Direction</b> property to 0.0. <br><br> 
@@ -74,7 +73,7 @@ class WindForcesTutorial(Tutorial):
                 to view the simulation. With the simulation running, we can adjust the various cloth properties to create a desired result. 
                 Here are some suggested settings: <br><br>
                 <b>Wind</b> <br>
-                        <ul><li><b>Air drag coefficient </b>0.1</li><li><br>
+                        <ul><li><b>Air drag coefficient </b>0.1</li><li>
                         <b>Air lift coefficient</b> 0,4</li></ul>
                 <br><br><b>Fabric stiffness</b><br><ul><li>
                         <b>Horizontal </b>0.25</li>
