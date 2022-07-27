@@ -20,12 +20,13 @@ class WindForcesTutorial(Tutorial):
 
         self.add_step(TutorialStep("Create Wind Forces", 
                 """<html><p style="font-size:13px">Greetings!<br><br>A <i>wind provider</i> is an entity that 
-                defines a global or localized wind force that can affect certain components such as Cloth components. 
+                defines a global or localized wind force that can affect certain components such as <b>Cloth</b> components. 
                 <br><br>In this tutorial, we'll set up a local wind provider, add a cloth object to the scene, and configure the cloth object to simulate a sheet gently blowing in the breeze. 
-                Let's begin by creating a new entity for a wind provider. Right click in Entity Outliner and choose Create Entity from the context menu. Name the new entity Wind Provider.
+                Let's begin by creating a new entity for a wind provider. Right click in <b>Entity Outliner</b> and choose <b>Create Entity</b> from the context menu. Name the new entity Wind Provider.
                 <br><br>For this tutorial, make sure that you have the <b>Nvidia Cloth Gem</b> and <b>PhysX Gem</b> enabled in your project.</p></html>"""))
         self.add_step(TutorialStep("Add a Tag component",  """<html><p style="font-size:13px">
-		TODO: add a detail. We need to add a tag to the entity to identify it as a wind provider and specify the type of wind force. We can do this with a Tag component.
+                Create an entity for the wind provider by right-clicking in <b>Entity Outliner</b> and selecting <b>Create Entity</b>.<br><br>
+		We need to add a tag to the entity to identify it as a wind provider and specify the type of wind force. We can do this with a Tag component.
                 In Entity Inspector, choose Add Component and select Tag from the components list to add a Tag component to the entity. </p></html>""", "EntityOutlinerWidgetUI"))
         self.add_step(TutorialStep("Create a local wind force tag",  """<html><p style="font-size:13px">A wind provider can create a global wind force for the entire level, or a local wind force that is contained within a volume. Let's create a local wind force.
                 In the Tag component, click the + button to add a new tag element. Enter wind in the new element field to create a local wind force.<br><br> </p></html>""", "EntityOutlinerWidgetUI"))
