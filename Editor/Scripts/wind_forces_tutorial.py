@@ -22,7 +22,9 @@ class WindForcesTutorial(Tutorial):
                 """<html><p style="font-size:13px">Greetings!<br><br>A <i>wind provider</i> is an entity that 
                 defines a global or localized wind force that can affect certain components such as <b>Cloth</b> components. 
                 <br><br>In this tutorial, we'll set up a local wind provider, add a cloth object to the scene, and configure the cloth object to simulate a sheet gently blowing in the breeze. 
-                Let's begin by creating a new entity for a wind provider. Right click in <b>Entity Outliner</b> and choose <b>Create Entity</b> from the context menu. Name the new entity Wind Provider.
+                Let's begin by creating a new entity for a wind provider. Right click in <b>Entity Outliner</b> and choose <b>Create Entity</b> from the context menu. Name the new entity 
+                <strong><code style="font-size:14px;
+                color:#FFFFFF">{"type": QtWidgets.QToolButton, "text": "Wind Provider"}</code></strong>.
                 <br><br>For this tutorial, make sure that you have the <b>Nvidia Cloth Gem</b> and <b>PhysX Gem</b> enabled in your project.</p></html>"""))
         self.add_step(TutorialStep("Add a Tag component",  """<html><p style="font-size:13px">
                 We need to add a tag to the entity to identify it as a wind provider and specify the type of wind force. We can do this with a Tag component.
@@ -36,10 +38,14 @@ class WindForcesTutorial(Tutorial):
                 Objects are affected by the local wind force only when they are inside the wind provider's PhysX collider.
                 In Entity Inspector, choose Add Component and add a PhysX Collider component to the entity. <br><br> </p></html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Set the collider shape", """<html><p style="font-size:13px">We'll use a simple box for the volume of our local wind force.<br><br>
-                In <b>Entity Inspector</b>, in the <b>PhysX Collider</b> component, set the <b>Shape</b> property to <b>Box</b>.<br><br>
+                In <b>Entity Inspector</b>, in the <b>PhysX Collider</b> component, set the <b>Shape</b> property to 
+                <strong><code style="font-size:14px;
+                color:#FFFFFF">{"type": QtWidgets.QToolButton, "text": "Box"}</code></strong>.<br><br>
                 The wind force can only affect entities that are within this box collider shape. </p></html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Resize the wind provider", """<html><p style="font-size:13px">The box is quite small. Let's enlarge it so that it affects a larger area and so that we can easily position the cloth entity inside it.
-                <br><br>In <b>Entity Inspector</b> in the <b>PhysX Collider</b> component, set the <b>X</b>, <b>Y</b>, and <b>Z</b> components of the <b>Dimensions</b> property to 5.0.</p></html>""", "InspectorMainWindow"))
+                <br><br>In <b>Entity Inspector</b> in the <b>PhysX Collider</b> component, set the <b>X</b>, <b>Y</b>, and <b>Z</b> components of the <b>Dimensions</b> property to 
+                <strong><code style="font-size:14px;
+                color:#FFFFFF">{"type": QtWidgets.QToolButton, "text": "5.0"}</code></strong>.</p></html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Position the Entity", """<html><p style="font-size:13px"> Use the <b>Move</b> tool to position the wind provider entity in the level. 
                 Ensure that the bottom of the PhysX collider box is roughly on the ground plane, and that the collider is in the camera's view frustum.</p></html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Add a PhysX Force Region component", """<html><p style="font-size:13px"> 
