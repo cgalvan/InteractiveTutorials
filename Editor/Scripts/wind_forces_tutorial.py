@@ -36,16 +36,16 @@ class WindForcesTutorial(Tutorial):
         self.add_step(TutorialStep("Add a PhysX collider component",  """<html><p style="font-size:13px"> Wind providers must have a PhysX collider. For local wind forces, the collider specifies the volume that contains the wind force. 
                 Objects are affected by the local wind force only when they are inside the wind provider's PhysX collider.
                 In Entity Inspector, choose Add Component and add a PhysX Collider component to the entity. <br><br> </p></html>""", "EntityOutlinerWidgetUI"))
-        self.add_step(TutorialStep("Set the collider shape", """<html><p style="font-size:13px">We'll use a simple box for the volume of our local wind force.
-                In Entity Inspector, in the PhysX Collider component, set the Shape property to Box.
+        self.add_step(TutorialStep("Set the collider shape", """<html><p style="font-size:13px">We'll use a simple box for the volume of our local wind force.<br><br>
+                In <b>Entity Inspector</b>, in the <b>PhysX Collider</b> component, set the <b>Shape</b> property to <b>Box</b>.<br><br>
                 The wind force can only affect entities that are within this box collider shape. </p></html>""", "AzAssetBrowserWindowClass"))
         self.add_step(TutorialStep("Resize the wind provider", """<html><p style="font-size:13px">The box is quite small. Let's enlarge it so that it affects a larger area and so that we can easily position the cloth entity inside it.
-                In Entity Inspector in the PhysX Collider component, set the X, Y, and Z components of the Dimensions property to 5.0.</p></html>""", "InspectorMainWindow"))
-        self.add_step(TutorialStep("Position the Entity", """<html><p style="font-size:13px"> Use the Move tool to position the wind provider entity in the level. 
+                <br><br>In <b>Entity Inspector</b> in the <b>PhysX Collider</b> component, set the <b>X</b>, <b>Y</b>, and <b>Z</b> components of the <b>Dimensions</b> property to 5.0.</p></html>""", "InspectorMainWindow"))
+        self.add_step(TutorialStep("Position the Entity", """<html><p style="font-size:13px"> Use the <b>Move</b> tool to position the wind provider entity in the level. 
                 Ensure that the bottom of the PhysX collider box is roughly on the ground plane, and that the collider is in the camera's view frustum.</p></html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Add a PhysX Force Region component", """<html><p style="font-size:13px"> 
-                Ensure Entity Inspector is highlighted in this step. <br><br>Our wind provider entity has a Tag that identifies it as a local wind provider and a box collider that defines a volume for the wind force. We need to add a PhysX Force Region that defines the wind force.
-                In Entity Inspector, choose Add Component, and select PhysX Force Region from the component list. </p></html>""", "InspectorMainWindow"))
+                <br><br>Our wind provider entity has a Tag that identifies it as a local wind provider and a box collider that defines a volume for the wind force. We need to add a <b>PhysX Force Region</b> that defines the wind force.<br><br>
+                In <b>Entity Inspector</b>, choose <b>Add Component</b>, and select <b>PhysX Force Region</b> from the component list. </p></html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Configure the wind force component direction", """<html><p style="font-size:13px"> 
                 We need to specify a direction for the wind force. <br><br>In <b>Entity Inspector</b>, in the <b>PhysX Force Region</b> 
                 component, click the <b>+</b> button to add a force. <br><br>Set the <b>X</b> value of the <b>Direction</b> property to -1.0. Set the <b>Y</b> 
