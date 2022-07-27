@@ -23,8 +23,7 @@ class WindForcesTutorial(Tutorial):
                 defines a global or localized wind force that can affect certain components such as <b>Cloth</b> components. 
                 <br><br>In this tutorial, we'll set up a local wind provider, add a cloth object to the scene, and configure the cloth object to simulate a sheet gently blowing in the breeze. 
                 Let's begin by creating a new entity for a wind provider. Right click in <b>Entity Outliner</b> and choose <b>Create Entity</b> from the context menu. Name the new entity 
-                <strong><code style="font-size:14px;
-                color:#FFFFFF">{"type": QtWidgets.QToolButton, "text": "Wind Provider"}</code></strong>.
+                <strong><code style="font-size:14px;color:#E44C9A">"Wind Provider"</code></strong>.
                 <br><br>For this tutorial, make sure that you have the <b>Nvidia Cloth Gem</b> and <b>PhysX Gem</b> enabled in your project.</p></html>"""))
         self.add_step(TutorialStep("Add a Tag component",  """<html><p style="font-size:13px">
                 We need to add a tag to the entity to identify it as a wind provider and specify the type of wind force. We can do this with a Tag component.
@@ -39,13 +38,11 @@ class WindForcesTutorial(Tutorial):
                 In Entity Inspector, choose Add Component and add a PhysX Collider component to the entity. <br><br> </p></html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Set the collider shape", """<html><p style="font-size:13px">We'll use a simple box for the volume of our local wind force.<br><br>
                 In <b>Entity Inspector</b>, in the <b>PhysX Collider</b> component, set the <b>Shape</b> property to 
-                <strong><code style="font-size:14px;
-                color:#FFFFFF">{"type": QtWidgets.QToolButton, "text": "Box"}</code></strong>.<br><br>
+                <strong><code style="font-size:14px;color:#E44C9A">"Box"</code></strong>.<br><br>
                 The wind force can only affect entities that are within this box collider shape. </p></html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Resize the wind provider", """<html><p style="font-size:13px">The box is quite small. Let's enlarge it so that it affects a larger area and so that we can easily position the cloth entity inside it.
                 <br><br>In <b>Entity Inspector</b> in the <b>PhysX Collider</b> component, set the <b>X</b>, <b>Y</b>, and <b>Z</b> components of the <b>Dimensions</b> property to 
-                <strong><code style="font-size:14px;
-                color:#FFFFFF">{"type": QtWidgets.QToolButton, "text": "5.0"}</code></strong>.</p></html>""", "InspectorMainWindow"))
+                <strong><code style="font-size:14px;color:#E44C9A">"text"</code></strong>.</p></html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Position the Entity", """<html><p style="font-size:13px"> Use the <b>Move</b> tool to position the wind provider entity in the level. 
                 Ensure that the bottom of the PhysX collider box is roughly on the ground plane, and that the collider is in the camera's view frustum.</p></html>""", "InspectorMainWindow"))
         self.add_step(TutorialStep("Add a PhysX Force Region component", """<html><p style="font-size:13px"> 
@@ -78,15 +75,15 @@ class WindForcesTutorial(Tutorial):
                 We need to enable the simulation to tune it. In <b>Entity Inspector<b/>, in the <b>Cloth component</b>, enable <b>Simulate in editor</b>
                 to view the simulation. With the simulation running, we can adjust the various cloth properties to create a desired result. 
                 Here are some suggested settings: <br><br>
-                <b>Wind</b> <br>
+                Wind<br>
                         <ul><li><b>Air drag coefficient </b>0.1</li><li>
                         <b>Air lift coefficient</b> 0,4</li></ul>
-                <br><br><b>Fabric stiffness</b><br><ul><li>
+                Fabric stiffness<br><ul><li>
                         <b>Horizontal </b>0.25</li>
                         <li><b>Vertical </b>0.25</li>
                         <li><b>Bending </b>0.25</li>
-                        <li><b>Shearing </b>0.25</li></ul><br><br>
-                The settings in this tutorial create a gentle breeze.<br><br> 
+                        <li><b>Shearing </b>0.25</li></ul><br>
+                The settings in this tutorial create a gentle breeze.<br>
                 Take some time to experiment with various properties of the <b>Cloth</b> component, as well as the wind direction and magnitude in the <b>PhysX Force Region</b> component to test their affect on the result of the simulation. </p></html>""", "EntityOutlinerWidgetUI"))
 
 
