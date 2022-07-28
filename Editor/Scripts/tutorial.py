@@ -10,10 +10,9 @@ import os
 
 # Class that describes a step in the tutorial
 class TutorialStep:
-    def __init__(self, title, content, current_step_index=0, last_clicked_step_index=0, Steps = [0,0,0,0,0], highlight_pattern=None):
+    def __init__(self, title, content, current_step_index=0, last_clicked_step_index=0, highlight_pattern=None):
         self.title = title
         self.content = content
-        self.Steps = Steps
         # The highlight pattern is a widget/item that will be highlighted
         # for this particular step (can be None)
         # This pattern will be passed to `editor_python_test_tools.pyside_utils`
@@ -119,6 +118,3 @@ class Tutorial:
 
     def get_steps(self):
         return self.steps
-
-    def simulate(self):
-        pass
