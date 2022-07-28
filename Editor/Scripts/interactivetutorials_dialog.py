@@ -201,9 +201,10 @@ class InteractiveTutorialsDialog(QDialog):
 
         self.title_label.setText(self.current_step.get_title())
         self.content_area.setText(self.current_step.get_content())
-        self.step_label.setText("Click next to continue.")
         if self.current_step_index > 0:
-            self.step_label.setText(f"Step {self.current_step_index} of {self.current_tutorial_num_steps}")        
+            self.step_label.setText(f"Step {self.current_step_index} of {self.current_tutorial_num_steps}")
+        else:
+            self.step_label.setText("Click next to continue.")
         # If there are no steps remaining in the tutorial, then
         # update the Next button text to "End"
         next_button_text = "Next"
