@@ -175,8 +175,8 @@ class RigidBodyTutorial(Tutorial):
         current_working_step = 0
         last_working_step = 0
 
-        print("current step" + str(self.current_step_index))
-        print("last stepe" + str(self.last_clicked_step_index))
+        #print("current step" + str(self.current_step_index))
+        #print("last step" + str(self.last_clicked_step_index))
 
         for x in range(0, 3):
                 if self.current_step_index >= Working_Steps[x] and self.current_step_index < Working_Steps[x + 1]:
@@ -242,7 +242,7 @@ class RigidBodyTutorial(Tutorial):
                 azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetLinearDamping", rigidBodyComponentTypeId, 0.06)
                 azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigid_body_id, 1.0)
                 azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigidBodyComponentTypeId, 3.0)
-        if current_working_step == 16 or (current_working_step == 21 and last_working_step < 21):
+        if current_working_step == 16 or (current_working_step > 16 and last_working_step < 16):
                 search_filter3 = entity.SearchFilter()
                 search_filter3.names = ["Sun"]
                 prefab_lc_root3 = entity.SearchBus(bus.Broadcast, 'SearchEntities', search_filter3)[0]
