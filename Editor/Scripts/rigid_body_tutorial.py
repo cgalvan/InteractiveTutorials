@@ -25,6 +25,12 @@ class Tests():
     exit_game_mode             = ("Exited game mode",                        "Couldn't exit game mode")
 # fmt: on
 
+class RigidBody:
+    gravity_enabled = False
+    linear_velocity = 10
+    angular_velocity = 10
+    mass = 0.0
+
 class RigidBodyTutorial(Tutorial):
     def __init__(self):
         super(RigidBodyTutorial, self).__init__()
@@ -238,10 +244,10 @@ class RigidBodyTutorial(Tutorial):
                 test_prefab_path = os.path.relpath("20-sided-dice/20-sided-dice.prefab")
 
                 rigid_body_id = general.find_game_entity(newEntity5)
-                azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetGravityEnabled", newEntity5, True)
-                azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetLinearDamping", rigidBodyComponentTypeId, 0.06)
-                azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigid_body_id, 1.0)
-                azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigidBodyComponentTypeId, 3.0)
+                #azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetGravityEnabled", newEntity5, True)
+                #azlmbr.physics.RigidBodyRequestBus(azlmbr.bus.Event, "SetLinearDamping", rigidBodyComponentTypeId, 0.06)
+                azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetLinearVelocity", rigid_body_id, 10)
+                azlmbr.physics.RigidBodyRequestBus(bus.Event, "SetAngularVelocity", rigid_body_id, 10)
         if current_working_step == 16 or (current_working_step > 16 and last_working_step < 16):
                 search_filter3 = entity.SearchFilter()
                 search_filter3.names = ["Sun"]
