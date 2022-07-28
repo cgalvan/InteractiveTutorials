@@ -12,8 +12,7 @@ from PySide2 import QtCore
 from PySide2.QtCore import QMargins, QStringListModel, Qt
 from PySide2.QtGui import QColor, QPainter, QPen
 from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView,
-    QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
-)
+        QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget, QAbstractItemView)
 
 # This import will fail when the AP launches, will only work once the Editor is running
 try:
@@ -22,16 +21,17 @@ except:
     pass
 
 from demo_tutorial import DemoTutorial, IntroTutorial
+from tutorial import Tutorial
 from rigid_body_tutorial import RigidBodyTutorial
 from finding_ui_objects import FindingUIObjectsTutorial
-from tutorial import Tutorial
-
+from wind_forces_tutorial import WindForcesTutorial
 
 class HighlightWidget(QWidget):
     def __init__(self, parent=None):
         super(HighlightWidget, self).__init__(parent)
 
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.Tool | Qt.WindowTransparentForInput | Qt.WindowDoesNotAcceptFocus | Qt.WindowStaysOnTopHint)
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.Tool | Qt.WindowTransparentForInput | 
+                Qt.WindowDoesNotAcceptFocus | Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_TranslucentBackground);
         self.setAttribute(Qt.WA_NoSystemBackground);
         self.setAttribute(Qt.WA_TransparentForMouseEvents)
@@ -97,6 +97,10 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "Highlighting UI Objects",
                 "tutorial": FindingUIObjectsTutorial
+            },
+            {
+                "name": "Create Wind Forces",
+                "tutorial": WindForcesTutorial
             }
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
@@ -104,6 +108,7 @@ class InteractiveTutorialsDialog(QDialog):
         self.tutorial_list_model.setStringList(tutorial_names)
         self.tutorial_list.setModel(self.tutorial_list_model)
         self.tutorial_list.setAlternatingRowColors(True)
+        self.tutorial_list.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.intro_layout.addWidget(self.tutorial_list, 0, Qt.AlignCenter)
 
         self.start_button = QPushButton("Start", self)
@@ -129,6 +134,9 @@ class InteractiveTutorialsDialog(QDialog):
         self.content_area.setWordWrap(True)
         self.tutorial_layout.addWidget(self.content_area, 1)
 
+        self.step_label = QLabel(self)
+        self.tutorial_layout.addWidget(self.step_label)
+
         self.button_box = QDialogButtonBox(self)
         self.next_button = QPushButton("Next", self)
         self.next_button.setDefault(True)
@@ -152,7 +160,8 @@ class InteractiveTutorialsDialog(QDialog):
 
         tutorial_factory = self.tutorials[index]["tutorial"]
         self.current_tutorial = tutorial_factory()
-
+        
+        self.current_tutorial_num_steps = len(self.current_tutorial.get_steps()) - 1
         # Invoke the tutorial start method
         self.current_tutorial.on_tutorial_start()
 
@@ -160,6 +169,7 @@ class InteractiveTutorialsDialog(QDialog):
         self.setWindowTitle("InteractiveTutorials - " + self.current_tutorial.get_title())
 
         # Reset initial state and load first step
+        self.current_step_index = 0 
         self.current_step = None
         first_step = self.current_tutorial.get_first_step()
         self.load_step(first_step)
@@ -191,7 +201,10 @@ class InteractiveTutorialsDialog(QDialog):
 
         self.title_label.setText(self.current_step.get_title())
         self.content_area.setText(self.current_step.get_content())
-
+        if self.current_step_index > 0:
+            self.step_label.setText(f"Step {self.current_step_index} of {self.current_tutorial_num_steps}")
+        else:
+            self.step_label.setText("Click next to continue.")
         # If there are no steps remaining in the tutorial, then
         # update the Next button text to "End"
         next_button_text = "Next"
@@ -239,6 +252,7 @@ class InteractiveTutorialsDialog(QDialog):
         if self.current_step:
             next_step = self.current_step.next_step
             if next_step:
+                self.current_step_index += 1 
                 self.load_step(next_step)
             else:
                 # If there are no next steps left,
@@ -249,13 +263,12 @@ class InteractiveTutorialsDialog(QDialog):
         if self.current_step:
             prev_step = self.current_step.prev_step
             if prev_step:
+                self.current_step_index -= 1
                 self.load_step(prev_step)
 
     def on_start_button_clicked(self):
         tutorial_index = self.tutorial_list.currentIndex().row()
-
         self.load_tutorial(tutorial_index)
-
 
 if __name__ == "__main__":
     # Create a new instance of the tool if launched from the Python Scripts window,
