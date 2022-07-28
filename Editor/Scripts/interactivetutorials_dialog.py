@@ -23,6 +23,7 @@ except:
 
 from demo_tutorial import DemoTutorial, IntroTutorial
 from rigid_body_tutorial import RigidBodyTutorial
+from finding_ui_objects import FindingUIObjectsTutorial
 from tutorial import Tutorial
 
 class HighlightWidget(QWidget):
@@ -91,6 +92,10 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "PhysX Rigid Bodies",
                 "tutorial": RigidBodyTutorial
+            },
+            {
+                "name": "Highlighting UI Objects",
+                "tutorial": FindingUIObjectsTutorial
             }
         ]
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
@@ -165,6 +170,7 @@ class InteractiveTutorialsDialog(QDialog):
         self.current_tutorial = tutorial_factory()
         
         self.current_tutorial_num_steps = len(self.current_tutorial.get_steps())
+        self.simulate_counter = 0
 
         # Invoke the tutorial start method
         self.current_tutorial.on_tutorial_start()
@@ -215,14 +221,27 @@ class InteractiveTutorialsDialog(QDialog):
 
         # If a highlight pattern was set for this step, then find that widget/item
         # and highlight it
+        highlight_item = None
         highlight_pattern = self.current_step.get_highlight_pattern()
-        if highlight_pattern:
-            item = pyside_utils.find_child_by_pattern(None, highlight_pattern)
-            self.highlight_widget.update_widget(item)
-            if not item:
-                print(f"Couldn't find widget or item matching pattern: { highlight_pattern }")
-        else:
+        if not highlight_pattern:
             self.highlight_widget.update_widget(None)
+            return
+
+        highlight_parent = self.current_step.get_highlight_parent()
+        if not highlight_parent:
+            highlight_item = pyside_utils.find_child_by_pattern(None, highlight_pattern)
+        else:
+            if isinstance(highlight_parent, str):
+                highlight_parent = pyside_utils.find_child_by_pattern(None, highlight_parent)
+            highlight_item = pyside_utils.find_child_by_hierarchy(highlight_parent, highlight_pattern, 
+                    child_index=self.current_step.get_highlight_index())
+
+        if not highlight_item:
+            self.highlight_widget.update_widget(None)
+            print(f"Couldn't find widget or item matching pattern: { highlight_pattern }")
+            return
+
+        self.highlight_widget.update_widget(highlight_item)
 
     def load_step(self, step):
         # If there was a step already loaded, call its ending method
@@ -261,7 +280,8 @@ class InteractiveTutorialsDialog(QDialog):
         if self.tutorial_list.currentIndex().row() == 3:
             #print("Rigid Body Tutorial identified")
             RigidBodyTutorial.set_current_step(self, self.current_step_index)
-            RigidBodyTutorial.set_last_clicked_step(self, 0)
+            RigidBodyTutorial.set_last_clicked_step(self, self.simulate_counter)
+            self.simulate_counter = self.current_step_index
             RigidBodyTutorial.simulate(self)
 
     def simulate_tutorial(self):
