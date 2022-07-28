@@ -260,21 +260,20 @@ class InteractiveTutorialsDialog(QDialog):
         #print("Entered simulate step")
         if self.tutorial_list.currentIndex().row() == 3:
             #print("Rigid Body Tutorial identified")
-            RigidBodyTutorial.set_step_number(self, self.current_step_index)
-            RigidBodyTutorial.set_simulate_on(self)
+            RigidBodyTutorial.set_current_step(self, self.current_step_index)
+            RigidBodyTutorial.set_last_clicked_step(self, 0)
             RigidBodyTutorial.simulate(self)
 
     def simulate_tutorial(self):
         if self.tutorial_list.currentIndex().row() == 3:
             #print("Rigid Body Tutorial identified")
-            RigidBodyTutorial.set_step_number(self, self.current_tutorial_num_steps)
-            RigidBodyTutorial.set_simulate_on(self)
-            RigidBodyTutorial.simulate(self)        
+            RigidBodyTutorial.set_current_step(self, self.current_tutorial_num_steps)
+            RigidBodyTutorial.set_last_clicked_step(self, self.current_tutorial_num_steps)
+            RigidBodyTutorial.simulate()
 
     def on_start_button_clicked(self):
         tutorial_index = self.tutorial_list.currentIndex().row()
         self.load_tutorial(tutorial_index)
-
 
 if __name__ == "__main__":
     # Create a new instance of the tool if launched from the Python Scripts window,

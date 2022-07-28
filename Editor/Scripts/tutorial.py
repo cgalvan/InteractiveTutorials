@@ -10,10 +10,10 @@ import os
 
 # Class that describes a step in the tutorial
 class TutorialStep:
-    def __init__(self, title, content, highlight_pattern=None):
+    def __init__(self, title, content, current_step_index=0, last_clicked_step_index=0, Steps = [0,0,0,0,0], highlight_pattern=None):
         self.title = title
         self.content = content
-
+        self.Steps = Steps
         # The highlight pattern is a widget/item that will be highlighted
         # for this particular step (can be None)
         # This pattern will be passed to `editor_python_test_tools.pyside_utils`
@@ -22,8 +22,8 @@ class TutorialStep:
 
         self.prev_step = None
         self.next_step = None
-        self.current_step_index = 0
-        self.simulate_clicked = False
+        self.current_step_index = current_step_index
+        self.last_clicked_step_index = last_clicked_step_index
 
     # Method that will be called when the step starts
     # A step class can override this method if they need
@@ -58,7 +58,7 @@ class Tutorial:
         self.steps = []
         self.title = ""
         self.current_step_index = 0
-        self.simulate_clicked = False
+        self.last_clicked_step_index = 0
 
     @classmethod
     def create_from_json_file(cls, file_path):
@@ -119,3 +119,6 @@ class Tutorial:
 
     def get_steps(self):
         return self.steps
+
+    def simulate(self):
+        pass

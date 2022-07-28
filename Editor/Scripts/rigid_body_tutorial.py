@@ -15,8 +15,6 @@ import azlmbr.math as math
 import azlmbr.prefab as prefab
 from azlmbr.entity import EntityId
 import azlmbr.asset as asset
-from editor_python_test_tools.utils import TestHelper as helper
-from hashtable import HashTable
 from PySide2.QtWidgets import QMenuBar
 from PySide2.QtWidgets import QDialog
 from tutorial import Tutorial, TutorialStep
@@ -26,16 +24,14 @@ class Tests():
     exit_game_mode             = ("Exited game mode",                        "Couldn't exit game mode")
 # fmt: on
 
-
-
 class RigidBodyTutorial(Tutorial):
     def __init__(self):
         super(RigidBodyTutorial, self).__init__()
 
         self.title = "PhysX Rigid Bodies"
         self.current_step_index = 0
-        self.simulate_clicked = False
-
+        self.last_clicked_step_index = 0
+        self.Steps = [0, 0, 0, 0, 0]
 
         self.add_step(TutorialStep("Dynamic Simulation with PhysX Rigid Bodies", 
                 """<html><p style="font-size:13px">Greetings!<br><br><i>Rigid bodies</i> are dynamic solid objects that 
@@ -162,21 +158,25 @@ class RigidBodyTutorial(Tutorial):
 
     def on_tutorial_start(self):
         print("Starting PhysX Rigid Body tutorial.")
+        
+    def simulate(self):
+        ## I have been wrangling with the subfunctions all night but I keep running into this error: "AttributeError: object has no attribute". 
+        ## Since I need to move on I am just going to table the subfunctions for now and try to run everything within 'simulate'.
+        self.delete_shader_ball()
 
-
-    def set_step_number(self, x):
+    def set_last_clicked_step(self, x):
+        self.last_clicked_step_index = x
+   
+    def set_current_step(self, x):
         self.current_step_index = x
 
-    def set_simulate_on(self):
-        """ simulate button has been clicked """
-        self.simulate_clicked = True
-    
-    def set_simulate_off(self):
-        self.simulate_clicked = False
+    def print_step(self):
+        print(self.current_step_index)
 
     def on_tutorial_end(self):
         print("PhysX Rigid Body tutorial complete!")
     
+
     """
     per-step functions
     """
@@ -257,29 +257,4 @@ class RigidBodyTutorial(Tutorial):
         editor.EditorComponentAPIBus(bus.Broadcast, 'AddComponentsOfType', collider_entity, [shapeComponentTypeId])
 
     def enter_game_mode(self):
-        helper.enter_game_mode(Tests.enter_game_mode)       
-        
-    def simulate(self):
-        #if simulate_clicked is true
-        step_count = self.current_step_index
-        print(step_count)
-        class RigidBody:
-            gravity_enabled = False
-            collison_occued = False 
-            mass = 0.0
-        Steps = [0, 0, 0, 0, 0]
-        for x in Steps:
-            pass
-        print("entered simulate")
-        self.delete_shader_ball
-        print("entered simulate")
-
-        Steps[0] = 1
-        self.focus_dice_prefab
-        Steps[1] = 1
-        #self.edit_dice_components
-        Steps[2] = 1
-        #self.create_new_collider
-        Steps[3] = 1
-        #self.enter_game_mode
-        Steps[4] = 1
+        helper.enter_game_mode(Tests.enter_game_mode)
