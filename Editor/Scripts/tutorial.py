@@ -5,27 +5,29 @@ For complete copyright and license terms please see the LICENSE at the root of t
 SPDX-License-Identifier: Apache-2.0 OR MIT
 """
 
-from asyncio.windows_events import NULL
 import json
 import os
+from time import sleep
 
 # Class that describes a step in the tutorial
 class TutorialStep:
-    def __init__(self, title, content, highlight_pattern=None, highlight_parent=None, current_step_index=0, last_clicked_step_index=0, highlight_index=0):
+    def __init__(self, title, content, highlight_pattern=None, 
+            highlight_parent=None, highlight_index=0):
         self.title = title
         self.content = content
         # The highlight pattern is a widget/item that will be highlighted
         # for this particular step (can be None)
-        # This pattern will be passed to `editor_python_test_tools.pyside_utils`
+        # This pattern will be passed to `pyside_utils`
         # to find the widget/item. See its documentation for supported patterns
+        # If a named parent is specified, the first child of the specified type 
+        # is returned
+        # An optional index can be specified to select a child to highlight
         self.highlight_pattern = highlight_pattern
         self.highlight_parent = highlight_parent
         self.highlight_index = highlight_index
 
         self.prev_step = None
         self.next_step = None
-        self.current_step_index = current_step_index
-        self.last_clicked_step_index = last_clicked_step_index
 
     # Method that will be called when the step starts
     # A step class can override this method if they need
@@ -40,7 +42,10 @@ class TutorialStep:
     def on_step_end(self):
         pass
 
-    def simulate(self):
+    # Method that will be called if the user selects to 'Autoplay' tutorial
+    # Provide editor script functionality to perform the actions for the step
+    # Use time.sleep() judiciously so the step text can be read by user
+    def automate(self):
         pass
 
     def get_title(self):
@@ -58,13 +63,15 @@ class TutorialStep:
     def get_highlight_index(self):
         return self.highlight_index
 
-# Top-level entry point for describing a tutorial which is made up of a series of steps
+# Top-level entry point for describing a tutorial which is a series of steps
 class Tutorial:
     def __init__(self):
         self.steps = []
         self.title = ""
-        self.current_step_index = 0
-        self.last_clicked_step_index = 0
+        # Set True if each step has an automate() method
+        self.has_automation = False
+        # This flag is set then the user chooses "Autoplay Tutorial"
+        self.autoplay = False
 
     @classmethod
     def create_from_json_file(cls, file_path):
@@ -109,6 +116,15 @@ class Tutorial:
 
     def get_title(self):
         return self.title
+
+    def get_has_automation(self):
+        return self.has_automation
+
+    def get_autoplay(self):
+        return self.autoplay
+
+    def set_autoplay(self, value):
+        self.autoplay = value
 
     def add_step(self, step):
         # Set the step references for the current last step on the list

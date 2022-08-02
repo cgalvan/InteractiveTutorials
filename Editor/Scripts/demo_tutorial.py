@@ -21,7 +21,6 @@ class SelectEntityStep(TutorialStep):
 
     def on_step_end(self):
         print("Ended the select Entity step")
-        
 
 class DemoTutorial(Tutorial):
     def __init__(self):
