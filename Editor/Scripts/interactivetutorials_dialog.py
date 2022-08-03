@@ -27,7 +27,7 @@ except:
 from demo_tutorial import DemoTutorial, IntroTutorial
 from tutorial import Tutorial
 from rigid_body_tutorial import RigidBodyTutorial
-from finding_ui_objects import FindingUIObjectsTutorial
+from highlight_ui_objects_tutorial import HighlightUIObjectsTutorial
 from wind_forces_tutorial import WindForcesTutorial
 
 class HighlightWidget(QWidget):
@@ -90,12 +90,16 @@ class InteractiveTutorialsDialog(QDialog):
         # TODO: Have real system for loading tutorials
         self.tutorials = [
             {
-                "name": "Intro to the Editor",
-                "tutorial": IntroTutorial
-            },
-            {
                 "name": "Demo Tutorial",
                 "tutorial": DemoTutorial
+            },
+            {
+                "name": "Highlighting UI Objects",
+                "tutorial": HighlightUIObjectsTutorial
+            },
+            {
+                "name": "Intro To O3DE Editor",
+                "tutorial": IntroTutorial
             },
             {
                 "name": "Create an Entity",
@@ -105,10 +109,6 @@ class InteractiveTutorialsDialog(QDialog):
             {
                 "name": "PhysX Rigid Bodies",
                 "tutorial": RigidBodyTutorial
-            },
-            {
-                "name": "Highlighting UI Objects",
-                "tutorial": FindingUIObjectsTutorial
             },
             {
                 "name": "Create Wind Forces",

@@ -16,52 +16,55 @@ except:
 
 from tutorial import Tutorial, TutorialStep
 
-class FindingUIObjectsTutorial(Tutorial):
+class HighlightUIObjectsTutorial(Tutorial):
     def __init__(self):
-        super(FindingUIObjectsTutorial, self).__init__()
+        super(HighlightUIObjectsTutorial, self).__init__()
 
         self.title = "Highlighting UI Objects"
         #self.is_automated = False
 
-        self.add_step(TutorialStep("Highlighting UI Objects", 
+        self.add_step(TutorialStep("Finding UI objects", 
                 """<html><p style="font-size:13px">Greetings!<br><br>This 
-                tutorial demonstrates methods to find UI objects to highlight in
-                 tutorial steps. You can use the <b>Object Tree</b> tool to find
-                 named UI objects or a named parent of a UI object. Then, use 
-                one of methods in this tutorial to specify the widget to 
-                highlight in a <strong>
-                <code style="font-size:14px;color:#E44C9A">TutorialStep</code>
-                </strong>.<br><br>The available methods are:<ul><li><b>Highlight
-                 by name</b> - Specify the name of the UI object to highlight.
-                </li><li><b>Highlight by parent</b> - Specify a named parent and
-                 a pattern for the UI object. The UI object is the first child 
-                of the parent that matches the specified pattern.</li><li><b>
-                Highlight from hierarchy with index</b> - Specify an index to 
-                select a specific child UI object when the parent has multiple 
-                unnamed children of the same type.</li></ul></p></html>"""))
+                tutorial demonstrates methods to find UI objects to highlight. 
+                You can use the <b>Object Tree</b> tool to find named UI objects
+                 or a named parent of a UI object. Then, use one of methods in 
+                this tutorial to specify the widget to highlight in a <strong>
+                <code style="font-size:14px;color:#E44C9A">TutorialStep()</code>
+                </strong> declaration. The available methods are:
+                <ul>
+                <li><b>Highlight by name</b> - Specify the name of the UI object
+                 to highlight.</li>
+                <li><b>Highlight by parent</b> - Specify a named parent and a 
+                pattern for the UI object. The UI object is the first child of 
+                the parent that matches the specified pattern.</li>
+                <li><b>Highlight from hierarchy with index</b> - Specify an 
+                index to select a specific child UI object when the parent has 
+                multiple unnamed children of the same type.</li></ul>
+                </p></html>"""))
         self.add_step(TutorialStep("Highlight by name", """<html><p style=
                 "font-size:13px">This step highlights the <b>Entity Outliner</b>
-                , finding it by its name, <strong>
+                , finding it by its name.<br><strong>
                 <code style="font-size:14px;color:#E44C9A">
-                "EntityOutlinerWidgetUI"</code></strong>.</p></html>""", 
+                "EntityOutlinerWidgetUI"</code></strong></p></html>""", 
                 "EntityOutlinerWidgetUI"))
         self.add_step(TutorialStep("Highlight by pattern", """<html>
                 <p style="font-size:13px">This step highlights the <b>Console 
-                Variables</b> tool button in the lower-left corner of the Editor
-                . The Console Variables tool button has a name, but is found 
-                through a dictionary that contains text (the widget name) and 
-                its type, <strong><code style="font-size:14px;color:#E44C9A">
+                Variables</b> tool button in the lower-left corner of <b>O3DE 
+                Editor</b>. The Console Variables tool button has a name, but is
+                 found through a dictionary that contains text (the widget name)
+                 and its type.<br><strong>
+                 <code style="font-size:14px;color:#E44C9A">
                 {"text": "button", "type": QtWidgets.QToolButton}</code>
-                </strong>. </p></html>""", {"text": "button", "type": 
+                </strong></p></html>""", {"text": "button", "type": 
                 QtWidgets.QToolButton}))
         self.add_step(TutorialStep("Highlight by pattern", """<html>
                 <p style="font-size:13px">This step highlights the <b>Play</b> 
-                tool button in the upper-right corner of the Editor. The Play 
+                tool button in the upper-right corner of O3DE Editor. The Play 
                 tool button is unnamed, but it has a text attribute for a 
                 tooltip. You can use a dictionary to find this UI element by 
-                providing the widget type and the tooltip text, <strong>
+                providing the widget type and the tooltip text.<br><strong>
                 <code style="font-size:14px;color:#E44C9A">{"type": 
-                QtWidgets.QToolButton, "text": "Play Game"}</code></strong>.
+                QtWidgets.QToolButton, "text": "Play Game"}</code></strong>
                 </p></html>""", {"type": QtWidgets.QToolButton, 
                 "text": "Play Game"}))
         self.add_step(TutorialStep("Highlight from named parent", """<html>
@@ -71,9 +74,9 @@ class FindingUIObjectsTutorial(Tutorial):
                  can find it by its type through its named parent. It's the 
                 first child of type <strong>
                 <code style="font-size:14px;color:#E44C9A">QtWidgets.QToolBar
-                </code></strong> of a widget named <strong>
+                </code></strong> of the <strong>
                 <code style="font-size:14px;color:#E44C9A">"ViewportUiOverlay"
-                </code></strong>.</p></html>""", QtWidgets.QToolBar, 
+                </code></strong> widget.</p></html>""", QtWidgets.QToolBar, 
                 "ViewportUiOverlay"))
         self.add_step(TutorialStep("Highlight with index", """<html>
                 <p style="font-size:13px">In the upper-right corner of the 
@@ -102,17 +105,18 @@ class FindingUIObjectsTutorial(Tutorial):
                 fourth <strong><code style="font-size:14px;color:#E44C9A">
                 QtWidgets.QToolButton</code></strong> in the second <strong>
                 <code style="font-size:14px;color:#E44C9A">QtWidgets.QToolBar
-                </code></strong> beneath a parent named <strong>
+                </code></strong> beneath the <strong>
                 <code style="font-size:14px;color:#E44C9A">ViewportUiOverlay
-                </code></strong>.<br><br>You can get the local space button by 
-                finding it's direct unnamed parent prior to defining the step, 
-                and supplying the direct parent and an index to the tutorial 
-                step. See this step in this tutorial's Python script for an 
-                example.</p></html>""", QtWidgets.QToolButton, item, 3))
+                </code></strong> widget.<br><br>You can get the local space 
+                button by finding its direct unnamed parent before you declare 
+                the tutorial step. Then, supply the direct parent and an index 
+                to the tutorial step. See this step in this tutorial's Python 
+                script for an example.</p></html>""", QtWidgets.QToolButton, 
+                item, 3))
         
 
     def on_tutorial_start(self):
-        print("Starting Widget By Hierarchy tutorial.")
+        print("Highlight UI Objects tutorial start.")
 
     def on_tutorial_end(self):
-        print("Widget By Hierarchy tutorial complete!")
+        print("Highlight UI Objects tutorial complete!")
