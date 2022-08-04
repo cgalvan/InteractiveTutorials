@@ -8,8 +8,8 @@ SPDX-License-Identifier: Apache-2.0 OR MIT
 Generated from O3DE PythonToolGem Template"""
 
 from PySide2 import QtCore
-from PySide2.QtCore import QMargins, QStringListModel, Qt
-from PySide2.QtGui import QColor, QPainter, QPen
+from PySide2.QtCore import QMargins, QStringListModel, Qt, QVariantAnimation
+from PySide2.QtGui import QColor, QPainter, QPen, QBrush
 from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView,
     QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
 )
@@ -31,8 +31,8 @@ class HighlightWidget(QWidget):
         super(HighlightWidget, self).__init__(parent)
 
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.Tool | Qt.WindowTransparentForInput | Qt.WindowDoesNotAcceptFocus | Qt.WindowStaysOnTopHint)
-        self.setAttribute(Qt.WA_TranslucentBackground);
-        self.setAttribute(Qt.WA_NoSystemBackground);
+        self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setAttribute(Qt.WA_NoSystemBackground)
         self.setAttribute(Qt.WA_TransparentForMouseEvents)
 
         self.border_width = 5
@@ -43,6 +43,30 @@ class HighlightWidget(QWidget):
         pen.setWidth(self.border_width)
         painter.setPen(pen)
         painter.drawRect(event.rect())
+        #print(self.width)
+        #print(self.height)
+        #highlights widget blue
+        if self.width < 50 and self.height < 50:
+            painter.setOpacity(0.3)
+            painter.fillRect(event.rect(), QBrush(QColor ("blue")))
+
+        #todo: highlight parent area
+        #highlight parent widget without highlighting the content of the widget itself
+        #1 highlight parent widget
+        #2 redraw filled rectangle regular color 
+        #or
+        #1 fill 4 rectangles around the parent rectangle
+        if self.width < 50 and self.height < 50:
+            painter.setOpacity(0.3)
+            #draw 4 rectangles around "self"
+            #painter.fillRect()
+            #painter.fillRect()
+            #painter.fillRect()
+            #painter.fillRect()
+            painter.fillRect(event.rect(), QBrush(QColor ("blue")))        
+
+        #todo: pulse effect
+        #edit the scale property as this will make the blob shrink and grow back gently
 
     def update_widget(self, item):
         if item:
