@@ -8,7 +8,7 @@ SPDX-License-Identifier: Apache-2.0 OR MIT
 Generated from O3DE PythonToolGem Template"""
 
 from PySide2 import QtCore
-from PySide2.QtCore import QMargins, QStringListModel, Qt, QVariantAnimation
+from PySide2.QtCore import QMargins, QStringListModel, Qt, QVariantAnimation, QRect
 from PySide2.QtGui import QColor, QPainter, QPen, QBrush
 from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView,
     QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget
@@ -45,28 +45,34 @@ class HighlightWidget(QWidget):
         painter.drawRect(event.rect())
         #print(self.width)
         #print(self.height)
-        #highlights widget blue
+
+        #option 1: highlight the content of the widget
         if self.width < 50 and self.height < 50:
             painter.setOpacity(0.3)
             painter.fillRect(event.rect(), QBrush(QColor ("blue")))
 
-        #todo: highlight parent area
-        #highlight parent widget without highlighting the content of the widget itself
-        #1 highlight parent widget
-        #2 redraw filled rectangle regular color 
-        #or
-        #1 fill 4 rectangles around the parent rectangle
+        #option 2: highlight the area around the widget not including the widget
         if self.width < 50 and self.height < 50:
             painter.setOpacity(0.3)
+            topLeftX = event.rect().topLeft().x
+            #topRightX = event.rect().topRight().x
+            bottomLeftX = event.rect().bottomLeft().x
+            bottomRightX = event.rect().bottomRight().x
+            topLeftY = event.rect().topLeft().y
+            #topRightY = event.rect().topRight().y
+            bottomLeftY = event.rect().bottomLeft().y
+            #bottomRightY = event.rect().bottomRight().y
             #draw 4 rectangles around "self"
-            #painter.fillRect()
-            #painter.fillRect()
-            #painter.fillRect()
-            #painter.fillRect()
-            painter.fillRect(event.rect(), QBrush(QColor ("blue")))        
+            painter.fillRect(bottomLeftX - self.width, bottomLeftY, self.width, self.height, QBrush(QColor ("blue")))
+            painter.fillRect(bottomRightX, bottomLeftY, self.width, self.height, QBrush(QColor ("blue")))
+            painter.fillRect(topLeftX - self.width, topLeftY, self.width * 3, self.height, QBrush(QColor ("blue")))
+            painter.fillRect(topLeftX - self.width, bottomLeftY - self.height, self.width * 3, self.height, QBrush(QColor ("blue")))       
 
-        #todo: pulse effect
-        #edit the scale property as this will make the blob shrink and grow back gently
+        #option 3: add a pulse effect
+        if self.width < 50 and self.height < 50:
+            update_widget(self, event)           
+            #edit the outline scale property as this will make the widget shrink and grow back gently
+
 
     def update_widget(self, item):
         if item:
@@ -81,6 +87,14 @@ class HighlightWidget(QWidget):
             self.raise_()
         else:
             self.hide()
+
+        blinking = False
+        if blinking:
+            painter = QPainter(self)
+            pen = QPen(QColor(255, 0, 152)) #Rhodamine Red
+            pen.setWidth(self.border_width + 10)
+            painter.setPen(pen)
+            painter.drawRect(item) 
 
 class InteractiveTutorialsDialog(QDialog):
     def __init__(self, parent=None):
