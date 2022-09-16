@@ -16,7 +16,7 @@ from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView,
 
 # This import will fail when the AP launches, will only work once the Editor is running
 try:
-    import editor_python_test_tools.pyside_utils as pyside_utils
+    import pyside_utils
 except:
     pass
 

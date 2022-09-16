@@ -9,7 +9,7 @@ import sys
 import azlmbr
 
 from PySide2 import QtWidgets
-import editor_python_test_tools.pyside_utils as pyside_utils
+import pyside_utils
 
 from tutorial import Tutorial, TutorialStep
 
