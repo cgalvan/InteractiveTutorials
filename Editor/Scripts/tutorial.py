@@ -5,7 +5,6 @@ For complete copyright and license terms please see the LICENSE at the root of t
 SPDX-License-Identifier: Apache-2.0 OR MIT
 """
 
-from asyncio.windows_events import NULL
 import json
 import os
 
@@ -18,7 +17,7 @@ class TutorialStep:
 
         # The highlight pattern is a widget/item that will be highlighted
         # for this particular step (can be None)
-        # This pattern will be passed to `editor_python_test_tools.pyside_utils`
+        # This pattern will be passed to `pyside_utils`
         # to find the widget/item. See its documentation for supported patterns
         self.highlight_pattern = highlight_pattern
         self.highlight_parent = highlight_parent
