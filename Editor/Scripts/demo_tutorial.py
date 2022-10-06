@@ -22,23 +22,6 @@ class SelectEntityStep(TutorialStep):
     def on_step_end(self):
         print("Ended the select Entity step")
 
-class DemoTutorial(Tutorial):
-    def __init__(self):
-        super(DemoTutorial, self).__init__()
-
-        self.title = "Demo Tutorial"
-
-        self.add_step(TutorialStep("First things first", "Welcome! This first step shouldn't highlight any widget."))
-        self.add_step(SelectEntityStep())
-        self.add_step(TutorialStep("Add a component", "Use the Add Component button to add a component to the Entity", "m_addComponentButton"))
-        self.add_step(TutorialStep("Cool menu bar", "This step is just to showcase highlighting an item without a direct name but by using a type pattern instead", {"type": QMenuBar}))
-
-    def on_tutorial_start(self):
-        print("Where we're going, we don't need roads")
-
-    def on_tutorial_end(self):
-        print("Follow the yellow brick road")
-
 # Interactive tutorial version of this Editor tour:
 #   https://www.o3de.org/docs/welcome-guide/tours/editor-tour/
 class IntroTutorial(Tutorial):
@@ -47,12 +30,12 @@ class IntroTutorial(Tutorial):
 
         self.title = "Intro to the Editor"
 
-        self.add_step(TutorialStep("Introduction", """<html>The default layout of O3DE Editor contains the most commonly used tools in a configuration, similar to other content creation applications. The core workflow of O3DE is to create and place entities in a level, so the default layout contains a menu bar, toolbars, panes, and tool tabs focused on entity creation and placement.
+        self.add_step(TutorialStep("Introduction", """<html><p style="font-size:13px">The default layout of O3DE Editor contains the most commonly used tools in a configuration similar to other content creation applications. The core workflow of O3DE is to create and place entities in a level, so the default layout contains a menu bar, toolbars, panes, and tool tabs focused on entity creation and placement.
 <br/><br/>
-You can customize the layout through drag and drop, and save to a custom layout through the <b>Layouts</b> option in the <b>View</b> menu of the main menu bar. Drag the separator bars between panes to resize the panes. Drag the title bar of a pane to tear off the pane. The pane can be dropped anywhere in the layout or dropped outside of O3DE Editor as its own window. To restore the default layout, in the main menu bar choose <b>View > Layouts > Default Layout</b>.</html>
+You can customize the layout through drag and drop, and save to a custom layout through the <b>Layouts</b> option in the <b>View</b> menu of the main menu bar. Drag the separator bars between panes to resize the panes. Drag the title bar of a pane to tear off the pane. The pane can be dropped anywhere in the layout or dropped outside of O3DE Editor as its own window. To restore the default layout, in the main menu bar choose <b>View > Layouts > Default Layout</b>.</p></html>
 """))
 
-        self.add_step(TutorialStep("Menu Bar", """<html>Near the top of O3DE Editor are the Menu Bar and the Tool Bar.
+        self.add_step(TutorialStep("Menu Bar", """<html><p style="font-size:13px">Near the top of O3DE Editor are the <b>Menu Bar</b> and the <b>Tool Bar</b>.
 <br/><br/>
 The Menu Bar contains several familiar menus:
 <ul>
@@ -64,47 +47,47 @@ The Menu Bar contains several familiar menus:
   <li><b>AWS</b> - AWS menu items include tools and links to documentation for working with AWS in your O3DE projects.</li>
   <li><b>Help</b> - Help menu items provide links to O3DE community and documentation resources.</li>
 </ul>
-</html>""", {"type": QMenuBar}))
+</p></html>""", {"type": QMenuBar}))
 
-        self.add_step(TutorialStep("Toolbar", """<html>
-The Tool Bar provides easy access to various editor tools and features. On the left are buttons to open various O3DE tools and editors, on the right are controls to run your project or activate simulation in editor. The Tool Bar is docked at the top of the editor by default, but you can also dock it vertically on the edges of the editor. To customize the toolbar, right-click anywhere on the toolbar and select <b>Customize</b> from the context menu. You can choose which toolbars to include, and add commands to the toolbar.
-</html>""", "EditMode"))
+        self.add_step(TutorialStep("Toolbar", """<html><p style="font-size:13px">
+The <b>Tool Bar</b> provides easy access to various editor tools and features. On the left are buttons to open various O3DE tools and editors, on the right are controls to run your project or activate simulation in editor. The Tool Bar is docked at the top of the editor by default, but you can also dock it vertically on the edges of the editor. To customize the toolbar, right-click anywhere on the toolbar and select <b>Customize</b> from the context menu. You can choose which toolbars to include, and add commands to the toolbar.
+</p></html>""", "EditMode"))
 
-        self.add_step(TutorialStep("Entity Outliner", """<html>
+        self.add_step(TutorialStep("Entity Outliner", """<html><p style="font-size:13px">
 On the left side of O3DE Editor, <b>Entity Outliner</b> displays a list of entities and prefabs in the current level. Right-click in Entity Outliner to open the context menu to create entities and instantiate prefabs. When an entity or prefab is selected in Entity Outliner, the context menu also has options to duplicate or delete entities, find selected entities and prefabs, organize the list, and open the properties for the selected entity or prefab.
-</html>""", "EntityOutlinerWidgetUI"))
+</p></html>""", "EntityOutlinerWidgetUI"))
 
-        self.add_step(TutorialStep("Asset Browser", """<html>
+        self.add_step(TutorialStep("Asset Browser", """<html><p style="font-size:13px">
 Below Entity Outliner is <b>Asset Browser</b>, which you can use to browse your project’s on-disk assets. Assets such as meshes, animations, and textures are created in third-party applications. Assets such as materials, scripts, and prefabs are created in O3DE Editor, or in editor tools such as <b>Script Canvas</b>. The assets that you create are stored in your project directory. You can also browse default assets that are included with O3DE, as well as assets that are included with Gems that have been added to your project.
 <br/><br/>
 The left pane of the Asset Browser displays a directory structure that you can browse for available assets. When an asset is selected, the preview pane on the right displays a thumbnail preview and information about the asset, if available.
 <br/><br/>
-With an asset selected in Asset Browser, the right-click context menu has options to open Scene Settings where you can set Asset Processor options for the asset, as well as open the asset in an associated application such as a modeling program, or open the file location in the system file browser.
-</html>""", "AzAssetBrowserWindowClass"))
+With an asset selected in Asset Browser, the right-click context menu has options to open <b>Scene Settings</b> where you can set <b>Asset Processor</b> options for the asset, as well as open the asset in an associated application such as a modeling program, or open the file location in the system file browser.
+</p></html>""", "AzAssetBrowserWindowClass"))
 
-        self.add_step(TutorialStep("Entity Inspector", """<html>
-On the right side of O3DE Editor, <b>Entity Inspector</b> displays the components of the currently selected entity. At the top of Entity Inspector is a field for the entity Name and an Add Component button. The Add Component button opens a list of available components, sorted by type, that can be added to the entity. Each component has its own set of properties that are displayed in Entity Inspector. All entities contain a transform component that sets the position, rotation, and scale of the entity in the level.
-</html>""", "InspectorMainWindow"))
+        self.add_step(TutorialStep("Entity Inspector", """<html><p style="font-size:13px">
+On the right side of O3DE Editor, <b>Entity Inspector</b> displays the components of the currently selected entity. At the top of Entity Inspector is a field for the entity <b>Name</b> and an <b>Add Component</b> button. The Add Component button opens a list of available components, sorted by type, that can be added to the entity. Each component has its own set of properties that are displayed in Entity Inspector. All entities contain a <b>Transform</b> component that sets the position, rotation, and scale of the entity in the level.
+</p></html>""", "InspectorMainWindow"))
 
-        self.add_step(TutorialStep("Console", """<html>
+        self.add_step(TutorialStep("Console", """<html><p style="font-size:13px">
 At the bottom of the default O3DE Editor layout is the <b>Editor Console</b>, which shows command and process output from O3DE Editor and your project. When you load a level, for example, the console displays messages about assets and configuration files as they load, and might display warnings and errors if issues are encountered.
 <br/><br/>
 You can enter console commands such as setting console variables in the entry field at the bottom of the console. Choose the <b>{x}</b> button in the lower left of Editor Console to open the <b>Console Variables Editor</b>, which provides a simple interface for setting console variables.
-</html>""", "Console"))
+</p></html>""", "Console"))
 
-        self.add_step(TutorialStep("Viewport", """<html>
-In the center of the default O3DE Editor layout is <b>Perspective</b>. This 3D viewport is a real-time view of your level. In Perspective, you create and place entities, and view and play your project.
+        self.add_step(TutorialStep("Viewport", """<html><p style="font-size:13px">
+In the center of the default O3DE Editor layout is the <b>Viewport</b>. This 3D viewport is a real-time view of your level. In the viewport, you create and place entities, and view and play your project.
 <br/><br/>
-Right-click in the title bar of Perspective to open the perspective menu. From the perspective menu, you can toggle visibility for various helpers such as the construction plane, icons, bounds, and guides. You can also select an aspect ratio, view through various cameras placed in the level, create new cameras from the current view, and split Perspective into multiple views.
+Right-click in the top bar of the viewport to open the viewport menu. From the menu, you can toggle visibility for various helpers. You can also select a target aspect ratio, view through various cameras placed in the level, and create a new camera from the current view.
 <br/><br/>
-On the right side of the Perspective title bar, are several icons to select cameras, set camera movement speed, set information display, enable view icons, set aspect ratio, and set grid snapping options.
+On the right side of the top bar, are several icons to select cameras, set camera movement speed, set information display, enable view icons, set aspect ratio, and set grid snapping options.
 <br/><br/>
-Right-click in the viewport of Perspective to open the context menu to create entities and prefabs. Much of the context menu functionality in Perspective is shared with the context menu functionality of Entity Outliner.
+Right-click in the viewport to open the context menu to create entities and instantiate prefabs. Much of the context menu functionality is shared with the context menu functionality of Entity Outliner.
 <br/><br/>
-In the upper left and upper right corners of Perspective are icon trays for manipulating entities. On the left, you can use the icons to select a transform operation. From top to bottom the icons represent  translate,  rotate, and  scale operations. On the right, you can use the icons to select a space for the transform operation. From top to bottom the icons represent  world,  parent, and  local spaces.
-</html>""", "renderOverlay"))
+In the upper left and upper right corners of the viewport are icon trays for manipulating entities. On the left, you can use the icons to select a transform operation. From top to bottom the icons represent  translate,  rotate, and  scale operations. On the right, you can use the icons to select a space for the transform operation. From top to bottom the icons represent  world,  parent, and  local spaces.
+</p></html>""",  "renderOverlay"))
 
-        self.add_step(TutorialStep("Navigating the O3DE Perspective viewport", """<html>
+        self.add_step(TutorialStep("Navigating the O3DE Perspective viewport", """<html><p style="font-size:13px">
 O3DE has familiar viewport interaction models based on first-person PC games and popular modeling applications, with a few minor tweaks and additions. Movement is handled by keyboard input, and view is handled by pointer device input.
 <ul>
   <li><b>W</b> - Move forward.</li>
@@ -122,8 +105,8 @@ O3DE has familiar viewport interaction models based on first-person PC games and
 </ul>
 The camera controls above are game-centric. If you prefer to use camera controls closer to those you would find in a DCC application such as Maya, use these hotkeys.
 <ul>
-  <li><b>ALT + left mouse + drag</b> - Orbit view.</li>
-  <li><b>ALT + right mouse + drag</b> - Dolly view.</li>
-  <li><b>ALT + right mouse + drag</b> - Track view.</li>
+  <li><b>Alt + left mouse + drag</b> - Orbit view.</li>
+  <li><b>Alt + right mouse + drag</b> - Dolly view.</li>
+  <li><b>Alt + right mouse + drag</b> - Track view.</li>
 </ul>
-</html>""", "renderOverlay"))
+</p></html>""", "renderOverlay"))

@@ -1,6 +1,7 @@
 """
 Copyright (c) Contributors to the Open 3D Engine Project.
-For complete copyright and license terms please see the LICENSE at the root of this distribution.
+For complete copyright and license terms please see the LICENSE at the root of 
+this distribution.
 
 SPDX-License-Identifier: Apache-2.0 OR MIT
 """
@@ -8,62 +9,88 @@ SPDX-License-Identifier: Apache-2.0 OR MIT
 """InteractiveTutorials\\editor\\scripts\\InteractiveTutorials_dialog.py
 Generated from O3DE PythonToolGem Template"""
 
-from PySide2 import QtCore
-from PySide2.QtCore import QMargins, QStringListModel, Qt
-from PySide2.QtGui import QColor, QPainter, QPen
-from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView,
-        QMessageBox, QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget, QAbstractItemView)
 
-# This import will fail when the AP launches, will only work once the Editor is running
+from PySide2 import QtCore
+from PySide2.QtCore import QMargins, QStringListModel, Qt, QCoreApplication
+from PySide2.QtGui import QColor, QPainter, QPen
+from PySide2.QtWidgets import (QDialog, QDialogButtonBox, QLabel, QListView, 
+        QMessageBox, QPushButton, QStackedWidget, QVBoxLayout, QWidget, QAbstractItemView)
+
+# This import will fail when AP launches, only works once the Editor is running
 try:
     import pyside_utils
 except:
     pass
 
-from demo_tutorial import DemoTutorial, IntroTutorial
+from demo_tutorial import IntroTutorial
 from tutorial import Tutorial
 from rigid_body_tutorial import RigidBodyTutorial
-from finding_ui_objects import FindingUIObjectsTutorial
+from highlight_ui_objects_tutorial import HighlightUIObjectsTutorial
 from wind_forces_tutorial import WindForcesTutorial
+
 
 class HighlightWidget(QWidget):
     def __init__(self, parent=None):
         super(HighlightWidget, self).__init__(parent)
 
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.Tool | Qt.WindowTransparentForInput | 
-                Qt.WindowDoesNotAcceptFocus | Qt.WindowStaysOnTopHint)
-        self.setAttribute(Qt.WA_TranslucentBackground);
-        self.setAttribute(Qt.WA_NoSystemBackground);
+                Qt.WindowDoesNotAcceptFocus | Qt.WindowStaysOnTopHint )
+        self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setAttribute(Qt.WA_NoSystemBackground)
         self.setAttribute(Qt.WA_TransparentForMouseEvents)
 
-        self.border_width = 5
+        self.highlight_rect = None
+        self.viewport_highlight = False
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        pen = QPen(QColor(131, 238, 255))
-        pen.setWidth(self.border_width)
+        pen = QPen(QColor(255, 0, 152))
+        pen.setWidth(4)
         painter.setPen(pen)
-        painter.drawRect(event.rect())
+        if self.viewport_highlight:
+            highlight_item = pyside_utils.find_child_by_pattern(None, "renderOverlay")
+            new_size = highlight_item.size().grownBy(QMargins(6, 6, 0, 0))
+            self.resize(new_size)
+            self.highlight_rect = self.rect()
+            self.move(highlight_item.mapTo(highlight_item.window(), QtCore.QPoint(-3, -3)))
+        else:
+           self.highlight_rect = self.parent().rect()
+           self.setGeometry(self.highlight_rect)
+
+        painter.drawRect(self.highlight_rect)
+
 
     def update_widget(self, item):
         if item:
-            self.show()
+            # Special handling for the viewport so the highlight isn't clipped by the 3D viewport
+            if item.objectName() == "renderOverlay":
+                self.viewport_highlight = True
+                self.setParent(item.window())
+                new_size = item.size().grownBy(QMargins(6, 6, 0, 0))
+                self.resize(new_size)
+                self.highlight_rect = self.rect()
+                self.move(item.mapTo(item.window(), QtCore.QPoint(-3, -3)))
+            
+            # Handle all other widgets
+            else:
+                self.viewport_highlight = False
+                self.setParent(item)
+                self.highlight_rect = item.rect()
+                self.setGeometry(self.highlight_rect)
 
-            # Position our highlight widget on top of the specified item, but with an offset
-            # so that the rectangle border that we draw doesn't overlap the actual item itself
-            item_size = item.size()
-            new_size = item_size.grownBy(QMargins(self.border_width / 2, self.border_width / 2, 0, 0))
-            self.resize(new_size)
-            self.window().move(item.mapToGlobal(QtCore.QPoint(-self.border_width / 2, -self.border_width / 2)))
             self.raise_()
+            self.show()
+            
         else:
+            self.viewport_highlight = False
             self.hide()
+
 
 class InteractiveTutorialsDialog(QDialog):
     def __init__(self, parent=None):
         super(InteractiveTutorialsDialog, self).__init__(parent)
 
-        # Stacked widget so we can switch between the intro screen that lets you
+        # Stacked widget so we can switch between the intro screen that lets you 
         # choose a tutorial, and the actual tutorial in progress view
         self.stacked_widget = QStackedWidget(self)
 
@@ -79,12 +106,12 @@ class InteractiveTutorialsDialog(QDialog):
         # TODO: Have real system for loading tutorials
         self.tutorials = [
             {
-                "name": "Intro to the Editor",
-                "tutorial": IntroTutorial
+                "name": "Highlighting UI Objects",
+                "tutorial": HighlightUIObjectsTutorial
             },
             {
-                "name": "Demo Tutorial",
-                "tutorial": DemoTutorial
+                "name": "Intro To O3DE Editor",
+                "tutorial": IntroTutorial
             },
             {
                 "name": "Create an Entity",
@@ -95,14 +122,11 @@ class InteractiveTutorialsDialog(QDialog):
                 "tutorial": RigidBodyTutorial
             },
             {
-                "name": "Highlighting UI Objects",
-                "tutorial": FindingUIObjectsTutorial
-            },
-            {
                 "name": "Create Wind Forces",
                 "tutorial": WindForcesTutorial
             }
         ]
+
         tutorial_names = [tutorial['name'] for tutorial in self.tutorials]
         self.tutorial_list_model = QStringListModel(self)
         self.tutorial_list_model.setStringList(tutorial_names)
@@ -141,6 +165,9 @@ class InteractiveTutorialsDialog(QDialog):
         self.next_button = QPushButton("Next", self)
         self.next_button.setDefault(True)
         self.next_button.clicked.connect(self.load_next_step)
+        self.autoplay_button = QPushButton("Autoplay Tutorial", self)
+        self.autoplay_button.clicked.connect(self.enable_autoplay)
+        self.button_box.addButton(self.autoplay_button, QDialogButtonBox.ActionRole)
         self.back_button = QPushButton("Back", self)
         self.back_button.clicked.connect(self.load_previous_step)
         self.button_box.addButton(self.next_button, QDialogButtonBox.ActionRole)
@@ -154,6 +181,7 @@ class InteractiveTutorialsDialog(QDialog):
         self.stacked_layout.addWidget(self.stacked_widget)
         self.setLayout(self.stacked_layout)
 
+
     def load_tutorial(self, index):
         # Switch to the tutorial view
         self.stacked_widget.setCurrentIndex(1)
@@ -162,14 +190,24 @@ class InteractiveTutorialsDialog(QDialog):
         self.current_tutorial = tutorial_factory()
         
         self.current_tutorial_num_steps = len(self.current_tutorial.get_steps()) - 1
+
         # Invoke the tutorial start method
         self.current_tutorial.on_tutorial_start()
 
         # Update the title based on the loaded tutorial
         self.setWindowTitle("InteractiveTutorials - " + self.current_tutorial.get_title())
 
+        if not self.back_button.isVisible():
+            self.back_button.show()
+
+        # Display the autoplay button if tutorial supports it
+        if self.current_tutorial.get_has_automation():
+            self.autoplay_button.show()
+        else:
+            self.autoplay_button.hide()
+
         # Reset initial state and load first step
-        self.current_step_index = 0 
+        self.current_step_index = 0
         self.current_step = None
         first_step = self.current_tutorial.get_first_step()
         self.load_step(first_step)
@@ -196,24 +234,32 @@ class InteractiveTutorialsDialog(QDialog):
             f"Congratulations! Great job completing the { title } tutorial :)")
 
     def update_step_view(self):
+        
         if not self.current_step:
             return
 
         self.title_label.setText(self.current_step.get_title())
         self.content_area.setText(self.current_step.get_content())
+        
         if self.current_step_index > 0:
             self.step_label.setText(f"Step {self.current_step_index} of {self.current_tutorial_num_steps}")
+            if self.autoplay_button.isVisible():
+                self.autoplay_button.hide()
         else:
             self.step_label.setText("Click next to continue.")
-        # If there are no steps remaining in the tutorial, then
-        # update the Next button text to "End"
+
+        # If there are no steps remaining in the tutorial, then update the Next button text to "End"
         next_button_text = "Next"
+
         if not self.current_step.next_step:
             next_button_text = "End"
+
         self.next_button.setText(next_button_text)
 
-        # If a highlight pattern was set for this step, then find that widget/item
-        # and highlight it
+        if self.current_tutorial.get_autoplay():
+            self.current_step.automate()
+
+        # If a highlight pattern was set for this step, then find that widget/item and highlight it
         highlight_item = None
         highlight_pattern = self.current_step.get_highlight_pattern()
         if not highlight_pattern:
@@ -266,9 +312,23 @@ class InteractiveTutorialsDialog(QDialog):
                 self.current_step_index -= 1
                 self.load_step(prev_step)
 
+    def enable_autoplay(self):
+        self.current_tutorial.set_autoplay(True)
+        self.back_button.hide()
+        step_counter = 1
+        while( step_counter <= self.current_tutorial_num_steps):
+            self.load_next_step()
+            QCoreApplication.processEvents()
+            step_counter += 1
+        
     def on_start_button_clicked(self):
         tutorial_index = self.tutorial_list.currentIndex().row()
         self.load_tutorial(tutorial_index)
+
+    def closeEvent(self, event):
+        self.highlight_widget.setParent(self)
+        event.accept()
+        
 
 if __name__ == "__main__":
     # Create a new instance of the tool if launched from the Python Scripts window,
