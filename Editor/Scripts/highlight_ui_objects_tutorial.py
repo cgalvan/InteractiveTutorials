@@ -21,7 +21,6 @@ class HighlightUIObjectsTutorial(Tutorial):
         super(HighlightUIObjectsTutorial, self).__init__()
 
         self.title = "Highlighting UI Objects"
-        #self.is_automated = False
 
         self.add_step(TutorialStep("Finding UI objects", 
                 """<html><p style="font-size:13px">Greetings!<br><br>This 

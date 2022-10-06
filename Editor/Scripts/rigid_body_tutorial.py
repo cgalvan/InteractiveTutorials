@@ -7,33 +7,8 @@ SPDX-License-Identifier: Apache-2.0 OR MIT
 
 from time import sleep
 
-#import os
-#import sys
-#import azlmbr
-#import azlmbr.bus as bus
-#import azlmbr.editor as editor
-#import azlmbr.legacy.general as general
-#import azlmbr.entity as entity
-#import azlmbr.math as math
-#import azlmbr.prefab as prefab
-#from azlmbr.entity import EntityId
-#from editor_python_test_tools.utils import TestHelper as helper
-#import azlmbr.asset as asset
-#from PySide2.QtWidgets import QMenuBar
-#from PySide2.QtWidgets import QDialog
 from PySide2 import QtWidgets
 from tutorial import Tutorial, TutorialStep
-
-#class Tests():
-#    enter_game_mode            = ("Entered game mode",                       "Failed to enter game mode")
-#    exit_game_mode             = ("Exited game mode",                        "Couldn't exit game mode")
-# fmt: on
-
-#class RigidBody:
-#    gravity_enabled = False
-#    linear_velocity = 10
-#    angular_velocity = 10
-#    mass = 0.0
 
 class RigidBodyTutorial(Tutorial):
     def __init__(self):

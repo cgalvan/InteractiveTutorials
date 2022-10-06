@@ -146,7 +146,6 @@ class InteractiveTutorialsDialog(QDialog):
         self.tutorial_widget = QWidget(self)
         self.tutorial_layout = QVBoxLayout()
 
-        #self.highlight_layout = QStackedLayout()
         self.highlight_widget = HighlightWidget()
         self.highlight_widget.hide()
 
